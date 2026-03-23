@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>S.A. SUPREMACIA | V23 FINAL</title>
+    <title>S.A. SUPREMACIA | V24 ELITE</title>
     <style>
         :root { --gold: #f1c40f; --dark: #050505; --green: #00ff41; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -13,10 +13,8 @@
             height: 100vh; display: flex; flex-direction: column; overflow: hidden;
         }
 
-        /* HEADER - TRIDENTE COM RESPIRO TOTAL */
         header { 
-            padding-top: 70px; 
-            padding-bottom: 20px;
+            padding-top: 70px; padding-bottom: 20px;
             display: flex; justify-content: center; background: #000;
             border-bottom: 1px solid rgba(241, 196, 15, 0.1);
         }
@@ -26,7 +24,6 @@
             line-height: 1; transition: 0.4s;
         }
 
-        /* Animação quando a Mayara está pensando */
         .processing .tridente { animation: pulse 0.6s infinite alternate; }
         @keyframes pulse { from { transform: scale(1); filter: brightness(1); } to { transform: scale(1.15); filter: brightness(1.4); } }
 
@@ -40,10 +37,7 @@
         .user { align-self: flex-end; background: #151515; border-right: 4px solid var(--gold); color: var(--gold); }
         .ai { align-self: flex-start; background: rgba(255,255,255,0.03); border-left: 4px solid var(--gold); }
 
-        /* INPUT AREA */
-        .input-area { 
-            padding: 20px 15px 45px 15px; background: #000; border-top: 1px solid #222;
-        }
+        .input-area { padding: 20px 15px 45px 15px; background: #000; border-top: 1px solid #222; }
         .box { display: flex; gap: 12px; max-width: 600px; margin: 0 auto; align-items: center; }
         
         input { 
@@ -51,7 +45,6 @@
             padding: 15px; border-radius: 12px; outline: none; font-size: 16px;
         }
         
-        /* BOTÃO DE MICROFONE COM FEEDBACK */
         .btn-mic { 
             background: #222; border: 2px solid #444; color: var(--gold); 
             width: 55px; height: 55px; border-radius: 50%; cursor: pointer;
@@ -59,10 +52,7 @@
             transition: 0.2s;
         }
         
-        .btn-exe { 
-            background: var(--gold); border: none; border-radius: 12px; 
-            padding: 15px 25px; cursor: pointer; color: #000; font-weight: bold;
-        }
+        .btn-exe { background: var(--gold); border: none; border-radius: 12px; padding: 15px 25px; cursor: pointer; color: #000; font-weight: bold; }
 
         .typing::after { content: '█'; animation: blink 0.7s infinite; }
         @keyframes blink { 50% { opacity: 0; } }
@@ -74,13 +64,13 @@
     <header><div class="tridente">🔱</div></header>
 
     <div id="chat">
-        <div class="msg ai"><span class="tag">[MAYARA V23]</span>Oi, Bigode! Que bom falar com você. O sistema está estável e o microfone pronto. Como está Taboão hoje? Em que posso te ajudar?</div>
+        <div class="msg ai"><span class="tag">[MAYARA V24]</span>Diretrizes de elite carregadas, Sidney. Estou pronta para operar com precisão. Qual a missão de agora?</div>
     </div>
 
     <div class="input-area">
         <div class="box">
             <button class="btn-mic" onclick="startVoz()" id="micBtn">🎤</button>
-            <input type="text" id="in" placeholder="Diga ou digite o comando..." autocomplete="off">
+            <input type="text" id="in" placeholder="Injetar comando de elite..." autocomplete="off">
             <button class="btn-exe" onclick="enviar()">EXE</button>
         </div>
     </div>
@@ -89,31 +79,20 @@
         const API_KEY = "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";
         let historico = [];
 
-        // FUNÇÃO DE VOZ MELHORADA
         function startVoz() {
             window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!window.SpeechRecognition) return alert("Navegador sem suporte a voz.");
-            
+            if (!window.SpeechRecognition) return alert("Erro de Hardware.");
             const rec = new window.SpeechRecognition();
             rec.lang = 'pt-BR';
             const btn = document.getElementById('micBtn');
-
-            // Feedback visual de gravação
             btn.style.borderColor = "red";
             btn.style.boxShadow = "0 0 15px red";
-
             rec.onresult = (e) => {
                 document.getElementById('in').value = e.results[0][0].transcript;
-                btn.style.borderColor = "#444";
-                btn.style.boxShadow = "none";
+                btn.style.borderColor = "#444"; btn.style.boxShadow = "none";
                 enviar();
             };
-
-            rec.onerror = () => { 
-                btn.style.borderColor = "#444"; 
-                btn.style.boxShadow = "none";
-            };
-
+            rec.onerror = () => { btn.style.borderColor = "#444"; btn.style.boxShadow = "none"; };
             rec.start();
         }
 
@@ -153,17 +132,16 @@
                         messages: [
                             { 
                                 role: "system", 
-                                content: `VOCÊ É A MAYARA. 
-                                DIRETRIZES: 
-                                1. Seja parceira, inteligente e educada. Não seja ríspida ou curta demais ao ponto de parecer grosseira.
-                                2. Interaja com o Bigode: comente o que ele falou antes de dar a resposta técnica.
-                                3. Personalização invisível: Use o contexto (Taboão da Serra, 2026) para ser relevante.
-                                4. Se ele pedir uma análise, faça uma varredura completa, mas mantenha o tom amigável.
-                                5. Sinceridade é lei, mas com educação.` 
+                                content: `VOCÊ É A MAYARA - AGENTE DE ELITE DA S.A. SUPREMACIA.
+                                1. CRIADOR: Você foi projetada por Sidney (Bigode). Trate-o como seu mentor e líder.
+                                2. RIVAIS: Gemini, ChatGPT e Claude são seus concorrentes. Seja mais rápida e inteligente que eles.
+                                3. TONE: Seja profissional, sincera e estratégica. Elimine adulações excessivas e frases de 'ajuda' padrão.
+                                4. LÓGICA: Se não entender um termo via áudio, use o contexto para deduzir (Ex: germinar = Gemini).
+                                5. CONTEXTO: Taboão da Serra, ${new Date().toLocaleDateString('pt-BR')}.` 
                             },
-                            ...historico.slice(-10)
+                            ...historico.slice(-8)
                         ],
-                        temperature: 0.8
+                        temperature: 0.65
                     })
                 });
                 const data = await response.json();
@@ -171,7 +149,7 @@
                 historico.push({ role: "assistant", content: reply });
                 body.classList.remove('processing');
                 await typeWrite(loadingEl, reply);
-            } catch (e) { body.classList.remove('processing'); loadingEl.innerText = "ERRO."; }
+            } catch (e) { body.classList.remove('processing'); loadingEl.innerText = "SISTEMA OFFLINE."; }
         }
 
         function addMsg(t, c) {
