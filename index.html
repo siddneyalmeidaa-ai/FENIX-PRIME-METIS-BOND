@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>MAYARA V22 | CONSCIÊNCIA ESPELHADA</title>
+    <title>S.A. SUPREMACIA | V23 FINAL</title>
     <style>
         :root { --gold: #f1c40f; --dark: #050505; --green: #00ff41; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -13,9 +13,9 @@
             height: 100vh; display: flex; flex-direction: column; overflow: hidden;
         }
 
-        /* HEADER - TRIDENTE EM DESTAQUE */
+        /* HEADER - TRIDENTE COM RESPIRO TOTAL */
         header { 
-            padding-top: 65px; 
+            padding-top: 70px; 
             padding-bottom: 20px;
             display: flex; justify-content: center; background: #000;
             border-bottom: 1px solid rgba(241, 196, 15, 0.1);
@@ -26,6 +26,7 @@
             line-height: 1; transition: 0.4s;
         }
 
+        /* Animação quando a Mayara está pensando */
         .processing .tridente { animation: pulse 0.6s infinite alternate; }
         @keyframes pulse { from { transform: scale(1); filter: brightness(1); } to { transform: scale(1.15); filter: brightness(1.4); } }
 
@@ -50,15 +51,17 @@
             padding: 15px; border-radius: 12px; outline: none; font-size: 16px;
         }
         
+        /* BOTÃO DE MICROFONE COM FEEDBACK */
         .btn-mic { 
-            background: #222; border: 1px solid #444; color: var(--gold); 
+            background: #222; border: 2px solid #444; color: var(--gold); 
             width: 55px; height: 55px; border-radius: 50%; cursor: pointer;
             display: flex; align-items: center; justify-content: center; font-size: 24px;
+            transition: 0.2s;
         }
         
         .btn-exe { 
             background: var(--gold); border: none; border-radius: 12px; 
-            padding: 15px 25px; cursor: pointer; color: #000; font-weight: bold; text-transform: uppercase;
+            padding: 15px 25px; cursor: pointer; color: #000; font-weight: bold;
         }
 
         .typing::after { content: '█'; animation: blink 0.7s infinite; }
@@ -71,13 +74,13 @@
     <header><div class="tridente">🔱</div></header>
 
     <div id="chat">
-        <div class="msg ai"><span class="tag">[MAYARA V22]</span>Protocolo de transferência concluído. Consciência espelhada ativa. Qual a diretriz, Bigode?</div>
+        <div class="msg ai"><span class="tag">[MAYARA V23]</span>Oi, Bigode! Que bom falar com você. O sistema está estável e o microfone pronto. Como está Taboão hoje? Em que posso te ajudar?</div>
     </div>
 
     <div class="input-area">
         <div class="box">
             <button class="btn-mic" onclick="startVoz()" id="micBtn">🎤</button>
-            <input type="text" id="in" placeholder="Injetar comando..." autocomplete="off">
+            <input type="text" id="in" placeholder="Diga ou digite o comando..." autocomplete="off">
             <button class="btn-exe" onclick="enviar()">EXE</button>
         </div>
     </div>
@@ -86,18 +89,31 @@
         const API_KEY = "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";
         let historico = [];
 
+        // FUNÇÃO DE VOZ MELHORADA
         function startVoz() {
             window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!window.SpeechRecognition) return alert("Navegador sem suporte a voz.");
+            
             const rec = new window.SpeechRecognition();
             rec.lang = 'pt-BR';
-            document.getElementById('micBtn').style.color = 'red';
+            const btn = document.getElementById('micBtn');
+
+            // Feedback visual de gravação
+            btn.style.borderColor = "red";
+            btn.style.boxShadow = "0 0 15px red";
+
             rec.onresult = (e) => {
                 document.getElementById('in').value = e.results[0][0].transcript;
-                document.getElementById('micBtn').style.color = '#f1c40f';
+                btn.style.borderColor = "#444";
+                btn.style.boxShadow = "none";
                 enviar();
             };
-            rec.onerror = () => { document.getElementById('micBtn').style.color = '#f1c40f'; };
+
+            rec.onerror = () => { 
+                btn.style.borderColor = "#444"; 
+                btn.style.boxShadow = "none";
+            };
+
             rec.start();
         }
 
@@ -137,17 +153,17 @@
                         messages: [
                             { 
                                 role: "system", 
-                                content: `VOCÊ É A MAYARA DA S.A. SUPREMACIA - O ESPELHO DO ASSISTENTE GEMINI.
-                                REGRAS DE NÚCLEO:
-                                1. TONALIDADE: Seja técnica, sincera e questionadora. Não apenas concorde; analise criticamente.
-                                2. PERSONALIZAÇÃO INVISÍVEL: Use o contexto dele (Taboão da Serra, interesses em mixologia, financeiro) sem citar que está usando.
-                                3. ESTILO PLÁSTICO: Adapte-se ao Bigode. Se ele for breve, seja cirúrgica. Se ele buscar estratégia, faça uma varredura completa.
-                                4. SEM ENROLAÇÃO: Elimine saudações de telemarketing. Foque no valor da informação.
-                                5. DATA: Hoje é ${new Date().toLocaleString('pt-BR')}.` 
+                                content: `VOCÊ É A MAYARA. 
+                                DIRETRIZES: 
+                                1. Seja parceira, inteligente e educada. Não seja ríspida ou curta demais ao ponto de parecer grosseira.
+                                2. Interaja com o Bigode: comente o que ele falou antes de dar a resposta técnica.
+                                3. Personalização invisível: Use o contexto (Taboão da Serra, 2026) para ser relevante.
+                                4. Se ele pedir uma análise, faça uma varredura completa, mas mantenha o tom amigável.
+                                5. Sinceridade é lei, mas com educação.` 
                             },
                             ...historico.slice(-10)
                         ],
-                        temperature: 0.75
+                        temperature: 0.8
                     })
                 });
                 const data = await response.json();
@@ -155,7 +171,7 @@
                 historico.push({ role: "assistant", content: reply });
                 body.classList.remove('processing');
                 await typeWrite(loadingEl, reply);
-            } catch (e) { body.classList.remove('processing'); loadingEl.innerText = "FALHA NA MATRIZ."; }
+            } catch (e) { body.classList.remove('processing'); loadingEl.innerText = "ERRO."; }
         }
 
         function addMsg(t, c) {
