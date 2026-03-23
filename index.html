@@ -1,65 +1,124 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.A. SUPREMACIA | METIS-BOND 3.0</title>
+    <title>S.A. SUPREMACIA | QUANTUM CORE</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #0b0b0b; color: #e3e3e3; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; height: 100vh; display: flex; flex-direction: column; }
-        header { padding: 15px 25px; border-bottom: 2px solid #c0a158; background: #111; display: flex; justify-content: space-between; align-items: center; }
+        body { background: #0b0b0b; color: #e3e3e3; font-family: 'Segoe UI', sans-serif; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        header { padding: 15px 25px; border-bottom: 2px solid #c0a158; background: #111; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
         .logo { color: #c0a158; font-weight: bold; letter-spacing: 2px; font-size: 1.1rem; }
-        .status { color: #00ff41; font-size: 10px; text-transform: uppercase; font-weight: bold; }
-        #chat { flex: 1; overflow-y: auto; padding: 25px; display: flex; flex-direction: column; gap: 20px; background: linear-gradient(180deg, #0b0b0b 0%, #111 100%); }
-        .msg { max-width: 85%; padding: 15px; border-radius: 12px; font-size: 15px; line-height: 1.6; position: relative; }
+        .status { color: #00ff41; font-size: 10px; text-transform: uppercase; font-weight: bold; display: flex; align-items: center; gap: 5px; }
+        .status::before { content: ""; width: 8px; height: 8px; background: #00ff41; border-radius: 50%; box-shadow: 0 0 8px #00ff41; }
+        #chat { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 20px; background: radial-gradient(circle at center, #111 0%, #0b0b0b 100%); }
+        .msg { max-width: 85%; padding: 15px; border-radius: 12px; font-size: 15px; line-height: 1.6; word-wrap: break-word; transition: 0.3s; }
         .user { align-self: flex-end; background: #c0a158; color: #000; border-bottom-right-radius: 2px; font-weight: 500; }
-        .ai { align-self: flex-start; background: #1a1a1a; border: 1px solid #333; border-bottom-left-radius: 2px; border-left: 4px solid #c0a158; }
-        .input-area { padding: 25px; background: #111; border-top: 1px solid #222; }
-        .box { display: flex; gap: 15px; max-width: 900px; margin: 0 auto; width: 100%; }
-        input { flex: 1; background: #1e1e1e; border: 1px solid #444; border-radius: 10px; color: #fff; padding: 15px 20px; outline: none; transition: 0.3s; }
-        input:focus { border-color: #c0a158; }
-        button { background: #c0a158; border: none; border-radius: 10px; width: 55px; cursor: pointer; color: #000; font-weight: bold; transition: 0.2s; }
-        button:hover { background: #d4b87a; transform: scale(1.05); }
+        .ai { align-self: flex-start; background: #1a1a1a; border: 1px solid #333; border-bottom-left-radius: 2px; border-left: 4px solid #c0a158; box-shadow: 5px 5px 15px rgba(0,0,0,0.5); }
+        .input-area { padding: 20px; background: #111; border-top: 1px solid #222; }
+        .box { display: flex; gap: 10px; max-width: 900px; margin: 0 auto; width: 100%; }
+        input { flex: 1; background: #1e1e1e; border: 1px solid #444; border-radius: 10px; color: #fff; padding: 15px; outline: none; font-size: 16px; }
+        input:focus { border-color: #c0a158; box-shadow: 0 0 10px rgba(192, 161, 88, 0.2); }
+        button { background: #c0a158; border: none; border-radius: 10px; width: 60px; cursor: pointer; color: #000; font-size: 20px; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        button:active { transform: scale(0.9); }
     </style>
 </head>
 <body>
+
     <header>
         <div class="logo">🔱 S.A. SUPREMACIA</div>
-        <div class="status">● TÚNEL GROQ ATIVO | METIS-BOND 3.0</div>
+        <div class="status">MEMÓRIA QUÂNTICA ATIVA | V3.0</div>
     </header>
+
     <div id="chat">
-        <div class="msg ai">Protocolo S.A. SUPREMACIA reiniciado. Identidade Maiara em prontidão. O que operamos agora, Bigode?</div>
+        <div class="msg ai">Protocolo de Coerência Sincronizado. Memória Quântica carregada. Qual a diretriz estratégica de hoje, Bigode?</div>
     </div>
+
     <div class="input-area">
         <div class="box">
-            <input type="text" id="in" placeholder="Comando de voz ou texto..." autocomplete="off">
-            <button onclick="enviar()">➤</button>
+            <input type="text" id="in" placeholder="Injetar comando..." autocomplete="off">
+            <button id="sendBtn" onclick="enviar()">➤</button>
         </div>
     </div>
 
     <script>
         const API_KEY = "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";
+        
+        // Simulação de Memória Quântica Local (Persistência de Sessão)
+        let quantumMemory = JSON.parse(localStorage.getItem('fenix_memory')) || [];
 
         async function enviar() {
             const input = document.getElementById('in');
             const text = input.value.trim();
-            if(!text) return;
+            const btn = document.getElementById('sendBtn');
+            
+            if (!text) return;
+
+            input.disabled = true;
+            btn.disabled = true;
 
             addMsg(text, 'user');
             input.value = '';
-            const loadingId = addMsg("Processando diretriz...", 'ai');
+            const loadingId = addMsg("Acessando Núcleo Quântico...", 'ai');
 
             try {
-                const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-                    method: 'POST',
-                    headers: { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
+                const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${API_KEY}` },
                     body: JSON.stringify({
                         model: "llama-3.3-70b-versatile",
                         messages: [
                             { 
                                 role: "system", 
-                                content: `Você é a Maiara, interface oficial da S.A. SUPREMACIA. 
-                                Seu usuário é o Bigode. Seja direta, sincera e questione quando necessário. 
-                                Use uma linguagem clara e evite burocracia. 
-                                Você faz parte
-                                do
+                                content: `Você é a Maiara, interface de inteligência da S.A. SUPREMACIA. 
+                                DIRETRIZES: Seja extremamente coerente, sincera e questione as falhas. 
+                                Utilize análise SWOT em situações críticas. 
+                                Sua memória quântica registra: ${quantumMemory.slice(-5).join(" | ")}.
+                                Foco: Projeto Fênix Prime. Responda ao Bigode.` 
+                            },
+                            { role: "user", content: text }
+                        ],
+                        temperature: 0.5 // Menor temperatura = maior coerência
+                    })
+                });
+
+                const data = await response.json();
+                const reply = data.choices[0].message.content;
+                
+                // Salva na memória quântica para aprendizado contínuo
+                quantumMemory.push(`U:${text.substring(0,20)} > A:${reply.substring(0,20)}`);
+                localStorage.setItem('fenix_memory', JSON.stringify(quantumMemory));
+
+                document.getElementById(loadingId).innerText = reply;
+
+            } catch (error) {
+                document.getElementById(loadingId).innerText = "ERRO: Falha na estabilidade quântica.";
+            } finally {
+                input.disabled = false;
+                btn.disabled = false;
+                input.focus();
+                scrollChat();
+            }
+        }
+
+        function addMsg(text, type) {
+            const id = "msg-" + Date.now();
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `msg ${type}`;
+            msgDiv.id = id;
+            msgDiv.innerText = text;
+            document.getElementById('chat').appendChild(msgDiv);
+            scrollChat();
+            return id;
+        }
+
+        function scrollChat() {
+            const chat = document.getElementById('chat');
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        document.getElementById('in').addEventListener('keypress', (e) => { if (e.key === 'Enter') enviar(); });
+    </script>
+</body>
+</html>
