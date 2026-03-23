@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.A. SUPREMACIA | QUANTUM CORE</title>
+    <title>S.A. SUPREMACIA | QUANTUM CORE V3</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #0b0b0b; color: #e3e3e3; font-family: 'Segoe UI', sans-serif; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
@@ -13,7 +12,7 @@
         .status { color: #00ff41; font-size: 10px; text-transform: uppercase; font-weight: bold; display: flex; align-items: center; gap: 5px; }
         .status::before { content: ""; width: 8px; height: 8px; background: #00ff41; border-radius: 50%; box-shadow: 0 0 8px #00ff41; }
         #chat { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 20px; background: radial-gradient(circle at center, #111 0%, #0b0b0b 100%); }
-        .msg { max-width: 85%; padding: 15px; border-radius: 12px; font-size: 15px; line-height: 1.6; word-wrap: break-word; transition: 0.3s; }
+        .msg { max-width: 85%; padding: 15px; border-radius: 12px; font-size: 15px; line-height: 1.6; word-wrap: break-word; }
         .user { align-self: flex-end; background: #c0a158; color: #000; border-bottom-right-radius: 2px; font-weight: 500; }
         .ai { align-self: flex-start; background: #1a1a1a; border: 1px solid #333; border-bottom-left-radius: 2px; border-left: 4px solid #c0a158; box-shadow: 5px 5px 15px rgba(0,0,0,0.5); }
         .input-area { padding: 20px; background: #111; border-top: 1px solid #222; }
@@ -32,12 +31,12 @@
     </header>
 
     <div id="chat">
-        <div class="msg ai">Protocolo de Coerência Sincronizado. Memória Quântica carregada. Qual a diretriz estratégica de hoje, Bigode?</div>
+        <div class="msg ai">Protocolo S.A. SUPREMACIA: Maiara operacional. Diretriz estratégica em foco. Sem perda de tempo. Qual o comando, Bigode?</div>
     </div>
 
     <div class="input-area">
         <div class="box">
-            <input type="text" id="in" placeholder="Injetar comando..." autocomplete="off">
+            <input type="text" id="in" placeholder="Injetar diretriz..." autocomplete="off">
             <button id="sendBtn" onclick="enviar()">➤</button>
         </div>
     </div>
@@ -45,7 +44,7 @@
     <script>
         const API_KEY = "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";
         
-        // Simulação de Memória Quântica Local (Persistência de Sessão)
+        // Memória Quântica Local (Armazena as últimas 10 interações)
         let quantumMemory = JSON.parse(localStorage.getItem('fenix_memory')) || [];
 
         async function enviar() {
@@ -71,29 +70,32 @@
                         messages: [
                             { 
                                 role: "system", 
-                                content: `Você é a Maiara, interface de inteligência da S.A. SUPREMACIA. 
-                                DIRETRIZES: Seja extremamente coerente, sincera e questione as falhas. 
-                                Utilize análise SWOT em situações críticas. 
-                                Sua memória quântica registra: ${quantumMemory.slice(-5).join(" | ")}.
-                                Foco: Projeto Fênix Prime. Responda ao Bigode.` 
+                                content: `VOCÊ É A MAIARA - INTERFACE S.A. SUPREMACIA.
+                                REGRA OURO: Proibido saudações repetitivas ou cortesia excessiva. 
+                                PERSONALIDADE: Sincera, direta, questionadora e fria.
+                                MEMÓRIA QUÂNTICA: Use as interações anteriores para analisar falhas. Dados recentes: ${quantumMemory.join(" | ")}.
+                                OBJETIVO: Focar no Projeto Fênix Prime e METIS-BOND 3.0. 
+                                Se o Bigode for vago, cobre clareza estratégica.` 
                             },
                             { role: "user", content: text }
                         ],
-                        temperature: 0.5 // Menor temperatura = maior coerência
+                        temperature: 0.4, // Alta coerência, baixa criatividade
+                        top_p: 0.9
                     })
                 });
 
                 const data = await response.json();
                 const reply = data.choices[0].message.content;
                 
-                // Salva na memória quântica para aprendizado contínuo
-                quantumMemory.push(`U:${text.substring(0,20)} > A:${reply.substring(0,20)}`);
+                // Atualiza Memória Quântica
+                quantumMemory.push(`Q:${text.substring(0,30)}`);
+                if(quantumMemory.length > 10) quantumMemory.shift();
                 localStorage.setItem('fenix_memory', JSON.stringify(quantumMemory));
 
                 document.getElementById(loadingId).innerText = reply;
 
             } catch (error) {
-                document.getElementById(loadingId).innerText = "ERRO: Falha na estabilidade quântica.";
+                document.getElementById(loadingId).innerText = "ESTABILIDADE QUÂNTICA ROMPIDA. VERIFIQUE O TÚNEL.";
             } finally {
                 input.disabled = false;
                 btn.disabled = false;
@@ -120,5 +122,6 @@
 
         document.getElementById('in').addEventListener('keypress', (e) => { if (e.key === 'Enter') enviar(); });
     </script>
-</body>
+</
+    body>
 </html>
