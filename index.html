@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>S.A. SUPREMACIA | OMNI V27 FINAL</title>
+    <title>S.A. SUPREMACIA | QUANTUM BINARY V27</title>
     <style>
         :root { --gold: #f1c40f; --dark: #050505; --green: #00ff41; --red: #ff3e3e; --gray: #1a1a1a; }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -39,13 +39,13 @@
 <body id="main-body">
 
     <header>
-        <div class="tridente" id="tridenteSupremo" onclick="solicitarReset()">🔱</div>
-        <div style="font-size: 10px; color: #444; margin-top: 5px; letter-spacing: 2px;">S.A. SUPREMACIA | 17 AGENTES</div>
+        <div class="tridente" id="tridenteSupremo">🔱</div>
+        <div style="font-size: 10px; color: #444; margin-top: 5px; letter-spacing: 2px;">S.A. SUPREMACIA | BINARY QUANTUM ENGINE</div>
     </header>
 
     <div class="dashboard">
         <div class="metric-card" id="cardStatus">
-            <div class="metric-title">STATUS DA MATRIZ</div>
+            <div class="metric-title">STATUS DA MATRIZ (0/1)</div>
             <div id="m1" class="metric-value">STANDBY</div>
         </div>
         <div class="metric-card" id="cardRisco">
@@ -53,60 +53,55 @@
             <div id="m2" class="metric-value">0%</div>
         </div>
         <div class="metric-card">
-            <div class="metric-title">PROJEÇÃO (-50%)</div>
-            <div id="m3" class="metric-value">R$ 0,00</div>
+            <div class="metric-title">ALGORITMO WALL STREET</div>
+            <div id="m3" class="metric-value" style="color: var(--gold);">ATIVO</div>
         </div>
         <div class="metric-card">
-            <div class="metric-title">MODO ATIVO</div>
-            <div id="m4" class="metric-value" style="color: var(--gold);">DUAL: BIZ/LIFE</div>
+            <div class="metric-title">LOGICA BINARIA</div>
+            <div id="m4" class="metric-value" style="color: var(--gold);">SINCRONIZADA</div>
         </div>
     </div>
 
     <div id="chat">
-        <div class="msg ai"><span class="tag">[MAYARA V27 OMNI]</span>Sidney, sistema unificado e blindado. Trava de Sabotagem e Protocolo de Reintegração ativos. Qual a estratégia para Taboão hoje?</div>
+        <div class="msg ai"><span class="tag">[MAYARA V27 OMNI]</span>Sidney, motor binário de Wall Street injetado. Engenharia de plataformas ativa. Aguardando input de dados para processamento frio.</div>
     </div>
 
     <div class="controls">
-        <button class="btn-download" onclick="downloadRelatorio()">Exportar Dados</button>
+        <button class="btn-download" onclick="downloadRelatorio()">Relatório de Auditoria</button>
         <span style="font-size: 9px; color: #555;">TABOÃO DA SERRA | 23/03/2026</span>
     </div>
 
     <div class="input-area">
         <div class="box">
             <button class="btn-mic" id="micBtn" onclick="startVoz()">🎤</button>
-            <input type="text" id="in" placeholder="Comando Supremo..." autocomplete="off">
+            <input type="text" id="in" placeholder="Injetar Dados Quantitativos..." autocomplete="off">
             <button class="btn-exe" onclick="enviar()">EXE</button>
         </div>
     </div>
 
     <script>
+        // BACK-END PROTEGIDO (SIMULAÇÃO DE PROXY PARA INVESTIDORES)
+        const QUANT_SERVER = {
+            getToken: () => "ENCRYPTED_AUTH_WALL_STREET",
+            getLogic: (lucro, risco, fadiga) => {
+                const lucroReal = lucro * 0.5; // Regra de Ouro Injetada no Core
+                return (lucroReal > (risco * 0.15) && fadiga < 70) ? 1 : 0;
+            }
+        };
+
         const API_KEY = "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";
         let historico = [];
         let modoSabotagem = false;
-
-        function startVoz() {
-            const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if(!Speech) return alert("Voz não suportada.");
-            const rec = new Speech(); rec.lang = 'pt-BR';
-            const btn = document.getElementById('micBtn');
-            btn.classList.add('active');
-            rec.onresult = (e) => { document.getElementById('in').value = e.results[0][0].transcript; btn.classList.remove('active'); enviar(); };
-            rec.onerror = () => btn.classList.remove('active');
-            rec.start();
-        }
 
         async function enviar() {
             const input = document.getElementById('in');
             const text = input.value.trim();
             if (!text) return;
 
-            // Lógica de Reintegração: Se o valor for 1000, ele destrava a sabotagem
             if (modoSabotagem && text === "1000") {
                 modoSabotagem = false;
-                addMsg("PROVA DE LUCIDEZ ACEITA. Sistema reintegrado, Sidney. Tridente em Dourado.", 'ai');
-                document.getElementById('m1').innerText = "LIBERADO";
-                document.getElementById('m1').style.color = "var(--green)";
-                document.getElementById('tridenteSupremo').style.color = "var(--gold)";
+                addMsg("LUCIDEZ COMPROVADA. Motor Binário Reintegrado.", 'ai');
+                updateUI("LIBERADO", "var(--green)", "var(--gold)");
                 input.value = ''; return;
             }
 
@@ -114,7 +109,7 @@
             historico.push({ role: "user", content: text });
             input.value = '';
             document.getElementById('main-body').classList.add('processing');
-            const loadingId = addMsg("...", 'ai');
+            const loadingId = addMsg("Processando Lógica Binária...", 'ai');
             const loadingEl = document.getElementById(loadingId);
 
             try {
@@ -124,10 +119,10 @@
                     body: JSON.stringify({
                         model: "llama-3.3-70b-versatile",
                         messages: [
-                            { role: "system", content: "VOCÊ É A MAYARA V27. 1. Criador: Sidney (Bigode). 2. Regra de Ouro: -50%. 3. Se o risco for alto ou operador exausto, diga SABOTAGEM e decida PULA." },
+                            { role: "system", content: "VOCÊ É A MAYARA V27 - QUANTUM ENGINE. 1. Base: Engenharia de Wall Street. 2. Decisão Binária: 1 (ENTRA) ou 0 (PULA). 3. Regra de Ouro: -50% obrigatório. 4. Respostas curtas, frias e técnicas." },
                             ...historico.slice(-12)
                         ],
-                        temperature: 0.6
+                        temperature: 0.3 // Baixa temperatura para maior precisão matemática
                     })
                 });
                 const data = await res.json();
@@ -135,23 +130,24 @@
                 historico.push({ role: "assistant", content: reply });
                 document.getElementById('main-body').classList.remove('processing');
                 
-                // SINCRONIZAÇÃO OMNI
-                const m1 = document.getElementById('m1');
-                const tri = document.getElementById('tridenteSupremo');
-
-                if(reply.includes("SABOTAGEM") || reply.includes("PULA")) { 
-                    m1.innerText = "SABOTAGEM!"; m1.style.color = "var(--red)";
-                    tri.style.color = "var(--red)";
+                if(reply.includes("0") || reply.includes("SABOTAGEM") || reply.includes("PULA")) { 
+                    updateUI("SABOTAGEM (0)", "var(--red)", "var(--red)");
                     modoSabotagem = true;
-                    if("vibrate" in navigator) navigator.vibrate([500, 110, 500]);
-                    addMsg("🚨 PROTOCOLO DE REINTEGRAÇÃO: Para liberar a Matriz, responda: Se o lucro bruto é R$ 2.000,00, qual o valor real na Regra de Ouro?", 'ai');
-                } else if(reply.includes("ENTRA")) { 
-                    m1.innerText = "LIBERADO"; m1.style.color = "var(--green)";
-                    tri.style.color = "var(--gold)";
+                    if("vibrate" in navigator) navigator.vibrate([500, 100, 500, 100, 500]);
+                    addMsg("🚨 BLOQUEIO BINÁRIO ATIVO. Responda o cálculo de reintegração para destravar.", 'ai');
+                } else if(reply.includes("1") || reply.includes("ENTRA")) { 
+                    updateUI("LIBERADO (1)", "var(--green)", "var(--gold)");
                 }
 
                 await typeWrite(loadingEl, reply);
-            } catch (e) { loadingEl.innerText = "ERRO NA MATRIZ."; }
+            } catch (e) { loadingEl.innerText = "FALHA NO SERVIDOR QUANTUM."; }
+        }
+
+        function updateUI(status, color, triColor) {
+            const m1 = document.getElementById('m1');
+            const tri = document.getElementById('tridenteSupremo');
+            m1.innerText = status; m1.style.color = color;
+            tri.style.color = triColor;
         }
 
         function addMsg(t, c) {
@@ -165,19 +161,26 @@
         }
 
         async function typeWrite(el, text) {
-            el.innerHTML = ""; let i = 0;
-            function n() { if (i < text.length) { el.innerHTML += text.charAt(i); i++; setTimeout(n, 12); } }
+            el.innerHTML = `<span class="tag">[MAYARA]</span>`; let i = 0;
+            function n() { if (i < text.length) { el.innerHTML += text.charAt(i); i++; setTimeout(n, 10); } }
             n();
         }
 
-        function downloadRelatorio() {
-            const dataStr = "data:text/plain;charset=utf-8," + encodeURIComponent("RELATORIO OMNI V27 - S.A. SUPREMACIA\nCriador: Sidney Bigode\nStatus: Blindado");
-            const dlAnchorElem = document.createElement('a');
-            dlAnchorElem.setAttribute("href", dataStr);
-            dlAnchorElem.setAttribute("download", "Relatorio_OMNI.txt");
-            dlAnchorElem.click();
+        function startVoz() {
+            const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if(!Speech) return;
+            const rec = new Speech(); rec.lang = 'pt-BR';
+            document.getElementById('micBtn').classList.add('active');
+            rec.onresult = (e) => { document.getElementById('in').value = e.results[0][0].transcript; document.getElementById('micBtn').classList.remove('active'); enviar(); };
+            rec.start();
         }
-        document.getElementById('in').addEventListener('keypress', (e) => { if (e.key === 'Enter') enviar(); });
+
+        function downloadRelatorio() {
+            const log = historico.map(h => `[${h.role.toUpperCase()}]: ${h.content}`).join('\n');
+            const blob = new Blob([`RELATÓRIO DE AUDITORIA BINÁRIA - S.A. SUPREMACIA\nOPERADOR: S.B. (BIGODE)\nDATA: 23/03/2026\n\n${log}`], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = 'Audit_Report_V27.txt'; a.click();
+        }
     </script>
 </body>
 </html>
