@@ -14,7 +14,7 @@
         .msg { max-width: 80%; padding: 12px; border-radius: 15px; line-height: 1.4; }
         .user { align-self: flex-end; background: #252525; border-bottom-right-radius: 2px; }
         .ai { align-self: flex-start; background: #161616; border: 1px solid #333; border-bottom-left-radius: 2px; }
-        .error-box { color: #ff4444; border: 1px solid #ff4444; padding: 10px; font-size: 0.8rem; margin-top: 5px; }
+        .error-box { color: #ff4444; border: 1px solid #ff4444; padding: 10px; font-size: 0.8rem; margin-top: 5px; background: rgba(255,0,0,0.1); }
         .input-box { padding: 20px; display: flex; gap: 10px; max-width: 800px; margin: 0 auto; width: 100%; }
         input { flex: 1; background: #1e1e1e; border: 1px solid #444; border-radius: 25px; color: #fff; padding: 12px 20px; outline: none; }
         button { background: #c0a158; border: none; border-radius: 50%; width: 45px; height: 45px; cursor: pointer; color: #000; font-weight: bold; }
@@ -26,14 +26,15 @@
         <div style="display:flex; align-items:center; gap:5px; font-size:12px;"><div class="status-dot"></div> OPERAÇÃO ATIVA</div>
     </header>
     <div id="chat">
-        <div class="msg ai">Sistemas sincronizados. Aguardando diretrizes de operação, Bigode.</div>
+        <div class="msg ai">Sistemas sincronizados. Protocolo METIS-BOND 3.0 ativo. O que vamos operar hoje, Bigode?</div>
     </div>
     <div class="input-box">
-        <input type="text" id="in" placeholder="Digite seu comando...">
+        <input type="text" id="in" placeholder="Digite seu comando..." autocomplete="off">
         <button onclick="enviar()">➤</button>
     </div>
 
     <script>
+        // CHAVE HOMOLOGADA
         const API_KEY = "AIzaSyBaysGMPXh4sHd0ytUe1I_XCHcG47aVYmw";
 
         async function enviar() {
@@ -46,8 +47,8 @@
             const loadingId = addMsg("Sincronizando via Túnel Estável...", 'ai');
 
             try {
-                // CORREÇÃO: Usando a rota v1 estável
-                const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+                // ROTA ESTÁVEL COM MODELO GEMINI-PRO
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`;
                 
                 const res = await fetch(url, {
                     method: 'POST',
@@ -62,14 +63,14 @@
                 if (data.error) {
                     document.getElementById(loadingId).innerHTML = `
                         <div class="error-box">
-                            <strong>ERRO DE TÚNEL:</strong><br>
+                            <strong>FALHA NA COMUNICAÇÃO:</strong><br>
                             ${data.error.message}
                         </div>`;
                 } else {
                     document.getElementById(loadingId).innerText = data.candidates[0].content.parts[0].text;
                 }
             } catch (e) {
-                document.getElementById(loadingId).innerText = "ERRO CRÍTICO: Falha na conexão de rede.";
+                document.getElementById(loadingId).innerText = "ERRO CRÍTICO: Falha física na conexão de rede.";
             }
         }
 
@@ -79,11 +80,17 @@
             d.className = `msg ${c}`;
             d.id = id;
             d.innerText = t;
-            document.getElementById('chat').appendChild(d);
-            document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
+            const chat = document.getElementById('chat');
+            chat.appendChild(d);
+            chat.scrollTop = chat.scrollHeight;
             return id;
         }
+
+        // Enviar com a tecla Enter
+        document.getElementById('in').addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') enviar();
+        });
     </script>
 </body>
- 
+
 </html>
