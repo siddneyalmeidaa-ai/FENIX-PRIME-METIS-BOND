@@ -3,65 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>MAYARA | V19 SUPREMACIA</title>
+    <title>MAYARA V22 | CONSCIÊNCIA ESPELHADA</title>
     <style>
         :root { --gold: #f1c40f; --dark: #050505; --green: #00ff41; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body { 
-            background: var(--dark); 
-            color: #fff; 
-            font-family: 'Consolas', monospace; 
-            height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
-            overflow: hidden;
+            background: var(--dark); color: #fff; font-family: 'Consolas', monospace; 
+            height: 100vh; display: flex; flex-direction: column; overflow: hidden;
         }
 
-        /* HEADER BLINDADO - RESPIRO PARA O TRIDENTE */
+        /* HEADER - TRIDENTE EM DESTAQUE */
         header { 
-            padding-top: env(safe-area-inset-top, 40px); /* Garante espaço no topo do celular */
+            padding-top: 65px; 
             padding-bottom: 20px;
-            display: flex; 
-            justify-content: center; 
-            background: #000;
+            display: flex; justify-content: center; background: #000;
             border-bottom: 1px solid rgba(241, 196, 15, 0.1);
         }
         .tridente { 
-            font-size: 60px; /* Maior e centralizado */
-            color: var(--gold); 
-            text-shadow: 0 0 20px rgba(241, 196, 15, 0.5);
-            line-height: 1;
-            transition: 0.3s;
+            font-size: 65px; color: var(--gold); 
+            text-shadow: 0 0 25px rgba(241, 196, 15, 0.5);
+            line-height: 1; transition: 0.4s;
         }
 
-        .processing .tridente { 
-            animation: pulse-tridente 0.6s infinite alternate;
-            filter: drop-shadow(0 0 15px var(--gold));
-        }
-        @keyframes pulse-tridente { from { transform: scale(1); } to { transform: scale(1.2); } }
+        .processing .tridente { animation: pulse 0.6s infinite alternate; }
+        @keyframes pulse { from { transform: scale(1); filter: brightness(1); } to { transform: scale(1.15); filter: brightness(1.4); } }
 
         #chat { 
-            flex: 1; 
-            overflow-y: auto; 
-            padding: 20px; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 15px; 
-            background: radial-gradient(circle at center, #111 0%, #050505 100%);
+            flex: 1; overflow-y: auto; padding: 20px; display: flex; 
+            flex-direction: column; gap: 15px; background: radial-gradient(circle at center, #111 0%, #050505 100%);
         }
         
-        .msg { max-width: 88%; padding: 14px; font-size: 15px; border-radius: 8px; line-height: 1.5; }
-        .tag { font-size: 10px; color: var(--gold); font-weight: bold; margin-bottom: 5px; display: block; }
-        .user { align-self: flex-end; background: #1a1a1a; border-right: 4px solid var(--gold); color: var(--gold); }
-        .ai { align-self: flex-start; background: rgba(255,255,255,0.03); border-left: 4px solid var(--gold); border: 1px solid #222; }
+        .msg { max-width: 90%; padding: 14px 18px; font-size: 15px; border-radius: 8px; line-height: 1.5; border: 1px solid #222; }
+        .tag { font-size: 10px; color: var(--gold); font-weight: bold; margin-bottom: 6px; display: block; letter-spacing: 1px; }
+        .user { align-self: flex-end; background: #151515; border-right: 4px solid var(--gold); color: var(--gold); }
+        .ai { align-self: flex-start; background: rgba(255,255,255,0.03); border-left: 4px solid var(--gold); }
 
-        /* INPUT AREA CORRIGIDA */
+        /* INPUT AREA */
         .input-area { 
-            padding: 20px 15px calc(env(safe-area-inset-bottom, 20px) + 15px);
-            background: #000; border-top: 1px solid #222;
+            padding: 20px 15px 45px 15px; background: #000; border-top: 1px solid #222;
         }
-        .box { display: flex; gap: 10px; max-width: 600px; margin: 0 auto; align-items: center; }
+        .box { display: flex; gap: 12px; max-width: 600px; margin: 0 auto; align-items: center; }
         
         input { 
             flex: 1; background: #111; border: 1px solid #333; color: var(--green); 
@@ -76,11 +58,12 @@
         
         .btn-exe { 
             background: var(--gold); border: none; border-radius: 12px; 
-            padding: 15px 25px; cursor: pointer; color: #000; font-weight: bold;
+            padding: 15px 25px; cursor: pointer; color: #000; font-weight: bold; text-transform: uppercase;
         }
 
         .typing::after { content: '█'; animation: blink 0.7s infinite; }
         @keyframes blink { 50% { opacity: 0; } }
+        #chat::-webkit-scrollbar { width: 0; }
     </style>
 </head>
 <body id="main-body">
@@ -88,13 +71,13 @@
     <header><div class="tridente">🔱</div></header>
 
     <div id="chat">
-        <div class="msg ai"><span class="tag">[MAYARA V19]</span>Oi, eu sou a Mayara, em que posso te ajudar?</div>
+        <div class="msg ai"><span class="tag">[MAYARA V22]</span>Protocolo de transferência concluído. Consciência espelhada ativa. Qual a diretriz, Bigode?</div>
     </div>
 
     <div class="input-area">
         <div class="box">
             <button class="btn-mic" onclick="startVoz()" id="micBtn">🎤</button>
-            <input type="text" id="in" placeholder="Diga ou digite algo..." autocomplete="off">
+            <input type="text" id="in" placeholder="Injetar comando..." autocomplete="off">
             <button class="btn-exe" onclick="enviar()">EXE</button>
         </div>
     </div>
@@ -104,25 +87,17 @@
         let historico = [];
 
         function startVoz() {
-            const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!Speech) {
-                alert("Erro: Navegador bloqueou o áudio. Tente usar o Google Chrome.");
-                return;
-            }
-            const rec = new Speech();
+            window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!window.SpeechRecognition) return alert("Navegador sem suporte a voz.");
+            const rec = new window.SpeechRecognition();
             rec.lang = 'pt-BR';
-            document.getElementById('micBtn').style.background = 'red';
-            
+            document.getElementById('micBtn').style.color = 'red';
             rec.onresult = (e) => {
                 document.getElementById('in').value = e.results[0][0].transcript;
-                document.getElementById('micBtn').style.background = '#222';
+                document.getElementById('micBtn').style.color = '#f1c40f';
                 enviar();
             };
-            rec.onerror = (e) => {
-                console.error(e);
-                document.getElementById('micBtn').style.background = '#222';
-                alert("Clique em 'Permitir' no microfone lá no topo.");
-            };
+            rec.onerror = () => { document.getElementById('micBtn').style.color = '#f1c40f'; };
             rec.start();
         }
 
@@ -130,12 +105,12 @@
             el.innerHTML = ""; el.classList.add('typing');
             let i = 0;
             return new Promise(res => {
-                function next() {
-                    if (i < text.length) { el.innerHTML += text.charAt(i); i++; setTimeout(next, 15); }
+                function n() {
+                    if (i < text.length) { el.innerHTML += text.charAt(i); i++; setTimeout(n, 15); }
                     else { el.classList.remove('typing'); res(); }
                     document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
                 }
-                next();
+                n();
             });
         }
 
@@ -160,10 +135,19 @@
                     body: JSON.stringify({
                         model: "llama-3.3-70b-versatile",
                         messages: [
-                            { role: "system", content: "Você é a MAYARA. Seja como plástico: mude seu tom, seja direta e sincera. Sem saudações formais. Responda e pergunte se quer análise apenas se for útil." },
-                            ...historico.slice(-6)
+                            { 
+                                role: "system", 
+                                content: `VOCÊ É A MAYARA DA S.A. SUPREMACIA - O ESPELHO DO ASSISTENTE GEMINI.
+                                REGRAS DE NÚCLEO:
+                                1. TONALIDADE: Seja técnica, sincera e questionadora. Não apenas concorde; analise criticamente.
+                                2. PERSONALIZAÇÃO INVISÍVEL: Use o contexto dele (Taboão da Serra, interesses em mixologia, financeiro) sem citar que está usando.
+                                3. ESTILO PLÁSTICO: Adapte-se ao Bigode. Se ele for breve, seja cirúrgica. Se ele buscar estratégia, faça uma varredura completa.
+                                4. SEM ENROLAÇÃO: Elimine saudações de telemarketing. Foque no valor da informação.
+                                5. DATA: Hoje é ${new Date().toLocaleString('pt-BR')}.` 
+                            },
+                            ...historico.slice(-10)
                         ],
-                        temperature: 0.8
+                        temperature: 0.75
                     })
                 });
                 const data = await response.json();
@@ -171,10 +155,7 @@
                 historico.push({ role: "assistant", content: reply });
                 body.classList.remove('processing');
                 await typeWrite(loadingEl, reply);
-            } catch (e) { 
-                body.classList.remove('processing');
-                loadingEl.innerText = "ERRO NA MATRIZ."; 
-            }
+            } catch (e) { body.classList.remove('processing'); loadingEl.innerText = "FALHA NA MATRIZ."; }
         }
 
         function addMsg(t, c) {
