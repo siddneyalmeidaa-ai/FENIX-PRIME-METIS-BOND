@@ -2,10 +2,10 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>S.A. SUPREMACIA | V18 PLÁSTICA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>MAYARA | V19 SUPREMACIA</title>
     <style>
-        :root { --gold: #f1c40f; --dark: #050505; --green: #00ff41; --msg-user: #1a1a1a; --msg-ai: rgba(255,255,255,0.02); }
+        :root { --gold: #f1c40f; --dark: #050505; --green: #00ff41; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body { 
@@ -16,30 +16,30 @@
             display: flex; 
             flex-direction: column; 
             overflow: hidden;
-            background-image: radial-gradient(circle at top, #151515 0%, #050505 100%);
         }
 
-        /* Header Centralizado - Apenas o Tridente */
+        /* HEADER BLINDADO - RESPIRO PARA O TRIDENTE */
         header { 
-            padding: 25px 15px; /* Mais respiro para o tridente */
-            border-bottom: 1px solid rgba(241, 196, 15, 0.1); 
+            padding-top: env(safe-area-inset-top, 40px); /* Garante espaço no topo do celular */
+            padding-bottom: 20px;
             display: flex; 
             justify-content: center; 
             background: #000;
+            border-bottom: 1px solid rgba(241, 196, 15, 0.1);
         }
         .tridente { 
-            font-size: 50px; 
+            font-size: 60px; /* Maior e centralizado */
             color: var(--gold); 
-            text-shadow: 0 0 15px rgba(241, 196, 15, 0.4);
-            transition: 0.5s; line-height: 1;
+            text-shadow: 0 0 20px rgba(241, 196, 15, 0.5);
+            line-height: 1;
+            transition: 0.3s;
         }
 
-        /* Animação de Processamento Plástica */
         .processing .tridente { 
-            animation: pulse-tridente 0.8s infinite alternate;
-            text-shadow: 0 0 30px var(--gold);
+            animation: pulse-tridente 0.6s infinite alternate;
+            filter: drop-shadow(0 0 15px var(--gold));
         }
-        @keyframes pulse-tridente { from { transform: scale(1); opacity: 0.6; } to { transform: scale(1.1); opacity: 1; } }
+        @keyframes pulse-tridente { from { transform: scale(1); } to { transform: scale(1.2); } }
 
         #chat { 
             flex: 1; 
@@ -48,70 +48,37 @@
             display: flex; 
             flex-direction: column; 
             gap: 15px; 
-            scroll-behavior: smooth;
+            background: radial-gradient(circle at center, #111 0%, #050505 100%);
         }
         
-        .msg { 
-            max-width: 85%; 
-            padding: 12px 16px; 
-            font-size: 15px; 
-            line-height: 1.5; 
-            position: relative; 
-            border-radius: 4px;
-        }
-        
-        .tag { font-size: 10px; color: var(--gold); font-weight: bold; margin-bottom: 6px; display: block; letter-spacing: 1px; }
+        .msg { max-width: 88%; padding: 14px; font-size: 15px; border-radius: 8px; line-height: 1.5; }
+        .tag { font-size: 10px; color: var(--gold); font-weight: bold; margin-bottom: 5px; display: block; }
+        .user { align-self: flex-end; background: #1a1a1a; border-right: 4px solid var(--gold); color: var(--gold); }
+        .ai { align-self: flex-start; background: rgba(255,255,255,0.03); border-left: 4px solid var(--gold); border: 1px solid #222; }
 
-        .user { align-self: flex-end; background: var(--msg-user); border-right: 4px solid var(--gold); color: var(--gold); }
-        .ai { align-self: flex-start; background: var(--msg-ai); border-left: 4px solid var(--gold); border: 1px solid #222; }
-
-        /* Área de Input - Fixa e Sem Cortar */
+        /* INPUT AREA CORRIGIDA */
         .input-area { 
-            padding: 15px 15px 35px 15px; /* Mais respiro para o mobile */
-            background: #000; 
-            border-top: 1px solid #222;
+            padding: 20px 15px calc(env(safe-area-inset-bottom, 20px) + 15px);
+            background: #000; border-top: 1px solid #222;
         }
         .box { display: flex; gap: 10px; max-width: 600px; margin: 0 auto; align-items: center; }
         
         input { 
-            flex: 1; 
-            background: #111; 
-            border: 1px solid #333; 
-            color: var(--green); 
-            padding: 15px; 
-            border-radius: 8px; 
-            outline: none; 
-            font-size: 16px; 
-            font-family: 'Consolas', monospace;
+            flex: 1; background: #111; border: 1px solid #333; color: var(--green); 
+            padding: 15px; border-radius: 12px; outline: none; font-size: 16px;
         }
         
-        input:focus { border-color: var(--gold); }
-        
-        .btn-icon { 
-            background: #222; 
-            border: 1px solid #444; 
-            color: var(--gold); 
-            width: 50px; height: 50px; 
-            border-radius: 50%; 
-            cursor: pointer;
-            display: flex; align-items: center; justify-content: center; font-size: 22px;
+        .btn-mic { 
+            background: #222; border: 1px solid #444; color: var(--gold); 
+            width: 55px; height: 55px; border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-size: 24px;
         }
         
         .btn-exe { 
-            background: var(--gold); 
-            border: none; 
-            border-radius: 8px; 
-            padding: 15px 25px; 
-            cursor: pointer; 
-            color: #000; 
-            font-weight: bold; 
-            text-transform: uppercase;
+            background: var(--gold); border: none; border-radius: 12px; 
+            padding: 15px 25px; cursor: pointer; color: #000; font-weight: bold;
         }
-        
-        .btn-exe:hover { background: #fff; }
 
-        /* Esconder scrollbar */
-        #chat::-webkit-scrollbar { width: 0px; }
         .typing::after { content: '█'; animation: blink 0.7s infinite; }
         @keyframes blink { 50% { opacity: 0; } }
     </style>
@@ -121,46 +88,51 @@
     <header><div class="tridente">🔱</div></header>
 
     <div id="chat">
-        <div class="msg ai"><span class="tag">[MAYARA V18]</span>Oi, eu sou a Mayara, em que posso te ajudar?</div>
+        <div class="msg ai"><span class="tag">[MAYARA V19]</span>Oi, eu sou a Mayara, em que posso te ajudar?</div>
     </div>
 
     <div class="input-area">
         <div class="box">
-            <button class="btn-icon" onclick="startVoz()" id="micBtn">🎤</button>
-            <input type="text" id="in" placeholder="Injetar diretriz..." autocomplete="off">
+            <button class="btn-mic" onclick="startVoz()" id="micBtn">🎤</button>
+            <input type="text" id="in" placeholder="Diga ou digite algo..." autocomplete="off">
             <button class="btn-exe" onclick="enviar()">EXE</button>
         </div>
     </div>
 
     <script>
         const API_KEY = "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";
-        let historico = []; // MEMÓRIA DA SESSÃO
+        let historico = [];
 
-        // Função de Áudio (Voz para Texto)
         function startVoz() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) return alert("Voz não suportada neste navegador.");
-            const recognition = new SpeechRecognition();
-            recognition.lang = 'pt-BR';
-            document.getElementById('micBtn').style.color = 'red';
+            const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!Speech) {
+                alert("Erro: Navegador bloqueou o áudio. Tente usar o Google Chrome.");
+                return;
+            }
+            const rec = new Speech();
+            rec.lang = 'pt-BR';
+            document.getElementById('micBtn').style.background = 'red';
             
-            recognition.onresult = (event) => {
-                const transcript = event.results[0][0].transcript;
-                document.getElementById('in').value = transcript;
-                document.getElementById('micBtn').style.color = '#f1c40f';
-                enviar(); // Envia automaticamente
+            rec.onresult = (e) => {
+                document.getElementById('in').value = e.results[0][0].transcript;
+                document.getElementById('micBtn').style.background = '#222';
+                enviar();
             };
-            recognition.onerror = () => document.getElementById('micBtn').style.color = '#f1c40f';
-            recognition.start();
+            rec.onerror = (e) => {
+                console.error(e);
+                document.getElementById('micBtn').style.background = '#222';
+                alert("Clique em 'Permitir' no microfone lá no topo.");
+            };
+            rec.start();
         }
 
         async function typeWrite(el, text) {
             el.innerHTML = ""; el.classList.add('typing');
             let i = 0;
-            return new Promise(resolve => {
+            return new Promise(res => {
                 function next() {
                     if (i < text.length) { el.innerHTML += text.charAt(i); i++; setTimeout(next, 15); }
-                    else { el.classList.remove('typing'); resolve(); }
+                    else { el.classList.remove('typing'); res(); }
                     document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
                 }
                 next();
@@ -176,7 +148,7 @@
             addMsg(text, 'user');
             historico.push({ role: "user", content: text });
             input.value = '';
-            body.classList.add('processing'); // Tridente brilha
+            body.classList.add('processing');
 
             const loadingId = addMsg("...", 'ai');
             const loadingEl = document.getElementById(loadingId);
@@ -188,17 +160,8 @@
                     body: JSON.stringify({
                         model: "llama-3.3-70b-versatile",
                         messages: [
-                            { 
-                                role: "system", 
-                                content: `VOCÊ É A MAYARA DA S.A. SUPREMACIA.
-                                DIRETRIZES:
-                                1. Seja como plástico: não use estruturas rígidas. Mude seu tom e estilo a cada resposta para se adaptar ao Bigode.
-                                2. Responda o que foi perguntado de forma sincera e adaptativa (temperature 0.8).
-                                3. Não ofereça análise SWOT em todas as respostas; faça-o apenas se for estratégico ou se for solicitada.
-                                4. Use o contexto real: Hoje é ${new Date().toLocaleString('pt-BR')}, Local: Taboão da Serra/SP.
-                                5. Sinceridade e questionamento são permitidos. Adicione valor, nunca enrole.` 
-                            },
-                            ...historico.slice(-8) // Contexto de 8 mensagens
+                            { role: "system", content: "Você é a MAYARA. Seja como plástico: mude seu tom, seja direta e sincera. Sem saudações formais. Responda e pergunte se quer análise apenas se for útil." },
+                            ...historico.slice(-6)
                         ],
                         temperature: 0.8
                     })
@@ -206,7 +169,7 @@
                 const data = await response.json();
                 const reply = data.choices[0].message.content;
                 historico.push({ role: "assistant", content: reply });
-                body.classList.remove('processing'); // Tridente para de brilhar
+                body.classList.remove('processing');
                 await typeWrite(loadingEl, reply);
             } catch (e) { 
                 body.classList.remove('processing');
@@ -217,14 +180,12 @@
         function addMsg(t, c) {
             const id = "m-" + Date.now();
             const d = document.createElement('div');
-            d.className = `msg ${c}`;
-            d.id = id;
-            d.innerHTML = c === 'ai' ? `<span class="tag">[MAYARA V18]</span>${t}` : t;
+            d.className = `msg ${c}`; d.id = id;
+            d.innerHTML = c === 'ai' ? `<span class="tag">[MAYARA]</span>${t}` : t;
             document.getElementById('chat').appendChild(d);
             document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
             return id;
         }
-        
         document.getElementById('in').addEventListener('keypress', (e) => { if (e.key === 'Enter') enviar(); });
     </script>
 </body>
