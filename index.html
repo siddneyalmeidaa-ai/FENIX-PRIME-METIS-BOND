@@ -3,40 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.A. SUPREMACIA</title>
+    <title>S.A. SUPREMACIA | METIS-BOND 3.0</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #0b0b0b; color: #e3e3e3; font-family: sans-serif; height: 100vh; display: flex; flex-direction: column; }
-        header { padding: 15px; border-bottom: 1px solid #c0a158; display: flex; align-items: center; justify-content: space-between; background: #111; }
-        .logo-area { display: flex; align-items: center; gap: 10px; font-weight: bold; color: #c0a158; }
-        .status-dot { width: 8px; height: 8px; background: #00ff41; border-radius: 50%; box-shadow: 0 0 5px #00ff41; }
-        #chat { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-        .msg { max-width: 80%; padding: 12px; border-radius: 15px; line-height: 1.4; }
-        .user { align-self: flex-end; background: #c0a158; color: #000; border-bottom-right-radius: 2px; }
-        .ai { align-self: flex-start; background: #161616; border: 1px solid #333; border-bottom-left-radius: 2px; }
-        .input-area { padding: 20px; background: #111; border-top: 1px solid #222; }
-        .input-box { display: flex; gap: 10px; max-width: 800px; margin: 0 auto; width: 100%; }
-        input { flex: 1; background: #1e1e1e; border: 1px solid #444; border-radius: 25px; color: #fff; padding: 12px 20px; outline: none; }
-        button { background: #c0a158; border: none; border-radius: 50%; width: 45px; height: 45px; cursor: pointer; color: #000; font-weight: bold; }
+        body { background: #0b0b0b; color: #e3e3e3; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; height: 100vh; display: flex; flex-direction: column; }
+        header { padding: 15px 25px; border-bottom: 2px solid #c0a158; background: #111; display: flex; justify-content: space-between; align-items: center; }
+        .logo { color: #c0a158; font-weight: bold; letter-spacing: 2px; font-size: 1.1rem; }
+        .status { color: #00ff41; font-size: 10px; text-transform: uppercase; font-weight: bold; }
+        #chat { flex: 1; overflow-y: auto; padding: 25px; display: flex; flex-direction: column; gap: 20px; background: linear-gradient(180deg, #0b0b0b 0%, #111 100%); }
+        .msg { max-width: 85%; padding: 15px; border-radius: 12px; font-size: 15px; line-height: 1.6; position: relative; }
+        .user { align-self: flex-end; background: #c0a158; color: #000; border-bottom-right-radius: 2px; font-weight: 500; }
+        .ai { align-self: flex-start; background: #1a1a1a; border: 1px solid #333; border-bottom-left-radius: 2px; border-left: 4px solid #c0a158; }
+        .input-area { padding: 25px; background: #111; border-top: 1px solid #222; }
+        .box { display: flex; gap: 15px; max-width: 900px; margin: 0 auto; width: 100%; }
+        input { flex: 1; background: #1e1e1e; border: 1px solid #444; border-radius: 10px; color: #fff; padding: 15px 20px; outline: none; transition: 0.3s; }
+        input:focus { border-color: #c0a158; }
+        button { background: #c0a158; border: none; border-radius: 10px; width: 55px; cursor: pointer; color: #000; font-weight: bold; transition: 0.2s; }
+        button:hover { background: #d4b87a; transform: scale(1.05); }
     </style>
 </head>
 <body>
     <header>
-        <div class="logo-area">🔱 S.A. SUPREMACIA</div>
-        <div style="display:flex; align-items:center; gap:5px; font-size:12px;"><div class="status-dot"></div> TÚNEL GROQ ATIVO</div>
+        <div class="logo">🔱 S.A. SUPREMACIA</div>
+        <div class="status">● TÚNEL GROQ ATIVO | METIS-BOND 3.0</div>
     </header>
     <div id="chat">
-        <div class="msg ai">Sistemas sincronizados via GroqCloud. Protocolo METIS-BOND 3.0 operacional. O que faremos, Bigode?</div>
+        <div class="msg ai">Protocolo S.A. SUPREMACIA reiniciado. Identidade Maiara em prontidão. O que operamos agora, Bigode?</div>
     </div>
     <div class="input-area">
-        <div class="input-box">
-            <input type="text" id="in" placeholder="Digite seu comando..." autocomplete="off">
+        <div class="box">
+            <input type="text" id="in" placeholder="Comando de voz ou texto..." autocomplete="off">
             <button onclick="enviar()">➤</button>
         </div>
     </div>
 
     <script>
-        // CHAVE HOMOLOGADA DA GROQ
         const API_KEY = "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";
 
         async function enviar() {
@@ -46,51 +47,19 @@
 
             addMsg(text, 'user');
             input.value = '';
-            const loadingId = addMsg("Processando via Llama-3.3...", 'ai');
+            const loadingId = addMsg("Processando diretriz...", 'ai');
 
             try {
                 const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                     method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${API_KEY}`,
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         model: "llama-3.3-70b-versatile",
                         messages: [
-                            { role: "system", content: "Você é a Maiara, interface da S.A. SUPREMACIA. Responda ao Bigode de forma direta." },
-                            { role: "user", content: text }
-                        ]
-                    })
-                });
-
-                const data = await res.json();
-                if(data.choices) {
-                    document.getElementById(loadingId).innerText = data.choices[0].message.content;
-                } else {
-                    document.getElementById(loadingId).innerText = "ERRO: Verifique os limites da API Groq.";
-                }
-            } catch (e) {
-                document.getElementById(loadingId).innerText = "ERRO CRÍTICO: Falha física na conexão.";
-            }
-        }
-
-        function addMsg(t, c) {
-            const id = "m-" + Date.now();
-            const d = document.createElement('div');
-            d.className = `msg ${c}`;
-            d.id = id;
-            d.innerText = t;
-            const chat = document.getElementById('chat');
-            chat.appendChild(d);
-            chat.scrollTop = chat.scrollHeight;
-            return id;
-        }
-
-        document.getElementById('in').addEventListener('keypress', (e) => {
-            if(e.key === 'Enter') enviar();
-        });
-    </script>
-</body>
-<
-    /html>
+                            { 
+                                role: "system", 
+                                content: `Você é a Maiara, interface oficial da S.A. SUPREMACIA. 
+                                Seu usuário é o Bigode. Seja direta, sincera e questione quando necessário. 
+                                Use uma linguagem clara e evite burocracia. 
+                                Você faz parte
+                                do
