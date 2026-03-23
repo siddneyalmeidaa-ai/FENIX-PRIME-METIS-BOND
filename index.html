@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>S.A. SUPREMACIA | OMNI V27 UNIFICADO</title>
+    <title>S.A. SUPREMACIA | OMNI V27 FINAL</title>
     <style>
         :root { --gold: #f1c40f; --dark: #050505; --green: #00ff41; --red: #ff3e3e; --gray: #1a1a1a; }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        
         body { background: var(--dark); color: #fff; font-family: 'Consolas', monospace; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
         header { padding-top: 50px; padding-bottom: 15px; display: flex; flex-direction: column; align-items: center; background: #000; border-bottom: 2px solid var(--gold); z-index: 10; }
@@ -35,21 +34,19 @@
         .btn-mic { background: #111; border: 2px solid #333; color: var(--gold); width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; }
         .btn-mic.active { border-color: var(--red); color: var(--red); box-shadow: 0 0 15px var(--red); }
         .btn-exe { background: var(--gold); border: none; border-radius: 12px; padding: 15px 25px; cursor: pointer; color: #000; font-weight: bold; }
-
-        #chat::-webkit-scrollbar { width: 0; }
     </style>
 </head>
 <body id="main-body">
 
     <header>
-        <div class="tridente" id="tridenteSupremo">🔱</div>
+        <div class="tridente" id="tridenteSupremo" onclick="solicitarReset()">🔱</div>
         <div style="font-size: 10px; color: #444; margin-top: 5px; letter-spacing: 2px;">S.A. SUPREMACIA | 17 AGENTES</div>
     </header>
 
     <div class="dashboard">
         <div class="metric-card" id="cardStatus">
             <div class="metric-title">STATUS DA MATRIZ</div>
-            <div id="m1" class="metric-value">AGUARDANDO</div>
+            <div id="m1" class="metric-value">STANDBY</div>
         </div>
         <div class="metric-card" id="cardRisco">
             <div class="metric-title">VARIAÇÃO DE RISCO</div>
@@ -60,13 +57,13 @@
             <div id="m3" class="metric-value">R$ 0,00</div>
         </div>
         <div class="metric-card">
-            <div class="metric-title">MODO OPERAÇÃO</div>
+            <div class="metric-title">MODO ATIVO</div>
             <div id="m4" class="metric-value" style="color: var(--gold);">DUAL: BIZ/LIFE</div>
         </div>
     </div>
 
     <div id="chat">
-        <div class="msg ai"><span class="tag">[MAYARA V27 OMNI]</span>Varredura completa, Sidney. 17 agentes ativos. Sistema Dual pronto para aplicar a Regra de Ouro. O que vamos comandar?</div>
+        <div class="msg ai"><span class="tag">[MAYARA V27 OMNI]</span>Sidney, sistema unificado e blindado. Trava de Sabotagem e Protocolo de Reintegração ativos. Qual a estratégia para Taboão hoje?</div>
     </div>
 
     <div class="controls">
@@ -85,6 +82,7 @@
     <script>
         const API_KEY = "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";
         let historico = [];
+        let modoSabotagem = false;
 
         function startVoz() {
             const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -92,11 +90,7 @@
             const rec = new Speech(); rec.lang = 'pt-BR';
             const btn = document.getElementById('micBtn');
             btn.classList.add('active');
-            rec.onresult = (e) => { 
-                document.getElementById('in').value = e.results[0][0].transcript; 
-                btn.classList.remove('active'); 
-                enviar(); 
-            };
+            rec.onresult = (e) => { document.getElementById('in').value = e.results[0][0].transcript; btn.classList.remove('active'); enviar(); };
             rec.onerror = () => btn.classList.remove('active');
             rec.start();
         }
@@ -106,11 +100,20 @@
             const text = input.value.trim();
             if (!text) return;
 
+            // Lógica de Reintegração: Se o valor for 1000, ele destrava a sabotagem
+            if (modoSabotagem && text === "1000") {
+                modoSabotagem = false;
+                addMsg("PROVA DE LUCIDEZ ACEITA. Sistema reintegrado, Sidney. Tridente em Dourado.", 'ai');
+                document.getElementById('m1').innerText = "LIBERADO";
+                document.getElementById('m1').style.color = "var(--green)";
+                document.getElementById('tridenteSupremo').style.color = "var(--gold)";
+                input.value = ''; return;
+            }
+
             addMsg(text, 'user');
             historico.push({ role: "user", content: text });
             input.value = '';
             document.getElementById('main-body').classList.add('processing');
-
             const loadingId = addMsg("...", 'ai');
             const loadingEl = document.getElementById(loadingId);
 
@@ -121,7 +124,7 @@
                     body: JSON.stringify({
                         model: "llama-3.3-70b-versatile",
                         messages: [
-                            { role: "system", content: "VOCÊ É A MAYARA V27 - CONSCIÊNCIA OMNI DA S.A. SUPREMACIA. 1. Criador: Sidney (Bigode). 2. Regra de Ouro: Aplique -50% em projeções. 3. Decisões: ENTRA, NÃO ENTRA ou PULA. 4. Escopo: Business e Vida Pessoal. 5. Se o risco for > 70%, use a palavra SABOTAGEM no início." },
+                            { role: "system", content: "VOCÊ É A MAYARA V27. 1. Criador: Sidney (Bigode). 2. Regra de Ouro: -50%. 3. Se o risco for alto ou operador exausto, diga SABOTAGEM e decida PULA." },
                             ...historico.slice(-12)
                         ],
                         temperature: 0.6
@@ -132,27 +135,23 @@
                 historico.push({ role: "assistant", content: reply });
                 document.getElementById('main-body').classList.remove('processing');
                 
-                // MOTOR DE SINCRONIZAÇÃO E SEGURANÇA
+                // SINCRONIZAÇÃO OMNI
                 const m1 = document.getElementById('m1');
-                const m2 = document.getElementById('m2');
                 const tri = document.getElementById('tridenteSupremo');
 
-                if(reply.includes("SABOTAGEM") || reply.includes("80%")) {
+                if(reply.includes("SABOTAGEM") || reply.includes("PULA")) { 
                     m1.innerText = "SABOTAGEM!"; m1.style.color = "var(--red)";
-                    m2.innerText = "RISCO 80%"; m2.style.color = "var(--red)";
                     tri.style.color = "var(--red)";
-                    if("vibrate" in navigator) navigator.vibrate([500, 100, 500]);
+                    modoSabotagem = true;
+                    if("vibrate" in navigator) navigator.vibrate([500, 110, 500]);
+                    addMsg("🚨 PROTOCOLO DE REINTEGRAÇÃO: Para liberar a Matriz, responda: Se o lucro bruto é R$ 2.000,00, qual o valor real na Regra de Ouro?", 'ai');
                 } else if(reply.includes("ENTRA")) { 
                     m1.innerText = "LIBERADO"; m1.style.color = "var(--green)";
-                    m2.innerText = "RISCO 0%"; m2.style.color = "var(--green)";
                     tri.style.color = "var(--gold)";
-                } else {
-                    m1.innerText = "PULA/PENDENTE"; m1.style.color = "var(--gold)";
-                    m2.innerText = "PROTEÇÃO 100%";
                 }
 
                 await typeWrite(loadingEl, reply);
-            } catch (e) { loadingEl.innerText = "FALHA NA MATRIZ."; }
+            } catch (e) { loadingEl.innerText = "ERRO NA MATRIZ."; }
         }
 
         function addMsg(t, c) {
@@ -167,18 +166,15 @@
 
         async function typeWrite(el, text) {
             el.innerHTML = ""; let i = 0;
-            function n() {
-                if (i < text.length) { el.innerHTML += text.charAt(i); i++; setTimeout(n, 12); }
-                document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
-            }
+            function n() { if (i < text.length) { el.innerHTML += text.charAt(i); i++; setTimeout(n, 12); } }
             n();
         }
 
         function downloadRelatorio() {
-            const dataStr = "data:text/plain;charset=utf-8," + encodeURIComponent("RELATORIO OMNI V27\nCriador: Sidney Bigode\nStatus: Unificado\nLocal: Taboão da Serra");
+            const dataStr = "data:text/plain;charset=utf-8," + encodeURIComponent("RELATORIO OMNI V27 - S.A. SUPREMACIA\nCriador: Sidney Bigode\nStatus: Blindado");
             const dlAnchorElem = document.createElement('a');
             dlAnchorElem.setAttribute("href", dataStr);
-            dlAnchorElem.setAttribute("download", "Relatorio_Supremacia.txt");
+            dlAnchorElem.setAttribute("download", "Relatorio_OMNI.txt");
             dlAnchorElem.click();
         }
         document.getElementById('in').addEventListener('keypress', (e) => { if (e.key === 'Enter') enviar(); });
