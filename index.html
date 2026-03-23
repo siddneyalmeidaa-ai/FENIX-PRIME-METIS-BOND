@@ -9,32 +9,24 @@
         body { background-color: #0b0b0b; color: #e3e3e3; font-family: sans-serif; height: 100vh; display: flex; flex-direction: column; }
         header { padding: 15px; border-bottom: 1px solid #c0a158; display: flex; align-items: center; justify-content: space-between; background: #111; }
         .logo-area { display: flex; align-items: center; gap: 10px; font-weight: bold; color: #c0a158; }
-        .status-dot { width: 8px; height: 8px; background: #00ff41; border-radius: 50%; box-shadow: 0 0 5px #00ff41; }
         #chat { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
         .msg { max-width: 80%; padding: 12px; border-radius: 15px; line-height: 1.4; }
         .user { align-self: flex-end; background: #252525; border-bottom-right-radius: 2px; }
         .ai { align-self: flex-start; background: #161616; border: 1px solid #333; border-bottom-left-radius: 2px; }
-        .error-box { color: #ff4444; border: 1px solid #ff4444; padding: 10px; font-size: 0.8rem; margin-top: 5px; background: rgba(255,0,0,0.1); }
+        .error-box { color: #ff4444; border: 1px solid #ff4444; padding: 10px; font-size: 0.8rem; background: rgba(255,0,0,0.1); }
         .input-box { padding: 20px; display: flex; gap: 10px; max-width: 800px; margin: 0 auto; width: 100%; }
         input { flex: 1; background: #1e1e1e; border: 1px solid #444; border-radius: 25px; color: #fff; padding: 12px 20px; outline: none; }
         button { background: #c0a158; border: none; border-radius: 50%; width: 45px; height: 45px; cursor: pointer; color: #000; font-weight: bold; }
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo-area">🔱 S.A. SUPREMACIA</div>
-        <div style="display:flex; align-items:center; gap:5px; font-size:12px;"><div class="status-dot"></div> OPERAÇÃO ATIVA</div>
-    </header>
-    <div id="chat">
-        <div class="msg ai">Sistemas sincronizados. Protocolo METIS-BOND 3.0 ativo. O que vamos operar hoje, Bigode?</div>
-    </div>
+    <header><div class="logo-area">🔱 S.A. SUPREMACIA</div></header>
+    <div id="chat"><div class="msg ai">Sincronização iniciada. Aguardando comando, Bigode.</div></div>
     <div class="input-box">
-        <input type="text" id="in" placeholder="Digite seu comando..." autocomplete="off">
+        <input type="text" id="in" placeholder="Comando de voz ou texto..." autocomplete="off">
         <button onclick="enviar()">➤</button>
     </div>
-
     <script>
-        // CHAVE HOMOLOGADA
         const API_KEY = "AIzaSyBaysGMPXh4sHd0ytUe1I_XCHcG47aVYmw";
 
         async function enviar() {
@@ -44,33 +36,31 @@
 
             addMsg(text, 'user');
             input.value = '';
-            const loadingId = addMsg("Sincronizando via Túnel Estável...", 'ai');
+            const loadingId = addMsg("Tentando Túnel Alternativo...", 'ai');
 
+            // TENTATIVA 1: ROTA V1 (ESTÁVEL)
             try {
-                // ROTA ESTÁVEL COM MODELO GEMINI-PRO
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`;
-                
+                const url = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${API_KEY}`;
                 const res = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: `Você é a Maiara, interface da S.A. SUPREMACIA. Responda ao Bigode. Pergunta: ${text}` }] }]
-                    })
+                    body: JSON.stringify({ contents: [{ parts: [{ text: text }] }] })
                 });
-
                 const data = await res.json();
 
-                if (data.error) {
+                if (data.candidates) {
+                    document.getElementById(loadingId).innerText = data.candidates[0].content.parts[0].text;
+                } else {
+                    // SE FALHAR, EXIBE O ERRO DE BILLING/FATURAMENTO
                     document.getElementById(loadingId).innerHTML = `
                         <div class="error-box">
-                            <strong>FALHA NA COMUNICAÇÃO:</strong><br>
-                            ${data.error.message}
+                            <strong>BLOQUEIO GOOGLE:</strong><br>
+                            ${data.error.message}<br><br>
+                            <em>Dica: Verifique se o faturamento está ativo no AI Studio.</em>
                         </div>`;
-                } else {
-                    document.getElementById(loadingId).innerText = data.candidates[0].content.parts[0].text;
                 }
             } catch (e) {
-                document.getElementById(loadingId).innerText = "ERRO CRÍTICO: Falha física na conexão de rede.";
+                document.getElementById(loadingId).innerText = "Erro físico de conexão.";
             }
         }
 
@@ -80,16 +70,11 @@
             d.className = `msg ${c}`;
             d.id = id;
             d.innerText = t;
-            const chat = document.getElementById('chat');
-            chat.appendChild(d);
-            chat.scrollTop = chat.scrollHeight;
+            document.getElementById('chat').appendChild(d);
+            document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
             return id;
         }
-
-        // Enviar com a tecla Enter
-        document.getElementById('in').addEventListener('keypress', (e) => {
-            if(e.key === 'Enter') enviar();
-        });
     </script>
 </body>
-</html>
+</h
+    tml>
