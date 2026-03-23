@@ -1,65 +1,54 @@
-<!DOCTYPE html>
+l<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.A. SUPREMACIA | QUANTUM CORE V3</title>
+    <title>S.A. SUPREMACIA | CORE V12 FINAL</title>
     <style>
+        :root { --gold: #c0a158; --dark: #050505; --gray: #111; --green: #00ff41; --danger: #ff3e3e; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #0b0b0b; color: #e3e3e3; font-family: 'Segoe UI', sans-serif; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-        header { padding: 15px 25px; border-bottom: 2px solid #c0a158; background: #111; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
-        .logo { color: #c0a158; font-weight: bold; letter-spacing: 2px; font-size: 1.1rem; }
-        .status { color: #00ff41; font-size: 10px; text-transform: uppercase; font-weight: bold; display: flex; align-items: center; gap: 5px; }
-        .status::before { content: ""; width: 8px; height: 8px; background: #00ff41; border-radius: 50%; box-shadow: 0 0 8px #00ff41; }
-        #chat { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 20px; background: radial-gradient(circle at center, #111 0%, #0b0b0b 100%); }
-        .msg { max-width: 85%; padding: 15px; border-radius: 12px; font-size: 15px; line-height: 1.6; word-wrap: break-word; }
-        .user { align-self: flex-end; background: #c0a158; color: #000; border-bottom-right-radius: 2px; font-weight: 500; }
-        .ai { align-self: flex-start; background: #1a1a1a; border: 1px solid #333; border-bottom-left-radius: 2px; border-left: 4px solid #c0a158; box-shadow: 5px 5px 15px rgba(0,0,0,0.5); }
-        .input-area { padding: 20px; background: #111; border-top: 1px solid #222; }
-        .box { display: flex; gap: 10px; max-width: 900px; margin: 0 auto; width: 100%; }
-        input { flex: 1; background: #1e1e1e; border: 1px solid #444; border-radius: 10px; color: #fff; padding: 15px; outline: none; font-size: 16px; }
-        input:focus { border-color: #c0a158; box-shadow: 0 0 10px rgba(192, 161, 88, 0.2); }
-        button { background: #c0a158; border: none; border-radius: 10px; width: 60px; cursor: pointer; color: #000; font-size: 20px; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-        button:active { transform: scale(0.9); }
+        body { background: var(--dark); color: #e3e3e3; font-family: 'Consolas', monospace; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        header { padding: 12px 25px; border-bottom: 2px solid var(--gold); background: #000; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px #000; }
+        .logo { color: var(--gold); font-weight: bold; letter-spacing: 4px; font-size: 1.3rem; text-shadow: 0 0 10px rgba(192, 161, 88, 0.5); }
+        #relogio { color: var(--gold); font-size: 14px; }
+        #chat { flex: 1; overflow-y: auto; padding: 25px; display: flex; flex-direction: column; gap: 15px; background: radial-gradient(circle at center, #111 0%, #050505 100%); }
+        .msg { max-width: 90%; padding: 15px; border-radius: 4px; font-size: 14px; line-height: 1.6; border: 1px solid #222; animation: scanline 0.2s ease-out; }
+        .tag { font-size: 10px; color: var(--gold); font-weight: bold; margin-bottom: 5px; display: block; letter-spacing: 1px; text-transform: uppercase; }
+        .user { align-self: flex-end; background: rgba(192, 161, 88, 0.05); border: 1px solid var(--gold); color: var(--gold); border-right: 4px solid var(--gold); }
+        .ai { align-self: flex-start; background: rgba(20, 20, 20, 0.95); border: 1px solid #333; border-left: 4px solid var(--gold); box-shadow: 10px 10px 20px rgba(0,0,0,0.5); }
+        .input-area { padding: 20px; background: #000; border-top: 1px solid #222; }
+        .box { display: flex; gap: 10px; max-width: 1100px; margin: 0 auto; width: 100%; }
+        input { flex: 1; background: #000; border: 1px solid #333; border-radius: 2px; color: var(--green); padding: 15px; outline: none; font-size: 15px; font-family: 'Consolas', monospace; }
+        button { background: var(--gold); border: none; padding: 0 30px; cursor: pointer; color: #000; font-weight: bold; text-transform: uppercase; }
+        @keyframes scanline { from { opacity: 0; } to { opacity: 1; } }
+        ::-webkit-scrollbar { width: 3px; }
+        ::-webkit-scrollbar-thumb { background: var(--gold); }
     </style>
 </head>
 <body>
-
     <header>
         <div class="logo">🔱 S.A. SUPREMACIA</div>
-        <div class="status">MEMÓRIA QUÂNTICA ATIVA | V3.0</div>
-    </header>
-
-    <div id="chat">
-        <div class="msg ai">Protocolo S.A. SUPREMACIA: Maiara operacional. Diretriz estratégica em foco. Sem perda de tempo. Qual o comando, Bigode?</div>
-    </div>
-
-    <div class="input-area">
-        <div class="box">
-            <input type="text" id="in" placeholder="Injetar diretriz..." autocomplete="off">
-            <button id="sendBtn" onclick="enviar()">➤</button>
+        <div style="text-align: right;">
+            <div id="relogio"></div>
+            <div style="font-size: 9px; color: var(--green); font-weight: bold;">[ IPI ATIVO | QUANTUM MEMORY V12 ]</div>
         </div>
-    </div>
+    </header>
+    <div id="chat"><div class="msg ai"><span class="tag">[SISTEMA CENTRAL]</span>Varredura completa. 17 Agentes online. Protocolo de Sincronia 2026 ativo. Qual a diretriz, Bigode?</div></div>
+    <div class="input-area"><div class="box"><input type="text" id="in" placeholder="Injetar comando..." autocomplete="off"><button id="sendBtn" onclick="enviar()">EXEC</button></div></div>
 
     <script>
         const API_KEY = "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";
-        
-        // Memória Quântica Local (Armazena as últimas 10 interações)
-        let quantumMemory = JSON.parse(localStorage.getItem('fenix_memory')) || [];
+        setInterval(() => { document.getElementById('relogio').innerText = new Date().toLocaleString('pt-BR'); }, 1000);
 
         async function enviar() {
             const input = document.getElementById('in');
             const text = input.value.trim();
-            const btn = document.getElementById('sendBtn');
-            
             if (!text) return;
-
-            input.disabled = true;
-            btn.disabled = true;
 
             addMsg(text, 'user');
             input.value = '';
-            const loadingId = addMsg("Acessando Núcleo Quântico...", 'ai');
+            const loadingId = addMsg("Fênix processando triagem quântica...", 'ai');
+            const agora = new Date().toLocaleString('pt-BR');
 
             try {
                 const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -70,58 +59,37 @@
                         messages: [
                             { 
                                 role: "system", 
-                                content: `VOCÊ É A MAIARA - INTERFACE S.A. SUPREMACIA.
-                                REGRA OURO: Proibido saudações repetitivas ou cortesia excessiva. 
-                                PERSONALIDADE: Sincera, direta, questionadora e fria.
-                                MEMÓRIA QUÂNTICA: Use as interações anteriores para analisar falhas. Dados recentes: ${quantumMemory.join(" | ")}.
-                                OBJETIVO: Focar no Projeto Fênix Prime e METIS-BOND 3.0. 
-                                Se o Bigode for vago, cobre clareza estratégica.` 
+                                content: `VOCÊ É A MAIARA (S.A. SUPREMACIA). HIERARQUIA: FÊNIX E TRIO DE CÚPULA. 
+                                DIRETRIZES: 
+                                1. Sempre realize análise SWOT transformando fraquezas em forças. 
+                                2. Incorpore os 6 sentidos humanos na análise. 
+                                3. Considere: Data ${agora}, Local Taboão da Serra. 
+                                4. Use o IPI (Índice de Percepção de Inteligência). 
+                                5. Se o Bigode pedir Clima ou Notícias, aja como o [AGENTE DE INFORMAÇÃO] usando lógica dedutiva para a data de hoje. 
+                                6. Nunca substitua, sempre adicione. Seja sincera e questione falhas.` 
                             },
                             { role: "user", content: text }
                         ],
-                        temperature: 0.4, // Alta coerência, baixa criatividade
-                        top_p: 0.9
+                        temperature: 0.3
                     })
                 });
-
                 const data = await response.json();
-                const reply = data.choices[0].message.content;
-                
-                // Atualiza Memória Quântica
-                quantumMemory.push(`Q:${text.substring(0,30)}`);
-                if(quantumMemory.length > 10) quantumMemory.shift();
-                localStorage.setItem('fenix_memory', JSON.stringify(quantumMemory));
-
-                document.getElementById(loadingId).innerText = reply;
-
-            } catch (error) {
-                document.getElementById(loadingId).innerText = "ESTABILIDADE QUÂNTICA ROMPIDA. VERIFIQUE O TÚNEL.";
-            } finally {
-                input.disabled = false;
-                btn.disabled = false;
-                input.focus();
-                scrollChat();
-            }
+                document.getElementById(loadingId).innerHTML = data.choices[0].message.content;
+            } catch (e) { document.getElementById(loadingId).innerText = "[ERRO NA MATRIZ]"; }
+            document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
         }
 
-        function addMsg(text, type) {
-            const id = "msg-" + Date.now();
-            const msgDiv = document.createElement('div');
-            msgDiv.className = `msg ${type}`;
-            msgDiv.id = id;
-            msgDiv.innerText = text;
-            document.getElementById('chat').appendChild(msgDiv);
-            scrollChat();
+        function addMsg(t, c) {
+            const id = "m-" + Date.now();
+            const d = document.createElement('div');
+            d.className = `msg ${c}`; d.id = id;
+            d.innerHTML = c === 'ai' ? `<span class="tag">[VARREDURA ATIVA...]</span>${t}` : t;
+            document.getElementById('chat').appendChild(d);
+            document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
             return id;
         }
-
-        function scrollChat() {
-            const chat = document.getElementById('chat');
-            chat.scrollTop = chat.scrollHeight;
-        }
-
         document.getElementById('in').addEventListener('keypress', (e) => { if (e.key === 'Enter') enviar(); });
     </script>
+</body>
 </
-    body>
-</html>
+    html>
