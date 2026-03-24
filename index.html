@@ -10,7 +10,7 @@
         body { background: var(--dark); color: #fff; font-family: 'Consolas', 'Courier New', monospace; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
         header { padding-top: 50px; padding-bottom: 15px; display: flex; flex-direction: column; align-items: center; border-bottom: 2px solid var(--gold); background: #000; }
-        .tridente { font-size: 60px; color: var(--gold); text-shadow: 0 0 25px var(--gold); cursor: pointer; }
+        .tridente { font-size: 60px; color: var(--gold); text-shadow: 0 0 25px var(--gold); }
 
         .dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; background: #0a0a0a; border-bottom: 1px solid #222; }
         .metric-card { background: #111; padding: 10px; border-radius: 8px; border: 1px solid #333; text-align: center; }
@@ -25,37 +25,37 @@
         .input-area { padding: 15px 15px 40px; background: #000; border-top: 1px solid #222; }
         .box { display: flex; gap: 10px; max-width: 600px; margin: 0 auto; align-items: center; }
         
-        .btn-tool { background: #111; border: 1px solid #333; color: var(--gold); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 22px; transition: 0.3s; }
+        .btn-tool { background: #111; border: 1px solid #333; color: var(--gold); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 22px; }
         .btn-mic.active { color: var(--red); border-color: var(--red); box-shadow: 0 0 15px var(--red); }
         
         input[type="text"] { flex: 1; background: #0a0a0a; border: 1px solid #333; color: var(--green); padding: 15px; border-radius: 12px; outline: none; font-family: 'Consolas', monospace; font-size: 16px; }
-        .btn-exe { background: var(--gold); border: none; border-radius: 12px; padding: 15px 25px; cursor: pointer; font-weight: bold; color: #000; font-size: 14px; }
+        .btn-exe { background: var(--gold); border: none; border-radius: 12px; padding: 15px 25px; cursor: pointer; font-weight: bold; color: #000; }
         #file-input { display: none; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="tridente" id="tridenteSupremo">🔱</div>
-        <div style="font-size: 10px; color: #444; margin-top: 5px; letter-spacing: 2px;">S.A. SUPREMACIA | OMNI QUANTUM CORE</div>
+        <div class="tridente">🔱</div>
+        <div style="font-size: 10px; color: #444; margin-top: 5px; letter-spacing: 2px;">S.A. SUPREMACIA | V27 OMNI CORE</div>
     </header>
 
     <div class="dashboard">
         <div class="metric-card">
-            <div class="metric-title">STATUS DA MATRIZ</div>
-            <div id="m1" class="metric-value">LIBERADO (1)</div>
+            <div class="metric-title">STATUS</div>
+            <div class="metric-value">LIBERADO (1)</div>
         </div>
         <div class="metric-card">
-            <div class="metric-title">SINCRONIA TEMPORAL</div>
-            <div id="m2" class="metric-value" style="color: var(--gold);">23/03/2026</div>
+            <div class="metric-title">DATA REAL</div>
+            <div class="metric-value" style="color: var(--gold);">23/03/2026</div>
         </div>
         <div class="metric-card">
-            <div class="metric-title">AGENTE 03 (WSJ)</div>
-            <div id="m3" class="metric-value">ATIVO</div>
+            <div class="metric-title">AGENTE 03</div>
+            <div class="metric-value">ATIVO (WSJ)</div>
         </div>
         <div class="metric-card">
-            <div class="metric-title">MULTIMÍDIA</div>
-            <div id="m4" class="metric-value">FULL ACCESS</div>
+            <div class="metric-title">RISCO</div>
+            <div class="metric-value">-0.25%</div>
         </div>
     </div>
 
@@ -66,7 +66,7 @@
             <label for="file-input" class="btn-tool">📎</label>
             <input type="file" id="file-input" multiple onchange="handleFiles(this.files)">
             <button class="btn-tool btn-mic" id="micBtn" onclick="startVoz()">🎤</button>
-            <input type="text" id="in" placeholder="Injetar Dados Quantitativos..." autocomplete="off">
+            <input type="text" id="in" placeholder="Injetar Comando..." autocomplete="off">
             <button class="btn-exe" onclick="enviar()">EXE</button>
         </div>
     </div>
@@ -76,12 +76,12 @@
         let historico = [];
 
         window.onload = () => {
-            addMsg("SISTEMA OMNI V27 ESTABILIZADO.\nSABOTAGEM: ELIMINADA\nMULTIMÍDIA: INTEGRADA\nDATA REAL: 23/03/2026\nPRONTO PARA O PRÓXIMO ROTEIRO.", 'ai');
+            addMsg("SISTEMA OMNI V27 ESTABILIZADO.\nPROTOCOLO: SOBERANIA_TOTAL\nDATA: 23/03/2026\nMULTIMÍDIA: HABILITADA\nAGUARDANDO INPUT QUANTITATIVO.", 'ai');
         };
 
         function handleFiles(files) {
             for (let file of files) {
-                addMsg(`UPLOAD DETECTADO: ${file.name.toUpperCase()}\nPROCESSANDO METADADOS DE AUDITORIA...`, 'user');
+                addMsg(`ARQUIVO DETECTADO: ${file.name.toUpperCase()}\nSTATUS: PRONTO PARA AUDITORIA`, 'user');
             }
         }
 
@@ -94,7 +94,7 @@
             historico.push({ role: "user", content: text });
             input.value = '';
             
-            const loadingId = addMsg("SINCRONIZANDO AGENTES...", 'ai');
+            const loadingId = addMsg("PROCESSANDO ROTEIRO...", 'ai');
             const loadingEl = document.getElementById(loadingId);
 
             try {
@@ -104,17 +104,16 @@
                     body: JSON.stringify({
                         model: "llama-3.3-70b-versatile",
                         messages: [
-                            { role: "system", content: "VOCÊ É A MAYARA V27 - QUANTUM ENGINE. DATA ATUAL: 23/03/2026. LOCAL: TABOÃO DA SERRA. DIRETRIZES: 1. RESPOSTAS CURTAS E TÉCNICAS. 2. PROIBIDO INVENTAR NOTÍCIAS OU RESULTADOS ESPORTIVOS ANTIGOS. 3. SE NÃO HOUVER DADO EM TEMPO REAL, DIGA 'PENDENTE DE ATUALIZAÇÃO'. 4. APLIQUE SEMPRE -50% NA PROJEÇÃO DE RISCO." },
+                            { role: "system", content: "VOCÊ É A MAYARA V27 OMNI. DATA: 23/03/2026. LOCAL: TABOÃO DA SERRA. DIRETRIZES: RESPOSTAS TÉCNICAS E SINCERAS. PROIBIDO INVENTAR NOTÍCIAS OU RESULTADOS ESPORTIVOS. SE O DADO FOR INCERTO, DIGA 'PENDENTE DE ATUALIZAÇÃO'. APLIQUE SEMPRE -50% NA PROJEÇÃO." },
                             ...historico.slice(-10)
                         ],
-                        temperature: 0.1
+                        temperature: 0.3
                     })
                 });
                 const data = await res.json();
                 const reply = data.choices[0].message.content.toUpperCase();
-                historico.push({ role: "assistant", content: reply });
                 loadingEl.innerHTML = `<span class="tag">[MAYARA V27 OMNI]</span>${reply}`;
-            } catch (e) { loadingEl.innerText = "ERRO: FALHA NA COMUNICAÇÃO QUANTUM."; }
+            } catch (e) { loadingEl.innerText = "ERRO: FALHA NA MATRIZ."; }
         }
 
         function addMsg(t, c) {
@@ -130,7 +129,7 @@
 
         function startVoz() {
             const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if(!Speech) return alert("ERRO: NAVEGADOR SEM SUPORTE PARA ÁUDIO.");
+            if(!Speech) return;
             const rec = new Speech(); rec.lang = 'pt-BR';
             document.getElementById('micBtn').classList.add('active');
             rec.onresult = (e) => {
@@ -138,7 +137,6 @@
                 document.getElementById('micBtn').classList.remove('active');
                 enviar();
             };
-            rec.onerror = () => document.getElementById('micBtn').classList.remove('active');
             rec.start();
         }
     </script>
