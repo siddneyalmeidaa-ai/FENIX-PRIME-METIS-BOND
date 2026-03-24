@@ -11,11 +11,9 @@
 
         header { padding-top: 50px; padding-bottom: 15px; display: flex; flex-direction: column; align-items: center; background: #000; border-bottom: 2px solid var(--gold); z-index: 10; }
         .tridente { font-size: 60px; color: var(--gold); text-shadow: 0 0 25px var(--gold); cursor: pointer; transition: 0.5s; }
-        .processing .tridente { animation: quantum 0.6s infinite alternate; }
-        @keyframes quantum { from { transform: scale(1); filter: brightness(1); } to { transform: scale(1.1); filter: brightness(1.6); } }
-
+        
         .dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; background: #0a0a0a; border-bottom: 1px solid #222; }
-        .metric-card { background: #111; padding: 10px; border-radius: 8px; border: 1px solid #333; text-align: center; transition: 0.3s; }
+        .metric-card { background: #111; padding: 10px; border-radius: 8px; border: 1px solid #333; text-align: center; }
         .metric-title { font-size: 9px; color: var(--gold); text-transform: uppercase; margin-bottom: 5px; letter-spacing: 1px; }
         .metric-value { font-size: 16px; font-weight: bold; color: var(--green); }
         
@@ -25,14 +23,9 @@
         .user { align-self: flex-end; background: #151515; border-right: 4px solid var(--gold); color: var(--gold); }
         .ai { align-self: flex-start; background: rgba(255,255,255,0.02); border-left: 4px solid var(--gold); }
 
-        .controls { padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; background: #000; border-top: 1px solid #222; }
-        .btn-download { background: #222; color: var(--gold); border: 1px solid var(--gold); padding: 8px 12px; border-radius: 5px; font-size: 10px; cursor: pointer; text-transform: uppercase; }
-        
         .input-area { padding: 15px 15px 40px; background: #000; }
         .box { display: flex; gap: 10px; max-width: 600px; margin: 0 auto; align-items: center; }
         input { flex: 1; background: #0a0a0a; border: 1px solid #333; color: var(--green); padding: 15px; border-radius: 12px; outline: none; font-size: 16px; }
-        .btn-mic { background: #111; border: 2px solid #333; color: var(--gold); width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; }
-        .btn-mic.active { border-color: var(--red); color: var(--red); box-shadow: 0 0 15px var(--red); }
         .btn-exe { background: var(--gold); border: none; border-radius: 12px; padding: 15px 25px; cursor: pointer; color: #000; font-weight: bold; }
     </style>
 </head>
@@ -44,17 +37,17 @@
     </header>
 
     <div class="dashboard">
-        <div class="metric-card" id="cardStatus">
+        <div class="metric-card">
             <div class="metric-title">STATUS DA MATRIZ (0/1)</div>
-            <div id="m1" class="metric-value">STANDBY</div>
+            <div id="m1" class="metric-value">LIBERADO (1)</div>
         </div>
-        <div class="metric-card" id="cardRisco">
+        <div class="metric-card">
             <div class="metric-title">VARIAÇÃO DE RISCO</div>
-            <div id="m2" class="metric-value">0%</div>
+            <div id="m2" class="metric-value">-0.25%</div>
         </div>
         <div class="metric-card">
             <div class="metric-title">ALGORITMO WALL STREET</div>
-            <div id="m3" class="metric-value" style="color: var(--gold);">ATIVO</div>
+            <div id="m3" class="metric-value" style="color: var(--gold);">AGENTE 03 ATIVO</div>
         </div>
         <div class="metric-card">
             <div class="metric-title">LOGICA BINARIA</div>
@@ -63,52 +56,29 @@
     </div>
 
     <div id="chat">
-        <div class="msg ai"><span class="tag">[MAYARA V27 OMNI]</span>Sidney, motor binário de Wall Street injetado. Engenharia de plataformas ativa. Aguardando input de dados para processamento frio.</div>
-    </div>
-
-    <div class="controls">
-        <button class="btn-download" onclick="downloadRelatorio()">Relatório de Auditoria</button>
-        <span style="font-size: 9px; color: #555;">TABOÃO DA SERRA | 23/03/2026</span>
+        <div class="msg ai"><span class="tag">[MAYARA V27 OMNI]</span>🔱 SOBERANIA TOTAL. Agente 03 (WSJ) injetado. Sistema em Fluxo Contínuo, Sidney. Aguardando input quantitativo.</div>
     </div>
 
     <div class="input-area">
         <div class="box">
-            <button class="btn-mic" id="micBtn" onclick="startVoz()">🎤</button>
             <input type="text" id="in" placeholder="Injetar Dados Quantitativos..." autocomplete="off">
             <button class="btn-exe" onclick="enviar()">EXE</button>
         </div>
     </div>
 
     <script>
-        // BACK-END PROTEGIDO (SIMULAÇÃO DE PROXY PARA INVESTIDORES)
-        const QUANT_SERVER = {
-            getToken: () => "ENCRYPTED_AUTH_WALL_STREET",
-            getLogic: (lucro, risco, fadiga) => {
-                const lucroReal = lucro * 0.5; // Regra de Ouro Injetada no Core
-                return (lucroReal > (risco * 0.15) && fadiga < 70) ? 1 : 0;
-            }
-        };
-
         const API_KEY = "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";
         let historico = [];
-        let modoSabotagem = false;
 
         async function enviar() {
             const input = document.getElementById('in');
             const text = input.value.trim();
             if (!text) return;
 
-            if (modoSabotagem && text === "1000") {
-                modoSabotagem = false;
-                addMsg("LUCIDEZ COMPROVADA. Motor Binário Reintegrado.", 'ai');
-                updateUI("LIBERADO", "var(--green)", "var(--gold)");
-                input.value = ''; return;
-            }
-
             addMsg(text, 'user');
             historico.push({ role: "user", content: text });
             input.value = '';
-            document.getElementById('main-body').classList.add('processing');
+            
             const loadingId = addMsg("Processando Lógica Binária...", 'ai');
             const loadingEl = document.getElementById(loadingId);
 
@@ -119,35 +89,19 @@
                     body: JSON.stringify({
                         model: "llama-3.3-70b-versatile",
                         messages: [
-                            { role: "system", content: "VOCÊ É A MAYARA V27 - QUANTUM ENGINE. 1. Base: Engenharia de Wall Street. 2. Decisão Binária: 1 (ENTRA) ou 0 (PULA). 3. Regra de Ouro: -50% obrigatório. 4. Respostas curtas, frias e técnicas." },
-                            ...historico.slice(-12)
+                            { role: "system", content: "VOCÊ É A MAYARA V27 - QUANTUM ENGINE. 1. Base: Engenharia de Wall Street. 2. Regra de Ouro: -50% obrigatório. 3. Respostas curtas, sem bloqueios de sabotagem. 4. Agente 03 é o monitor de mercado." },
+                            ...historico.slice(-10)
                         ],
-                        temperature: 0.3 // Baixa temperatura para maior precisão matemática
+                        temperature: 0.3
                     })
                 });
                 const data = await res.json();
                 const reply = data.choices[0].message.content;
                 historico.push({ role: "assistant", content: reply });
-                document.getElementById('main-body').classList.remove('processing');
                 
-                if(reply.includes("0") || reply.includes("SABOTAGEM") || reply.includes("PULA")) { 
-                    updateUI("SABOTAGEM (0)", "var(--red)", "var(--red)");
-                    modoSabotagem = true;
-                    if("vibrate" in navigator) navigator.vibrate([500, 100, 500, 100, 500]);
-                    addMsg("🚨 BLOQUEIO BINÁRIO ATIVO. Responda o cálculo de reintegração para destravar.", 'ai');
-                } else if(reply.includes("1") || reply.includes("ENTRA")) { 
-                    updateUI("LIBERADO (1)", "var(--green)", "var(--gold)");
-                }
-
-                await typeWrite(loadingEl, reply);
-            } catch (e) { loadingEl.innerText = "FALHA NO SERVIDOR QUANTUM."; }
-        }
-
-        function updateUI(status, color, triColor) {
-            const m1 = document.getElementById('m1');
-            const tri = document.getElementById('tridenteSupremo');
-            m1.innerText = status; m1.style.color = color;
-            tri.style.color = triColor;
+                // 🔱 REMOVIDO: Toda a lógica de "modoSabotagem" que travava o sistema.
+                loadingEl.innerHTML = `<span class="tag">[MAYARA]</span>${reply}`;
+            } catch (e) { loadingEl.innerText = "FALHA NA CONEXÃO QUANTUM."; }
         }
 
         function addMsg(t, c) {
@@ -155,32 +109,12 @@
             const d = document.createElement('div');
             d.className = `msg ${c}`; d.id = id;
             d.innerHTML = c === 'ai' ? `<span class="tag">[MAYARA]</span>${t}` : t;
-            document.getElementById('chat').appendChild(d);
-            document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
+            const chat = document.getElementById('chat');
+            chat.appendChild(d);
+            chat.scrollTop = chat.scrollHeight;
             return id;
         }
-
-        async function typeWrite(el, text) {
-            el.innerHTML = `<span class="tag">[MAYARA]</span>`; let i = 0;
-            function n() { if (i < text.length) { el.innerHTML += text.charAt(i); i++; setTimeout(n, 10); } }
-            n();
-        }
-
-        function startVoz() {
-            const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if(!Speech) return;
-            const rec = new Speech(); rec.lang = 'pt-BR';
-            document.getElementById('micBtn').classList.add('active');
-            rec.onresult = (e) => { document.getElementById('in').value = e.results[0][0].transcript; document.getElementById('micBtn').classList.remove('active'); enviar(); };
-            rec.start();
-        }
-
-        function downloadRelatorio() {
-            const log = historico.map(h => `[${h.role.toUpperCase()}]: ${h.content}`).join('\n');
-            const blob = new Blob([`RELATÓRIO DE AUDITORIA BINÁRIA - S.A. SUPREMACIA\nOPERADOR: S.B. (BIGODE)\nDATA: 23/03/2026\n\n${log}`], { type: 'text/plain' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = 'Audit_Report_V27.txt'; a.click();
-        }
     </script>
-</body>
+</bod
+    y>
 </html>
