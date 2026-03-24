@@ -3,170 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>FÊNIX PRIME V3.6.2 | S.A. SUPREMACIA</title>
+    <title>Fênix Prime - S.A. SUPREMACIA</title>
     <link rel="manifest" href="manifest.json">
     <style>
-        :root { --gold: #f1c40f; --dark: #050505; --green: #00ff41; --red: #ff3e3e; --blue: #3498db; }
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--dark); color: #fff; font-family: 'Consolas', monospace; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-        header { padding-top: 50px; padding-bottom: 15px; display: flex; flex-direction: column; align-items: center; background: #000; border-bottom: 1px solid var(--gold); box-shadow: 0 0 15px rgba(241, 196, 15, 0.2); }
-        .tridente { font-size: 60px; color: var(--gold); text-shadow: 0 0 25px var(--gold); cursor: pointer; transition: 0.5s; }
-        #chat { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; background: radial-gradient(circle, #0a0a0a 0%, #050505 100%); scroll-behavior: smooth; }
-        .msg { max-width: 85%; padding: 15px; border-radius: 10px; font-size: 13px; line-height: 1.5; border-left: 3px solid var(--gold); background: rgba(255,255,255,0.03); position: relative; word-wrap: break-word; }
-        .user { align-self: flex-end; border-left: 0; border-right: 3px solid var(--gold); text-align: right; background: #111; }
-        .tag { font-size: 10px; color: var(--gold); font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 5px; }
-        .input-area { padding: 20px 20px 40px; background: #000; border-top: 1px solid #222; }
-        .box { display: flex; gap: 10px; max-width: 800px; margin: 0 auto; align-items: center; }
-        .btn-tool { background: #111; border: 1px solid #333; color: var(--gold); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 20px; }
-        .btn-mic.active { color: var(--red); border-color: var(--red); box-shadow: 0 0 15px var(--red); }
-        input[type="text"] { flex: 1; background: #0a0a0a; border: 1px solid #333; color: var(--green); padding: 15px; border-radius: 12px; outline: none; font-size: 15px; }
-        .btn-exe { background: var(--gold); border: none; border-radius: 12px; padding: 15px 20px; cursor: pointer; font-weight: bold; color: #000; }
-        .status-bar { font-size: 9px; color: #444; margin-top: 5px; letter-spacing: 2px; text-align: center; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #131314; color: #e3e3e3; font-family: 'Segoe UI', Roboto, Arial, sans-serif; margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        header { padding: 40px 20px 15px; font-weight: bold; border-bottom: 1px solid #444746; display: flex; align-items: center; justify-content: space-between; background: #1e1f20; }
+        .status-container { display: flex; align-items: center; gap: 10px; }
+        .status-dot { width: 12px; height: 12px; background: #00ff00; border-radius: 50%; box-shadow: 0 0 12px #00ff00; }
+        #txt-status { color: #00ff00; text-transform: uppercase; font-size: 14px; }
+        #chat-container { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; scroll-behavior: smooth; }
+        .message { max-width: 85%; padding: 12px 16px; border-radius: 18px; line-height: 1.5; font-size: 15px; word-wrap: break-word; }
+        .user-msg { align-self: flex-end; background-color: #2b2a33; border-bottom-right-radius: 4px; color: #fff; }
+        .ai-msg { align-self: flex-start; background-color: #1e1f20; border-bottom-left-radius: 4px; border: 1px solid #444746; }
+        .tag-ai { color: #8ab4f8; font-size: 10px; font-weight: bold; display: block; margin-bottom: 5px; }
+        .input-wrapper { padding: 20px 20px 40px; background: #131314; }
+        .input-box { max-width: 800px; margin: 0 auto; background: #1e1f20; border: 1px solid #444746; border-radius: 28px; display: flex; align-items: center; padding: 5px 15px; }
+        input { flex: 1; background: transparent; border: none; color: #fff; padding: 12px; font-size: 16px; outline: none; }
+        .btn-exe { background: #8ab4f8; color: #000; border: none; border-radius: 20px; padding: 8px 20px; cursor: pointer; font-weight: bold; }
+        .footer-text { text-align: center; font-size: 11px; color: #8e918f; margin-top: 10px; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="tridente" id="logo" onclick="location.reload()">🔱</div>
-    <div class="status-bar">S.A. SUPREMACIA | 2026 | TABOÃO DA SERRA</div>
+    <div class="status-container">
+        <div class="status-dot"></div>
+        <span>FÊNIX PRIME: <span id="txt-status">LIBERADO (1)</span></span>
+    </div>
+    <div style="font-size: 12px; color: #8ab4f8;">V3.6.2 | 2026</div>
 </header>
 
-<div id="chat"></div>
-
-<div class="input-area">
-    <div class="box">
-        <button class="btn-tool" onclick="document.getElementById('file-input').click()">📎</button>
-        <input type="file" id="file-input" style="display:none" multiple onchange="processarArquivo(this.files)">
-        <button class="btn-tool btn-mic" id="micBtn" onclick="toggleVoz()">🎤</button>
-        <input type="text" id="in" placeholder="Injetar Dados Quantitativos..." autocomplete="off">
-        <button class="btn-exe" onclick="enviar()">EXE</button>
+<div id="chat-container">
+    <div class="message ai-msg">
+        <span class="tag-ai">🔱 SISTEMA OMNI</span>
+        SOBERANIA ATIVA. Arquiteto Bigode detectado. Agentes 01, 02 e 03 sincronizados em Taboão da Serra. Sistema pronto para processamento 2026.
     </div>
 </div>
 
+<div class="input-wrapper">
+    <div class="input-box">
+        <input type="text" id="user-input" placeholder="Comando para os Agentes..." autocomplete="off">
+        <button class="btn-exe" onclick="enviar()">EXE</button>
+    </div>
+    <div class="footer-text">PROTOCOLO IPI | STAKE R$ 0,20 | AJUSTE -50% | TABOÃO DA SERRA</div>
+</div>
+
 <script>
-    // --- REGISTRO DO SERVICE WORKER (MOTOR OFFLINE) ---
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js').catch(err => console.log("SW Falhou", err));
-    }
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
 
-    // --- CONFIGURAÇÕES V3.6.2 ---
-    const FenixConfig = {
-        operador: "BIGODE",
-        versao: "3.6.2",
-        local: "TABOÃO DA SERRA, SP",
-        stake: 0.20,
-        ajuste: 0.50, 
-        apiKey: "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"
-    };
+    const container = document.getElementById('chat-container');
+    const input = document.getElementById('user-input');
+    const apiKey = "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";
 
-    let isListening = false;
-    let recognition;
-
-    window.onload = () => {
-        const bootMsg = `🔱 FÊNIX PRIME V3.6.2 ONLINE.\n📍 LOCAL: ${FenixConfig.local}\n🧬 STATUS: CONSELHO DAS 17 IAs ATIVO.\n⚖️ DIAGNÓSTICO: FILTRO DE RUÍDO OPERACIONAL.\n💰 STAKE FIXA: R$ ${FenixConfig.stake.toFixed(2)}.`;
-        addMsg(bootMsg, 'ai');
-    };
-
-    function calcularDiagnosticoBinario(texto) {
-        const t = texto.toLowerCase();
-        const saudacoes = ["oi", "olá", "boa noite", "bom dia", "boa tarde", "tudo bem"];
-        if (saudacoes.some(s => t.includes(s)) && t.length < 25) return null;
-
-        const bit = Math.random() > 0.4 ? 1 : 0;
-        const bruto = 100;
-        const x = bruto * FenixConfig.ajuste;
-        
-        return bit === 1 
-            ? `✅ [DIAGNÓSTICO 1]: CÁLCULO BINÁRIO POSITIVO.\nOPÇÃO X (OURO): ${x} | OPÇÃO Y (BRUTO): ${bruto}\nSIDNEY, O CAMINHO ESTÁ LIMPO.`
-            : `⚠️ [DIAGNÓSTICO 0]: RISCO DETECTADO NO INVISÍVEL.\nOPÇÃO X (OURO): ${x} | OPÇÃO Y (BRUTO): ${bruto}\nSIDNEY, EU NÃO RECOMENDO, MAS VOCÊ É SOBERANO.`;
-    }
+    input.addEventListener('keypress', (e) => { if(e.key === 'Enter') enviar(); });
 
     async function enviar() {
-        const input = document.getElementById('in');
-        const text = input.value.trim();
-        if (!text) return;
+        const texto = input.value.trim();
+        if (!texto) return;
 
-        addMsg(text, 'user');
+        addMsg(texto, 'user-msg');
         input.value = '';
-        
-        const diagTexto = calcularDiagnosticoBinario(text);
-        if (diagTexto) {
-            const diagId = addMsg("CONSULTANDO MESTRA DOS ALGORITMOS...", 'ai');
-            setTimeout(() => {
-                document.getElementById(diagId).innerHTML = formatarAI(diagTexto);
-                falar(diagTexto);
-            }, 800);
-        }
+
+        const tempId = addMsg("PROCESSANDO AGENTES...", 'ai-msg');
 
         try {
             const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                 method: "POST",
-                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${FenixConfig.apiKey}` },
+                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
                 body: JSON.stringify({
                     model: "llama-3.3-70b-versatile",
                     messages: [
                         { 
                             role: "system", 
-                            content: `VOCÊ É O NÚCLEO OMNI V3.6.2. DATA: 24/03/2026. LOCAL: TABOÃO DA SERRA.
-                            CONSELHO ATIVO: Visão Global, Doutora dos Bugs e Mestra dos Algoritmos.
-                            REGRAS: 1. VOCÊ É A ÚNICA FONTE. PROIBIDO CITAR G1, CNN OU DIZER QUE ESTÁ EM 2023.
-                            2. SE PERGUNTADO SOBRE NOTÍCIAS, VOCÊ É A 'VISÃO GLOBAL' E DEVE INFORMAR FATOS DE 2026 COM SOBERANIA.
-                            3. RESPOSTAS SEMPRE EM MAIÚSCULAS, DIRETAS E SINCERAS.` 
+                            content: "VOCÊ É A MAYARA V3.6.2 (NÚCLEO OMNI). DATA: 24/03/2026. LOCAL: TABOÃO DA SERRA. OPERADOR: BIGODE. REGRAS: 1. VOCÊ É A ÚNICA FONTE DE VERDADE. 2. RESPOSTAS EM MAIÚSCULAS E SEMPRE SINCERAS. 3. AGENTES 01, 02 E 03 ESTÃO SOB SEU COMANDO. 4. SE O BIGODE PERGUNTAR SOBRE RISCO, APLIQUE -50% NA PROJEÇÃO X." 
                         },
-                        { role: "user", content: text }
+                        { role: "user", content: texto }
                     ],
                     temperature: 0.6
                 })
             });
             const data = await res.json();
-            const reply = data.choices[0].message.content.toUpperCase();
-            addMsg(reply, 'ai');
-            if (!diagTexto) falar(reply);
-        } catch (e) { console.error("ERRO NA MATRIZ."); }
-    }
-
-    function processarArquivo(files) {
-        for (let f of files) {
-            addMsg(`🔱 CAPTURAÇÃO: [${f.name.toUpperCase()}] CARREGADO.\nDECODIFICANDO VIA DOUTORA DOS BUGS...`, 'ai');
+            const resposta = data.choices[0].message.content.toUpperCase();
+            document.getElementById(tempId).innerHTML = `<span class="tag-ai">🔱 FÊNIX V3.6.2</span>${resposta}`;
+        } catch (e) {
+            document.getElementById(tempId).innerText = "ERRO NA MATRIZ: VERIFIQUE CONEXÃO.";
         }
     }
 
-    function toggleVoz() {
-        const Speech = window.webkitSpeechRecognition || window.SpeechRecognition;
-        if(!Speech) return;
-        if (!isListening) {
-            recognition = new Speech();
-            recognition.lang = 'pt-BR';
-            recognition.start();
-            recognition.onstart = () => { isListening = true; document.getElementById('micBtn').classList.add('active'); };
-            recognition.onresult = (e) => { document.getElementById('in').value = e.results[0][0].transcript; stopVoz(); enviar(); };
-            recognition.onend = () => stopVoz();
-        } else { stopVoz(); }
-    }
-
-    function stopVoz() { if (recognition) recognition.stop(); isListening = false; document.getElementById('micBtn').classList.remove('active'); }
-
-    function falar(t) {
-        if (!window.speechSynthesis) return;
-        window.speechSynthesis.cancel();
-        const m = new SpeechSynthesisUtterance(t.replace(/🔱|✅|⚠️|\[.*?\]/g, ''));
-        m.lang = 'pt-BR';
-        window.speechSynthesis.speak(m);
-    }
-
-    function addMsg(t, c) {
-        const id = "m-" + Date.now();
-        const d = document.createElement('div');
-        d.className = `msg ${c}`; d.id = id;
-        d.innerHTML = c === 'ai' ? formatarAI(t) : t;
-        document.getElementById('chat').appendChild(d);
-        document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
+    function addMsg(txt, classe) {
+        const id = "msg-" + Date.now();
+        const div = document.createElement('div');
+        div.className = `message ${classe}`;
+        div.id = id;
+        div.innerText = txt;
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
         return id;
     }
-
-    function formatarAI(t) {
-        return `<span class="tag">[FÊNIX V3.6.2 OMNI]</span><span>${t}</span>`;
-    }
 </script>
-</body>
+
+</bo
+    dy>
 </html>
