@@ -1,0 +1,15 @@
+{
+  "name": "S.A. SUPREMACIA V27",
+  "short_name": "SUPREMACIA",
+  "start_url": "/FENIX-PRIME-METIS-BOND/",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#f1c40f",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/siddneyalmeidaa-ai/FENIX-PRIME-METIS-BOND/main/icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
