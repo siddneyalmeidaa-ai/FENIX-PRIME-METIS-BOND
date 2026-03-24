@@ -1,8 +1,7 @@
 {
   "name": "S.A. SUPREMACIA V27",
   "short_name": "SUPREMACIA",
-  "description": "SISTEMA OMNI V27 - AGENTE 03",
-  "start_url": "/FENIX-PRIME-METIS-BOND/index.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#050505",
   "theme_color": "#f1c40f",
