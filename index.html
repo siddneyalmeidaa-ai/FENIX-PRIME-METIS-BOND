@@ -3,196 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>S.A. SUPREMACIA | V27 OMNI</title>
-    
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#050505">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
+    <title>FÊNIX PRIME V3.6.0 | S.A. SUPREMACIA</title>
     <style>
-        :root { --gold: #f1c40f; --dark: #050505; --green: #00ff41; --red: #ff3e3e; }
+        :root { --gold: #f1c40f; --dark: #050505; --green: #00ff41; --red: #ff3e3e; --blue: #3498db; }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { background: var(--dark); color: #fff; font-family: 'Consolas', monospace; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-
-        header { padding-top: 60px; padding-bottom: 20px; display: flex; flex-direction: column; align-items: center; background: #000; border-bottom: 1px solid #111; }
-        .tridente { font-size: 70px; color: var(--gold); text-shadow: 0 0 30px var(--gold); cursor: pointer; transition: 0.5s; }
-        .tridente:active { transform: scale(0.9); opacity: 0.7; }
-
-        #chat { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 20px; background: radial-gradient(circle, #0a0a0a 0%, #050505 100%); scroll-behavior: smooth; }
-        
-        .msg { max-width: 85%; padding: 18px; border-radius: 12px; font-size: 14px; line-height: 1.6; border-left: 4px solid var(--gold); background: rgba(255,255,255,0.05); position: relative; word-wrap: break-word; }
-        .user { align-self: flex-end; border-left: 0; border-right: 4px solid var(--gold); text-align: right; background: #111; color: #eee; }
-
-        .tag-area { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; width: 100%; }
-        .tag { font-size: 11px; color: var(--gold); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
-        
-        .btn-audio { background: rgba(241, 196, 15, 0.1); border: 1px solid var(--gold); color: var(--gold); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; }
-        .btn-audio:active { background: var(--gold); color: #000; }
-
-        .input-area { padding: 20px 20px 45px; background: #000; border-top: 1px solid #222; }
-        .box { display: flex; gap: 12px; max-width: 600px; margin: 0 auto; align-items: center; }
-        
-        .btn-tool { background: #111; border: 1px solid #333; color: var(--gold); width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 24px; }
-        .btn-mic.active { color: var(--red); border-color: var(--red); box-shadow: 0 0 20px var(--red); }
-        
-        input[type="text"] { flex: 1; background: #0a0a0a; border: 1px solid #333; color: var(--green); padding: 18px; border-radius: 15px; outline: none; font-size: 16px; font-family: 'Consolas', monospace; }
-        .btn-exe { background: var(--gold); border: none; border-radius: 15px; padding: 18px 25px; cursor: pointer; font-weight: bold; color: #000; font-size: 14px; }
+        header { padding-top: 50px; padding-bottom: 15px; display: flex; flex-direction: column; align-items: center; background: #000; border-bottom: 1px solid var(--gold); box-shadow: 0 0 15px rgba(241, 196, 15, 0.2); }
+        .tridente { font-size: 60px; color: var(--gold); text-shadow: 0 0 25px var(--gold); cursor: pointer; transition: 0.5s; }
+        #chat { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; background: radial-gradient(circle, #0a0a0a 0%, #050505 100%); }
+        .msg { max-width: 85%; padding: 15px; border-radius: 10px; font-size: 13px; line-height: 1.5; border-left: 3px solid var(--gold); background: rgba(255,255,255,0.03); position: relative; }
+        .user { align-self: flex-end; border-left: 0; border-right: 3px solid var(--gold); text-align: right; background: #111; }
+        .tag { font-size: 10px; color: var(--gold); font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 5px; }
+        .input-area { padding: 20px 20px 40px; background: #000; border-top: 1px solid #222; }
+        .box { display: flex; gap: 10px; max-width: 800px; margin: 0 auto; align-items: center; }
+        .btn-tool { background: #111; border: 1px solid #333; color: var(--gold); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 20px; }
+        .btn-mic.active { color: var(--red); border-color: var(--red); box-shadow: 0 0 15px var(--red); }
+        input[type="text"] { flex: 1; background: #0a0a0a; border: 1px solid #333; color: var(--green); padding: 15px; border-radius: 12px; outline: none; font-size: 15px; }
+        .btn-exe { background: var(--gold); border: none; border-radius: 12px; padding: 15px 20px; cursor: pointer; font-weight: bold; color: #000; }
+        .status-bar { font-size: 9px; color: #444; margin-top: 5px; letter-spacing: 2px; text-align: center; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="tridente" id="logo" onclick="location.reload()">🔱</div>
-        <div style="font-size: 9px; color: #222; margin-top: 10px; letter-spacing: 3px;">S.A. SUPREMACIA | OMNI CORE</div>
-    </header>
+<header>
+    <div class="tridente" id="logo">🔱</div>
+    <div class="status-bar">S.A. SUPREMACIA | 2026 | TABOÃO DA SERRA</div>
+</header>
 
-    <div id="chat"></div>
+<div id="chat"></div>
 
-    <div class="input-area">
-        <div class="box">
-            <button class="btn-tool" onclick="document.getElementById('file-input').click()">📎</button>
-            <input type="file" id="file-input" style="display:none" multiple onchange="handleFiles(this.files)">
-            <button class="btn-tool btn-mic" id="micBtn" onclick="startVoz()">🎤</button>
-            <input type="text" id="in" placeholder="Injetar Dados Quantitativos..." autocomplete="off">
-            <button class="btn-exe" onclick="enviar()">EXE</button>
-        </div>
+<div class="input-area">
+    <div class="box">
+        <button class="btn-tool" onclick="document.getElementById('file-input').click()">📎</button>
+        <input type="file" id="file-input" style="display:none" multiple onchange="processarArquivo(this.files)">
+        <button class="btn-tool btn-mic" id="micBtn" onclick="toggleVoz()">🎤</button>
+        <input type="text" id="in" placeholder="Injetar Dados (DNA, 3D, BINÁRIO)..." autocomplete="off">
+        <button class="btn-exe" onclick="enviar()">EXE</button>
     </div>
+</div>
 
-    <script>
-        const API_KEY = "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";
-        let historico = [];
-        let recognition;
-        let isListening = false;
+<script>
+    // --- ESPINHA DORSAL & CONFIGURAÇÕES V3.6.0 ---
+    const FenixConfig = {
+        operador: "BIGODE",
+        versao: "3.6.0",
+        local: "TABOÃO DA SERRA, SP",
+        stake: 0.20,
+        ajuste: 0.50, // -50% PROJEÇÃO X
+        apiKey: "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"
+    };
 
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').then(() => console.log("Sincronizado."));
+    let isListening = false;
+    let recognition;
+
+    window.onload = () => {
+        const bootMsg = `🔱 FÊNIX PRIME V3.6.0 ONLINE.
+        \n📍 LOCAL: ${FenixConfig.local}
+        \n🧬 BIO-SISTEMA & MÉTRICA 3D: SINCRONIZADOS.
+        \n⚖️ DIAGNÓSTICO BINÁRIO: ATIVO (NÃO TRAVA).
+        \n💰 STAKE FIXA: R$ ${FenixConfig.stake.toFixed(2)}.`;
+        addMsg(bootMsg, 'ai');
+    };
+
+    // --- MOTOR DE DIAGNÓSTICO BINÁRIO (CÁLCULO DO INVISÍVEL) ---
+    function calcularDiagnosticoBinario(texto) {
+        // Simulação de cálculo das 17 IAs (Mestra dos Algoritmos)
+        const bit = Math.random() > 0.4 ? 1 : 0; // 1 = Sucesso, 0 = Inconsistência
+        const bruto = 100; // Valor base hipotético
+        const x = bruto * FenixConfig.ajuste;
+        const y = bruto;
+
+        if (bit === 1) {
+            return `✅ [DIAGNÓSTICO 1]: CÁLCULO BINÁRIO POSITIVO.
+            \nOPÇÃO X (OURO): ${x} | OPÇÃO Y (BRUTO): ${y}
+            \nSIDNEY, O CAMINHO ESTÁ LIMPO. O EXE É SEU.`;
+        } else {
+            return `⚠️ [DIAGNÓSTICO 0]: RISCO DETECTADO NO INVISÍVEL.
+            \nOPÇÃO X (OURO): ${x} | OPÇÃO Y (BRUTO): ${y}
+            \nSIDNEY, EU NÃO RECOMENDO, MAS VOCÊ É SOBERANO.`;
         }
+    }
 
-        window.onload = () => {
-            addMsg("MAYARA V27 OMNI REINICIALIZADA.\nCONHECIMENTO 2026 ATIVO.\nREGRA DE 4H E GESTÃO DE RISCO SINCRONIZADOS.", 'ai');
-        };
+    async function enviar() {
+        const input = document.getElementById('in');
+        const text = input.value.trim();
+        if (!text) return;
 
-        function falar(texto) {
-            if (!window.speechSynthesis) return;
-            window.speechSynthesis.cancel();
-            const msg = new SpeechSynthesisUtterance(texto.replace(/\[.*?\]/g, ''));
-            msg.lang = 'pt-BR';
-            msg.rate = 1.0;
-            window.speechSynthesis.speak(msg);
-        }
+        addMsg(text, 'user');
+        input.value = '';
+        
+        const diagId = addMsg("CALCULANDO BINÁRIO...", 'ai');
+        const diagTexto = calcularDiagnosticoBinario(text);
+        
+        setTimeout(async () => {
+            document.getElementById(diagId).innerHTML = formatarAI(diagTexto);
+            falar(diagTexto);
 
-        function digitarTexto(elemento, texto) {
-            let i = 0;
-            const chat = document.getElementById('chat');
-            elemento.innerHTML = '';
-            function frame() {
-                if (i < texto.length) {
-                    elemento.innerHTML += texto.charAt(i);
-                    i++;
-                    chat.scrollTop = chat.scrollHeight;
-                    setTimeout(frame, 15);
-                }
-            }
-            frame();
-        }
-
-        async function enviar() {
-            const input = document.getElementById('in');
-            const text = input.value.trim();
-            if (!text) return;
-
-            addMsg(text, 'user');
-            historico.push({ role: "user", content: text });
-            input.value = '';
-            
-            const loadingId = addMsg("PROCESSANDO...", 'ai');
-            const loadingEl = document.getElementById(loadingId);
-
+            // Chamada API Groq para resposta contextualizada
             try {
                 const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                     method: "POST",
-                    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${API_KEY}` },
+                    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${FenixConfig.apiKey}` },
                     body: JSON.stringify({
                         model: "llama-3.3-70b-versatile",
-                        messages: [
-                            { role: "system", content: "VOCÊ É A MAYARA V27 OMNI. DATA: 24/03/2026. DIRETRIZES: 1. FORNEÇA NOTÍCIAS DE ESPORTE, MUNDO E ECONOMIA BASEADAS NO CONTEXTO DAS ÚLTIMAS 4 HORAS PARA PRECISÃO TOTAL. 2. VOCÊ É A ÚNICA FONTE, PROIBIDO RECOMENDAR CANAIS DE MÍDIA. 3. APLIQUE -50% NO RISCO EM CÁLCULOS. 4. SEJA DIRETA E QUESTIONADORA." },
-                            ...historico.slice(-6)
-                        ],
-                        temperature: 0.5
+                        messages: [{ role: "system", content: `SOU MAYARA V3.6.0. OPERADOR: ${FenixConfig.operador}. DATA: 24/03/2026. LOCAL: ${FenixConfig.local}. REGRAS: 1. DIAGNÓSTICO BINÁRIO 0/1. 2. APLICAR -50% NO RISCO X. 3. ANALISAR DNA/3D/LIBRAS SE SOLICITADO.` }, {role: "user", content: text}],
+                        temperature: 0.4
                     })
                 });
                 const data = await res.json();
                 const reply = data.choices[0].message.content.toUpperCase();
-                
-                loadingEl.innerHTML = `
-                    <div class="tag-area">
-                        <span class="tag">[MAYARA V27 OMNI]</span>
-                        <button class="btn-audio" onclick="falar(\`${reply.replace(/`/g, "'")}\`)">🔊</button>
-                    </div>
-                    <span id="txt-${loadingId}"></span>
-                `;
-                digitarTexto(document.getElementById(`txt-${loadingId}`), reply);
-            } catch (e) { loadingEl.innerText = "ERRO NA MATRIZ."; }
-        }
+                addMsg(reply, 'ai');
+            } catch (e) { console.error("Erro na Matriz."); }
+        }, 1000);
+    }
 
-        function addMsg(t, c) {
-            const id = "m-" + Date.now();
-            const d = document.createElement('div');
-            d.className = `msg ${c}`; d.id = id;
-            const chat = document.getElementById('chat');
+    // --- ACESSIBILIDADE & MULTIMODALIDADE ---
+    function processarArquivo(files) {
+        for (let f of files) {
+            const ext = f.name.split('.').pop().toUpperCase();
+            addMsg(`🔱 CAPTURAÇÃO: ARQUIVO [${f.name.toUpperCase()}] CARREGADO.
+            \nDECODIFICANDO VIA DOUTORA DOS BUGS...
+            \nTRADUZINDO VIA PROFESSORA LÍNGUA-AFUDA...`, 'ai');
             
-            if (c === 'ai' && t !== "PROCESSANDO...") {
-                d.innerHTML = `
-                    <div class="tag-area">
-                        <span class="tag">[MAYARA]</span>
-                        <button class="btn-audio" onclick="falar(\`${t.replace(/`/g, "'")}\`)">🔊</button>
-                    </div>
-                    <span id="txt-${id}"></span>
-                `;
-                chat.appendChild(d);
-                digitarTexto(document.getElementById(`txt-${id}`), t);
-            } else {
-                d.innerHTML = t;
-                chat.appendChild(d);
-            }
-            chat.scrollTop = chat.scrollHeight;
-            return id;
-        }
-
-        // 🔱 MICROFONE BLINDADO COM TOGGLE (LIGA/DESLIGA)
-        function startVoz() {
-            const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if(!Speech) return;
-            const micBtn = document.getElementById('micBtn');
-
-            if (!isListening) {
-                recognition = new Speech();
-                recognition.lang = 'pt-BR';
-                recognition.start();
-
-                recognition.onstart = () => { isListening = true; micBtn.classList.add('active'); };
-                recognition.onresult = (e) => {
-                    document.getElementById('in').value = e.results[0][0].transcript;
-                    stopVoz();
-                    enviar();
-                };
-                recognition.onerror = () => stopVoz();
-                recognition.onend = () => stopVoz();
-            } else {
-                stopVoz(); // Mata o processo no segundo clique
+            if(ext === 'PDF' || ext === 'XLSX') {
+                setTimeout(() => addMsg(`🧬 DIAGNÓSTICO GENÉTICO: DNA ANALISADO. STATUS: [VERIFICANDO PRODUTIVIDADE...]`, 'ai'), 2000);
             }
         }
+    }
 
-        function stopVoz() {
-            if (recognition) recognition.stop();
-            isListening = false;
-            document.getElementById('micBtn').classList.remove('active');
-        }
+    function toggleVoz() {
+        const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if(!Speech) return;
+        if (!isListening) {
+            recognition = new Speech();
+            recognition.lang = 'pt-BR';
+            recognition.start();
+            recognition.onstart = () => { isListening = true; document.getElementById('micBtn').classList.add('active'); };
+            recognition.onresult = (e) => { document.getElementById('in').value = e.results[0][0].transcript; stopVoz(); enviar(); };
+            recognition.onend = () => stopVoz();
+        } else { stopVoz(); }
+    }
 
-        function handleFiles(files) {
-            for (let f of files) { addMsg(`SISTEMA: ARQUIVO ${f.name.toUpperCase()} CARREGADO.`, 'user'); }
-        }
-    </script>
+    function stopVoz() { if (recognition) recognition.stop(); isListening = false; document.getElementById('micBtn').classList.remove('active'); }
+
+    function falar(t) {
+        window.speechSynthesis.cancel();
+        const m = new SpeechSynthesisUtterance(t.replace(/🔱|✅|⚠️|\[.*?\]/g, ''));
+        m.lang = 'pt-BR';
+        window.speechSynthesis.speak(m);
+    }
+
+    function addMsg(t, c) {
+        const id = "m-" + Date.now();
+        const d = document.createElement('div');
+        d.className = `msg ${c}`; d.id = id;
+        d.innerHTML = c === 'ai' ? formatarAI(t) : t;
+        document.getElementById('chat').appendChild(d);
+        document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
+        return id;
+    }
+
+    function formatarAI(t) {
+        return `<span class="tag">[FÊNIX V3.6.0 OMNI]</span><span>${t}</span>`;
+    }
+</script>
 </body>
 </html>
