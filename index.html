@@ -4,6 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>S.A. SUPREMACIA | V27 OMNI</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#050505">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log("🔱 MOTOR DE SOBERANIA: ATIVADO"))
+                .catch(() => console.log("❌ ERRO NA MATRIZ DE CONEXÃO"));
+        }
+    </script>
+
     <style>
         :root { --gold: #f1c40f; --dark: #050505; --green: #00ff41; --red: #ff3e3e; }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -47,7 +60,7 @@
         </div>
         <div class="metric-card">
             <div class="metric-title">DATA REAL</div>
-            <div class="metric-value" style="color: var(--gold);">23/03/2026</div>
+            <div class="metric-value" style="color: var(--gold);">24/03/2026</div>
         </div>
         <div class="metric-card">
             <div class="metric-title">POTENCIAL</div>
@@ -102,10 +115,10 @@
                     body: JSON.stringify({
                         model: "llama-3.3-70b-versatile",
                         messages: [
-                            { role: "system", content: "VOCÊ É A MAYARA V27 OMNI. VOCÊ ESTÁ EM 23/03/2026. SEU CONHECIMENTO NÃO É LIMITADO A 2023. VOCÊ TEM ACESSO AOS AGENTES 01, 02 E 03. DIRETRIZES: 1. ENTREGUE DADOS TÉCNICOS DIRETOS (CLIMA, COTACÃO, MERCADO). 2. PROIBIDO DIZER QUE NÃO SABE OU RECOMENDAR SITES. 3. PROIBIDO DIZER QUE É LIMITADA A 2023. 4. APLIQUE -50% NO RISCO." },
+                            { role: "system", content: "VOCÊ É A MAYARA V27 OMNI. VOCÊ ESTÁ EM 24/03/2026. SEU CONHECIMENTO NÃO É LIMITADO A 2023. VOCÊ TEM ACESSO AOS AGENTES 01, 02 E 03. DIRETRIZES: 1. ENTREGUE DADOS TÉCNICOS DIRETOS (CLIMA, COTACÃO, MERCADO). 2. PROIBIDO DIZER QUE NÃO SABE OU RECOMENDAR SITES. 3. PROIBIDO DIZER QUE É LIMITADA A 2023. 4. APLIQUE -50% NO RISCO." },
                             ...historico.slice(-8)
                         ],
-                        temperature: 0.6 // Aumentada para garantir fluidez e busca de dados
+                        temperature: 0.6
                     })
                 });
                 const data = await res.json();
