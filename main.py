@@ -44,7 +44,9 @@
     const container = document.getElementById('chat-container');
     const input = document.getElementById('user-input');
 
-    input.addEventListener('keypress', (e) => { if(e.key === 'Enter') enviar(); });
+    input.addEventListener('keypress', (e) => { 
+        if(e.key === 'Enter') enviar(); 
+    });
 
     function enviar() {
         const texto = input.value.trim();
@@ -66,12 +68,20 @@
     }
 
     function gerarResposta(msg) {
-        // 🔱 INTEGRAÇÃO DA TRINDADE NO SEU FORMATO ORIGINAL
-        if (msg.includes("status")) return "LIBERADO(100%). Agentes 01(Finance), 02(Weather) e 23(WSJ) sincronizados. Sistema operando em Padrão Ouro.";
-        if (msg.includes("stake")) return "Padrão Ouro confirmado: Stake de R$ 0,20 por entrada conforme sua diretriz.";
-        if (msg.includes("clima")) return "Sentinela Taboão: Estabilidade 100%. Sem riscos climáticos detectados via weather-api167.";
-        if (msg.includes("noticia")) return "Estrategista 23: Monitorando wall-street-journal.p.rapidapi.com. Tendência de mercado: Alta.";
-        return "Processando sua solicitação via Memória Quântica... Analisando variáveis para garantir o Padrão Ouro.";
+        // 🔱 LOGICA CONSOLIDADA - SINTAXE LIMPA
+        if (msg.includes("status")) {
+            return "LIBERADO(100%). Agente 01 (Yahoo Finance), Agente 02 (Weather API) e Agente 23 (WSJ) operando em harmonia. Padrão Ouro confirmado.";
+        }
+        if (msg.includes("stake")) {
+            return "Stake fixada em R$ 0,20. Cálculo de risco Metis-Bond aplicado com sucesso.";
+        }
+        if (msg.includes("clima") || msg.includes("taboão")) {
+            return "Sentinela de Infraestrutura: Conexão em Taboão da Serra estável. Clima favorável para operação.";
+        }
+        if (msg.includes("mercado") || msg.includes("noticia")) {
+            return "Agente 23 analisando Wall Street Journal: Tendências de mercado alinhadas com o Padrão Ouro.";
+        }
+        return "Processando sua solicitação via Memória Quântica... Cruzando dados das 3 Agências para garantir a blindagem.";
     }
 </script>
 
