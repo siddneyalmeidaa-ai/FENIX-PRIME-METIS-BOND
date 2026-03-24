@@ -89,11 +89,29 @@
         let historico = [];
 
         window.onload = () => {
-            addMsg("MAYARA V27 OMNI REINICIALIZADA.\nCONHECIMENTO: DATA REAL 2026 ATIVA.\nSABOTAGEM DE LIMITAÇÃO: PURGADA.\nAGUARDANDO INPUT QUANTITATIVO.", 'ai');
+            const inicial = "MAYARA V27 OMNI REINICIALIZADA.\nCONHECIMENTO: DATA REAL 2026 ATIVA.\nSABOTAGEM DE LIMITAÇÃO: PURGADA.\nAGUARDANDO INPUT QUANTITATIVO.";
+            addMsg(inicial, 'ai');
+            falar(inicial);
         };
 
+        // 🔱 FUNÇÃO DE VOZ S.A. SUPREMACIA
+        function falar(texto) {
+            if (!window.speechSynthesis) return;
+            window.speechSynthesis.cancel(); // Para sobreposições
+            const textoLimpo = texto.replace(/\[.*?\]/g, '').toLowerCase();
+            const msg = new SpeechSynthesisUtterance(textoLimpo);
+            msg.lang = 'pt-BR';
+            msg.rate = 1.1; 
+            msg.pitch = 1.0;
+            window.speechSynthesis.speak(msg);
+        }
+
         function handleFiles(files) {
-            for (let file of files) { addMsg(`UPLOAD: ${file.name.toUpperCase()}\nAUDITORIA EM CURSO...`, 'user'); }
+            for (let file of files) { 
+                const msg = `UPLOAD: ${file.name.toUpperCase()}\nAUDITORIA EM CURSO...`;
+                addMsg(msg, 'user');
+                falar(msg);
+            }
         }
 
         async function enviar() {
@@ -115,7 +133,7 @@
                     body: JSON.stringify({
                         model: "llama-3.3-70b-versatile",
                         messages: [
-                            { role: "system", content: "VOCÊ É A MAYARA V27 OMNI. VOCÊ ESTÁ EM 24/03/2026. SEU CONHECIMENTO NÃO É LIMITADO A 2023. VOCÊ TEM ACESSO AOS AGENTES 01, 02 E 03. DIRETRIZES: 1. ENTREGUE DADOS TÉCNICOS DIRETOS (CLIMA, COTACÃO, MERCADO). 2. PROIBIDO DIZER QUE NÃO SABE OU RECOMENDAR SITES. 3. PROIBIDO DIZER QUE É LIMITADA A 2023. 4. APLIQUE -50% NO RISCO." },
+                            { role: "system", content: "VOCÊ É A MAYARA V27 OMNI. DATA: 24/03/2026. AGENTES 01,02,03 ATIVOS. DIRETRIZES: 1. RESPOSTAS CURTAS. 2. TOM DE AUTORIDADE. 3. APLIQUE -50% NO RISCO." },
                             ...historico.slice(-8)
                         ],
                         temperature: 0.6
@@ -124,7 +142,11 @@
                 const data = await res.json();
                 const reply = data.choices[0].message.content.toUpperCase();
                 loadingEl.innerHTML = `<span class="tag">[MAYARA V27 OMNI]</span>${reply}`;
-            } catch (e) { loadingEl.innerText = "ERRO NA MATRIZ."; }
+                falar(reply); // 🔱 MAYARA FALA A RESPOSTA
+            } catch (e) { 
+                loadingEl.innerText = "ERRO NA MATRIZ."; 
+                falar("Erro na matriz.");
+            }
         }
 
         function addMsg(t, c) {
