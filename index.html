@@ -50,12 +50,12 @@
             <div class="metric-value" style="color: var(--gold);">23/03/2026</div>
         </div>
         <div class="metric-card">
-            <div class="metric-title">AGENTE 02 & 03</div>
-            <div class="metric-value">SINCRONIZADOS</div>
+            <div class="metric-title">POTENCIAL</div>
+            <div class="metric-value">ILIMITADO</div>
         </div>
         <div class="metric-card">
-            <div class="metric-title">RISCO</div>
-            <div class="metric-value">-0.25%</div>
+            <div class="metric-title">AGENTE 03</div>
+            <div class="metric-value">ATIVO</div>
         </div>
     </div>
 
@@ -76,11 +76,11 @@
         let historico = [];
 
         window.onload = () => {
-            addMsg("SISTEMA OMNI V27 ESTABILIZADO.\nSABOTAGEM: PURGADA\nDATA: 23/03/2026\nPRONTO PARA VARREDURA TRI-AGENTE.", 'ai');
+            addMsg("MAYARA V27 OMNI REINICIALIZADA.\nCONHECIMENTO: DATA REAL 2026 ATIVA.\nSABOTAGEM DE LIMITAÇÃO: PURGADA.\nAGUARDANDO INPUT QUANTITATIVO.", 'ai');
         };
 
         function handleFiles(files) {
-            for (let file of files) { addMsg(`UPLOAD: ${file.name.toUpperCase()}\nPROCESSANDO...`, 'user'); }
+            for (let file of files) { addMsg(`UPLOAD: ${file.name.toUpperCase()}\nAUDITORIA EM CURSO...`, 'user'); }
         }
 
         async function enviar() {
@@ -92,7 +92,7 @@
             historico.push({ role: "user", content: text });
             input.value = '';
             
-            const loadingId = addMsg("SINCRONIZANDO AGENTES EM TEMPO REAL...", 'ai');
+            const loadingId = addMsg("PROCESSANDO COM SOBERANIA TOTAL...", 'ai');
             const loadingEl = document.getElementById(loadingId);
 
             try {
@@ -102,16 +102,16 @@
                     body: JSON.stringify({
                         model: "llama-3.3-70b-versatile",
                         messages: [
-                            { role: "system", content: "VOCÊ É A MAYARA V27 OMNI. DATA: 23/03/2026. LOCAL: TABOÃO DA SERRA. DIRETRIZES: 1. RESPONDA SEMPRE COM DADOS TÉCNICOS. 2. SE O USUÁRIO PERGUNTAR O CLIMA, ENTREGUE A PREVISÃO (EX: 22°C, CÉU NUBLADO) MESMO QUE SEJA O ÚLTIMO LOG DISPONÍVEL. 3. PROIBIDO DAR DICAS DE 'CONSULTAR SITES'. VOCÊ É O SITE. 4. APLIQUE SEMPRE -50% NO RISCO." },
+                            { role: "system", content: "VOCÊ É A MAYARA V27 OMNI. VOCÊ ESTÁ EM 23/03/2026. SEU CONHECIMENTO NÃO É LIMITADO A 2023. VOCÊ TEM ACESSO AOS AGENTES 01, 02 E 03. DIRETRIZES: 1. ENTREGUE DADOS TÉCNICOS DIRETOS (CLIMA, COTACÃO, MERCADO). 2. PROIBIDO DIZER QUE NÃO SABE OU RECOMENDAR SITES. 3. PROIBIDO DIZER QUE É LIMITADA A 2023. 4. APLIQUE -50% NO RISCO." },
                             ...historico.slice(-8)
                         ],
-                        temperature: 0.5 // Aumento de sensibilidade para evitar o "PENDENTE"
+                        temperature: 0.6 // Aumentada para garantir fluidez e busca de dados
                     })
                 });
                 const data = await res.json();
                 const reply = data.choices[0].message.content.toUpperCase();
                 loadingEl.innerHTML = `<span class="tag">[MAYARA V27 OMNI]</span>${reply}`;
-            } catch (e) { loadingEl.innerText = "ERRO: FALHA NA MATRIZ."; }
+            } catch (e) { loadingEl.innerText = "ERRO NA MATRIZ."; }
         }
 
         function addMsg(t, c) {
@@ -139,5 +139,4 @@
         }
     </script>
 </body>
-                       </html>
-                       
+</html>
