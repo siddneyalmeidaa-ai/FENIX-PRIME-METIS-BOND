@@ -1,16 +1,15 @@
 {
-  "name": "S.A. SUPREMACIA V27",
-  "short_name": "SUPREMACIA",
-  "start_url": "./index.html",
+  "name": "FÊNIX PRIME V3.6.2",
+  "short_name": "Fênix Prime",
+  "start_url": "index.html",
   "display": "standalone",
   "background_color": "#050505",
   "theme_color": "#f1c40f",
   "icons": [
     {
-      "src": "https://raw.githubusercontent.com/siddneyalmeidaa-ai/FENIX-PRIME-METIS-BOND/main/tridente.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "src": "https://raw.githubusercontent.com/siddneyalmeida-ai/FENIX-PRIME-METIS-BOND/main/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
     }
   ]
 }
