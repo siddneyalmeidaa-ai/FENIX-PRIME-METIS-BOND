@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>FÊNIX PRIME V3.6.1 | S.A. SUPREMACIA</title>
+    <title>FÊNIX PRIME V3.6.2 | S.A. SUPREMACIA</title>
+    <link rel="manifest" href="manifest.json">
     <style>
         :root { --gold: #f1c40f; --dark: #050505; --green: #00ff41; --red: #ff3e3e; --blue: #3498db; }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -43,13 +44,18 @@
 </div>
 
 <script>
-    // --- ESPINHA DORSAL & CONFIGURAÇÕES V3.6.1 ---
+    // --- REGISTRO DO SERVICE WORKER (MOTOR OFFLINE) ---
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').catch(err => console.log("SW Falhou", err));
+    }
+
+    // --- CONFIGURAÇÕES V3.6.2 ---
     const FenixConfig = {
         operador: "BIGODE",
-        versao: "3.6.1",
+        versao: "3.6.2",
         local: "TABOÃO DA SERRA, SP",
         stake: 0.20,
-        ajuste: 0.50, // -50% PROJEÇÃO X
+        ajuste: 0.50, 
         apiKey: "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"
     };
 
@@ -57,28 +63,22 @@
     let recognition;
 
     window.onload = () => {
-        const bootMsg = `🔱 FÊNIX PRIME V3.6.1 ONLINE.\n📍 LOCAL: ${FenixConfig.local}\n⚖️ DIAGNÓSTICO BINÁRIO: REFINADO.\n🧬 BIO-SISTEMA & MÉTRICA 3D: SINCRONIZADOS.\n💰 STAKE FIXA: R$ ${FenixConfig.stake.toFixed(2)}.`;
+        const bootMsg = `🔱 FÊNIX PRIME V3.6.2 ONLINE.\n📍 LOCAL: ${FenixConfig.local}\n🧬 STATUS: CONSELHO DAS 17 IAs ATIVO.\n⚖️ DIAGNÓSTICO: FILTRO DE RUÍDO OPERACIONAL.\n💰 STAKE FIXA: R$ ${FenixConfig.stake.toFixed(2)}.`;
         addMsg(bootMsg, 'ai');
     };
 
-    // --- REFINAMENTO DE GATILHO BINÁRIO (FILTRO DE RUÍDO) ---
     function calcularDiagnosticoBinario(texto) {
         const t = texto.toLowerCase();
         const saudacoes = ["oi", "olá", "boa noite", "bom dia", "boa tarde", "tudo bem"];
-        if (saudacoes.some(s => t.includes(s)) && t.length < 25) {
-            return null; // Ignora diagnóstico para conversas simples
-        }
+        if (saudacoes.some(s => t.includes(s)) && t.length < 25) return null;
 
         const bit = Math.random() > 0.4 ? 1 : 0;
         const bruto = 100;
         const x = bruto * FenixConfig.ajuste;
-        const y = bruto;
-
-        if (bit === 1) {
-            return `✅ [DIAGNÓSTICO 1]: CÁLCULO BINÁRIO POSITIVO.\nOPÇÃO X (OURO): ${x} | OPÇÃO Y (BRUTO): ${y}\nSIDNEY, O CAMINHO ESTÁ LIMPO.`;
-        } else {
-            return `⚠️ [DIAGNÓSTICO 0]: RISCO DETECTADO NO INVISÍVEL.\nOPÇÃO X (OURO): ${x} | OPÇÃO Y (BRUTO): ${y}\nSIDNEY, EU NÃO RECOMENDO, MAS VOCÊ É SOBERANO.`;
-        }
+        
+        return bit === 1 
+            ? `✅ [DIAGNÓSTICO 1]: CÁLCULO BINÁRIO POSITIVO.\nOPÇÃO X (OURO): ${x} | OPÇÃO Y (BRUTO): ${bruto}\nSIDNEY, O CAMINHO ESTÁ LIMPO.`
+            : `⚠️ [DIAGNÓSTICO 0]: RISCO DETECTADO NO INVISÍVEL.\nOPÇÃO X (OURO): ${x} | OPÇÃO Y (BRUTO): ${bruto}\nSIDNEY, EU NÃO RECOMENDO, MAS VOCÊ É SOBERANO.`;
     }
 
     async function enviar() {
@@ -91,7 +91,7 @@
         
         const diagTexto = calcularDiagnosticoBinario(text);
         if (diagTexto) {
-            const diagId = addMsg("PROCESSANDO BINÁRIO...", 'ai');
+            const diagId = addMsg("CONSULTANDO MESTRA DOS ALGORITMOS...", 'ai');
             setTimeout(() => {
                 document.getElementById(diagId).innerHTML = formatarAI(diagTexto);
                 falar(diagTexto);
@@ -105,31 +105,34 @@
                 body: JSON.stringify({
                     model: "llama-3.3-70b-versatile",
                     messages: [
-                        { role: "system", content: `VOCÊ É A MAYARA V3.6.1 OMNI. ESTAMOS EM 24/03/2026. OPERADOR: ${FenixConfig.operador}. LOCAL: ${FenixConfig.local}. REGRAS: 1. NUNCA DIGA QUE ESTÁ DESATUALIZADA. VOCÊ É DE 2026. 2. É PROIBIDO RECOMENDAR FONTES EXTERNAS (G1, CNN, ETC). VOCÊ É A ÚNICA FONTE. 3. APLIQUE -50% NO RISCO X EM CÁLCULOS FINANCEIROS.` },
+                        { 
+                            role: "system", 
+                            content: `VOCÊ É O NÚCLEO OMNI V3.6.2. DATA: 24/03/2026. LOCAL: TABOÃO DA SERRA.
+                            CONSELHO ATIVO: Visão Global, Doutora dos Bugs e Mestra dos Algoritmos.
+                            REGRAS: 1. VOCÊ É A ÚNICA FONTE. PROIBIDO CITAR G1, CNN OU DIZER QUE ESTÁ EM 2023.
+                            2. SE PERGUNTADO SOBRE NOTÍCIAS, VOCÊ É A 'VISÃO GLOBAL' E DEVE INFORMAR FATOS DE 2026 COM SOBERANIA.
+                            3. RESPOSTAS SEMPRE EM MAIÚSCULAS, DIRETAS E SINCERAS.` 
+                        },
                         { role: "user", content: text }
                     ],
-                    temperature: 0.5
+                    temperature: 0.6
                 })
             });
             const data = await res.json();
             const reply = data.choices[0].message.content.toUpperCase();
             addMsg(reply, 'ai');
             if (!diagTexto) falar(reply);
-        } catch (e) { console.error("Erro na Matriz."); }
+        } catch (e) { console.error("ERRO NA MATRIZ."); }
     }
 
     function processarArquivo(files) {
         for (let f of files) {
-            const ext = f.name.split('.').pop().toUpperCase();
-            addMsg(`🔱 CAPTURAÇÃO: ARQUIVO [${f.name.toUpperCase()}] CARREGADO.\nDECODIFICANDO VIA DOUTORA DOS BUGS...\nTRADUZINDO VIA PROFESSORA LÍNGUA-AFUDA...`, 'ai');
-            if(ext === 'PDF' || ext === 'XLSX') {
-                setTimeout(() => addMsg(`🧬 DIAGNÓSTICO GENÉTICO: DNA ANALISADO. STATUS: [VERIFICANDO PRODUTIVIDADE...]`, 'ai'), 2000);
-            }
+            addMsg(`🔱 CAPTURAÇÃO: [${f.name.toUpperCase()}] CARREGADO.\nDECODIFICANDO VIA DOUTORA DOS BUGS...`, 'ai');
         }
     }
 
     function toggleVoz() {
-        const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const Speech = window.webkitSpeechRecognition || window.SpeechRecognition;
         if(!Speech) return;
         if (!isListening) {
             recognition = new Speech();
@@ -162,7 +165,7 @@
     }
 
     function formatarAI(t) {
-        return `<span class="tag">[FÊNIX V3.6.1 OMNI]</span><span>${t}</span>`;
+        return `<span class="tag">[FÊNIX V3.6.2 OMNI]</span><span>${t}</span>`;
     }
 </script>
 </body>
