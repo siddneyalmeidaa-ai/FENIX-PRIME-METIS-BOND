@@ -1,15 +1,17 @@
 {
   "name": "S.A. SUPREMACIA V27",
   "short_name": "SUPREMACIA",
-  "start_url": "/FENIX-PRIME-METIS-BOND/",
+  "description": "SISTEMA OMNI V27 - AGENTE 03",
+  "start_url": "/FENIX-PRIME-METIS-BOND/index.html",
   "display": "standalone",
   "background_color": "#050505",
   "theme_color": "#f1c40f",
   "icons": [
     {
-      "src": "https://raw.githubusercontent.com/siddneyalmeidaa-ai/FENIX-PRIME-METIS-BOND/main/icon.png",
+      "src": "https://raw.githubusercontent.com/siddneyalmeidaa-ai/FENIX-PRIME-METIS-BOND/main/tridente.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
