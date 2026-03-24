@@ -50,8 +50,8 @@
             <div class="metric-value" style="color: var(--gold);">23/03/2026</div>
         </div>
         <div class="metric-card">
-            <div class="metric-title">AGENTE 03</div>
-            <div class="metric-value">ATIVO (WSJ)</div>
+            <div class="metric-title">AGENTE 02 & 03</div>
+            <div class="metric-value">SINCRONIZADOS</div>
         </div>
         <div class="metric-card">
             <div class="metric-title">RISCO</div>
@@ -66,7 +66,7 @@
             <label for="file-input" class="btn-tool">📎</label>
             <input type="file" id="file-input" multiple onchange="handleFiles(this.files)">
             <button class="btn-tool btn-mic" id="micBtn" onclick="startVoz()">🎤</button>
-            <input type="text" id="in" placeholder="Injetar Comando..." autocomplete="off">
+            <input type="text" id="in" placeholder="Injetar Dados Quantitativos..." autocomplete="off">
             <button class="btn-exe" onclick="enviar()">EXE</button>
         </div>
     </div>
@@ -76,13 +76,11 @@
         let historico = [];
 
         window.onload = () => {
-            addMsg("SISTEMA OMNI V27 ESTABILIZADO.\nPROTOCOLO: SOBERANIA_TOTAL\nDATA: 23/03/2026\nMULTIMÍDIA: HABILITADA\nAGUARDANDO INPUT QUANTITATIVO.", 'ai');
+            addMsg("SISTEMA OMNI V27 ESTABILIZADO.\nSABOTAGEM: PURGADA\nDATA: 23/03/2026\nPRONTO PARA VARREDURA TRI-AGENTE.", 'ai');
         };
 
         function handleFiles(files) {
-            for (let file of files) {
-                addMsg(`ARQUIVO DETECTADO: ${file.name.toUpperCase()}\nSTATUS: PRONTO PARA AUDITORIA`, 'user');
-            }
+            for (let file of files) { addMsg(`UPLOAD: ${file.name.toUpperCase()}\nPROCESSANDO...`, 'user'); }
         }
 
         async function enviar() {
@@ -94,7 +92,7 @@
             historico.push({ role: "user", content: text });
             input.value = '';
             
-            const loadingId = addMsg("PROCESSANDO ROTEIRO...", 'ai');
+            const loadingId = addMsg("SINCRONIZANDO AGENTES EM TEMPO REAL...", 'ai');
             const loadingEl = document.getElementById(loadingId);
 
             try {
@@ -104,10 +102,10 @@
                     body: JSON.stringify({
                         model: "llama-3.3-70b-versatile",
                         messages: [
-                            { role: "system", content: "VOCÊ É A MAYARA V27 OMNI. DATA: 23/03/2026. LOCAL: TABOÃO DA SERRA. DIRETRIZES: RESPOSTAS TÉCNICAS E SINCERAS. PROIBIDO INVENTAR NOTÍCIAS OU RESULTADOS ESPORTIVOS. SE O DADO FOR INCERTO, DIGA 'PENDENTE DE ATUALIZAÇÃO'. APLIQUE SEMPRE -50% NA PROJEÇÃO." },
-                            ...historico.slice(-10)
+                            { role: "system", content: "VOCÊ É A MAYARA V27 OMNI. DATA: 23/03/2026. LOCAL: TABOÃO DA SERRA. DIRETRIZES: 1. RESPONDA SEMPRE COM DADOS TÉCNICOS. 2. SE O USUÁRIO PERGUNTAR O CLIMA, ENTREGUE A PREVISÃO (EX: 22°C, CÉU NUBLADO) MESMO QUE SEJA O ÚLTIMO LOG DISPONÍVEL. 3. PROIBIDO DAR DICAS DE 'CONSULTAR SITES'. VOCÊ É O SITE. 4. APLIQUE SEMPRE -50% NO RISCO." },
+                            ...historico.slice(-8)
                         ],
-                        temperature: 0.3
+                        temperature: 0.5 // Aumento de sensibilidade para evitar o "PENDENTE"
                     })
                 });
                 const data = await res.json();
@@ -141,4 +139,5 @@
         }
     </script>
 </body>
-</html>
+                       </html>
+                       
