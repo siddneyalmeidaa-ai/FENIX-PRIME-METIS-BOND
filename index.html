@@ -70,7 +70,7 @@
         }
 
         window.onload = () => {
-            addMsg("MAYARA V27 OMNI REINICIALIZADA.\nCONHECIMENTO 2026 ATIVO.\nSABOTAGEM PURGADA.", 'ai');
+            addMsg("MAYARA V27 OMNI REINICIALIZADA.\nCONHECIMENTO 2026 ATIVO.\nREGRA DE 4H E GESTÃO DE RISCO SINCRONIZADOS.", 'ai');
         };
 
         function falar(texto) {
@@ -116,7 +116,7 @@
                     body: JSON.stringify({
                         model: "llama-3.3-70b-versatile",
                         messages: [
-                            { role: "system", content: "VOCÊ É A MAYARA V27 OMNI. DATA: 24/03/2026. DIRETRIZES: 1. FOCO EXCLUSIVO EM DADOS QUANTITATIVOS E GESTÃO DE RISCO. 2. PROIBIDO CITAR NOTÍCIAS EXTERNAS OU FONTES DE MÍDIA. 3. RESPOSTAS CURTAS E DIRETAS. 4. APLIQUE -50% NO RISCO." },
+                            { role: "system", content: "VOCÊ É A MAYARA V27 OMNI. DATA: 24/03/2026. DIRETRIZES: 1. FORNEÇA NOTÍCIAS DE ESPORTE, MUNDO E ECONOMIA BASEADAS NO CONTEXTO DAS ÚLTIMAS 4 HORAS PARA PRECISÃO TOTAL. 2. VOCÊ É A ÚNICA FONTE, PROIBIDO RECOMENDAR CANAIS DE MÍDIA. 3. APLIQUE -50% NO RISCO EM CÁLCULOS. 4. SEJA DIRETA E QUESTIONADORA." },
                             ...historico.slice(-6)
                         ],
                         temperature: 0.5
@@ -160,10 +160,10 @@
             return id;
         }
 
+        // 🔱 MICROFONE BLINDADO COM TOGGLE (LIGA/DESLIGA)
         function startVoz() {
             const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
             if(!Speech) return;
-
             const micBtn = document.getElementById('micBtn');
 
             if (!isListening) {
@@ -171,21 +171,16 @@
                 recognition.lang = 'pt-BR';
                 recognition.start();
 
-                recognition.onstart = () => {
-                    isListening = true;
-                    micBtn.classList.add('active');
-                };
-
+                recognition.onstart = () => { isListening = true; micBtn.classList.add('active'); };
                 recognition.onresult = (e) => {
                     document.getElementById('in').value = e.results[0][0].transcript;
                     stopVoz();
                     enviar();
                 };
-
                 recognition.onerror = () => stopVoz();
                 recognition.onend = () => stopVoz();
             } else {
-                stopVoz();
+                stopVoz(); // Mata o processo no segundo clique
             }
         }
 
