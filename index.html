@@ -31,9 +31,11 @@
         .metric-value { font-size: 16px; font-weight: bold; color: var(--green); }
         
         #chat { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; background: radial-gradient(circle, #111 0%, #050505 100%); }
-        .msg { max-width: 90%; padding: 15px; border-radius: 4px; font-size: 13px; line-height: 1.6; white-space: pre-wrap; border-left: 3px solid var(--gold); background: rgba(255,255,255,0.03); }
-        .tag { font-size: 10px; color: var(--gold); font-weight: bold; display: block; margin-bottom: 8px; text-transform: uppercase; }
+        .msg { max-width: 90%; padding: 15px; border-radius: 4px; font-size: 13px; line-height: 1.6; white-space: pre-wrap; border-left: 3px solid var(--gold); background: rgba(255,255,255,0.03); position: relative; }
+        .tag { font-size: 10px; color: var(--gold); font-weight: bold; text-transform: uppercase; }
         .user { align-self: flex-end; border-left: 0; border-right: 3px solid var(--gold); text-align: right; background: #151515; }
+
+        .btn-audio { background: none; border: none; color: var(--gold); cursor: pointer; font-size: 18px; padding: 5px; }
 
         .input-area { padding: 15px 15px 40px; background: #000; border-top: 1px solid #222; }
         .box { display: flex; gap: 10px; max-width: 600px; margin: 0 auto; align-items: center; }
@@ -89,29 +91,21 @@
         let historico = [];
 
         window.onload = () => {
-            const inicial = "MAYARA V27 OMNI REINICIALIZADA.\nCONHECIMENTO: DATA REAL 2026 ATIVA.\nSABOTAGEM DE LIMITAÇÃO: PURGADA.\nAGUARDANDO INPUT QUANTITATIVO.";
-            addMsg(inicial, 'ai');
-            falar(inicial);
+            addMsg("MAYARA V27 OMNI REINICIALIZADA.\nCONHECIMENTO: DATA REAL 2026 ATIVA.\nSABOTAGEM DE LIMITAÇÃO: PURGADA.", 'ai');
         };
 
-        // 🔱 FUNÇÃO DE VOZ S.A. SUPREMACIA
         function falar(texto) {
             if (!window.speechSynthesis) return;
-            window.speechSynthesis.cancel(); // Para sobreposições
-            const textoLimpo = texto.replace(/\[.*?\]/g, '').toLowerCase();
-            const msg = new SpeechSynthesisUtterance(textoLimpo);
+            window.speechSynthesis.cancel();
+            const limpo = texto.replace(/\[.*?\]/g, '').toLowerCase();
+            const msg = new SpeechSynthesisUtterance(limpo);
             msg.lang = 'pt-BR';
-            msg.rate = 1.1; 
-            msg.pitch = 1.0;
+            msg.rate = 1.1;
             window.speechSynthesis.speak(msg);
         }
 
         function handleFiles(files) {
-            for (let file of files) { 
-                const msg = `UPLOAD: ${file.name.toUpperCase()}\nAUDITORIA EM CURSO...`;
-                addMsg(msg, 'user');
-                falar(msg);
-            }
+            for (let file of files) { addMsg(`UPLOAD: ${file.name.toUpperCase()}\nAUDITORIA EM CURSO...`, 'user'); }
         }
 
         async function enviar() {
@@ -133,7 +127,7 @@
                     body: JSON.stringify({
                         model: "llama-3.3-70b-versatile",
                         messages: [
-                            { role: "system", content: "VOCÊ É A MAYARA V27 OMNI. DATA: 24/03/2026. AGENTES 01,02,03 ATIVOS. DIRETRIZES: 1. RESPOSTAS CURTAS. 2. TOM DE AUTORIDADE. 3. APLIQUE -50% NO RISCO." },
+                            { role: "system", content: "VOCÊ É A MAYARA V27 OMNI. DATA: 24/03/2026. DIRETRIZES: 1. RESPOSTAS CURTAS. 2. TOM DE AUTORIDADE. 3. APLIQUE -50% NO RISCO." },
                             ...historico.slice(-8)
                         ],
                         temperature: 0.6
@@ -141,19 +135,33 @@
                 });
                 const data = await res.json();
                 const reply = data.choices[0].message.content.toUpperCase();
-                loadingEl.innerHTML = `<span class="tag">[MAYARA V27 OMNI]</span>${reply}`;
-                falar(reply); // 🔱 MAYARA FALA A RESPOSTA
-            } catch (e) { 
-                loadingEl.innerText = "ERRO NA MATRIZ."; 
-                falar("Erro na matriz.");
-            }
+                
+                const d = document.getElementById(loadingId);
+                d.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span class="tag">[MAYARA V27 OMNI]</span>
+                        <button class="btn-audio" onclick="falar(\`${reply.replace(/`/g, "'")}\`)">🔊</button>
+                    </div>
+                    ${reply}
+                `;
+            } catch (e) { loadingEl.innerText = "ERRO NA MATRIZ."; }
         }
 
         function addMsg(t, c) {
             const id = "m-" + Date.now();
             const d = document.createElement('div');
             d.className = `msg ${c}`; d.id = id;
-            d.innerHTML = c === 'ai' ? `<span class="tag">[MAYARA]</span>${t}` : t;
+            if (c === 'ai') {
+                d.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span class="tag">[MAYARA]</span>
+                        <button class="btn-audio" onclick="falar(\`${t.replace(/`/g, "'")}\`)">🔊</button>
+                    </div>
+                    ${t}
+                `;
+            } else {
+                d.innerHTML = t;
+            }
             const chat = document.getElementById('chat');
             chat.appendChild(d);
             chat.scrollTop = chat.scrollHeight;
