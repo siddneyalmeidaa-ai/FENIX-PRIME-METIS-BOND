@@ -1,15 +1,24 @@
 {
   "name": "FÊNIX PRIME V3.6.2",
   "short_name": "Fênix Prime",
+  "description": "SISTEMA OMNI DE INTELIGÊNCIA E GESTÃO IPI",
   "start_url": "index.html",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#050505",
   "theme_color": "#f1c40f",
   "icons": [
     {
-      "src": "https://raw.githubusercontent.com/siddneyalmeida-ai/FENIX-PRIME-METIS-BOND/main/logo.png",
+      "src": "logo.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
