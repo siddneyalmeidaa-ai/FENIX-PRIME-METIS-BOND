@@ -3,53 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>S.A. SUPREMACIA | V27 OMNI FULL</title>
+    <title>S.A. SUPREMACIA | V27 OMNI</title>
     <style>
         :root { --gold: #f1c40f; --dark: #050505; --green: #00ff41; --red: #ff3e3e; }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--dark); color: #fff; font-family: 'Consolas', monospace; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        body { background: var(--dark); color: #fff; font-family: 'Consolas', 'Courier New', monospace; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
         header { padding-top: 50px; padding-bottom: 15px; display: flex; flex-direction: column; align-items: center; border-bottom: 2px solid var(--gold); background: #000; }
-        .tridente { font-size: 60px; color: var(--gold); text-shadow: 0 0 20px var(--gold); }
+        .tridente { font-size: 60px; color: var(--gold); text-shadow: 0 0 25px var(--gold); cursor: pointer; }
 
-        .dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; background: #0a0a0a; }
+        .dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; background: #0a0a0a; border-bottom: 1px solid #222; }
         .metric-card { background: #111; padding: 10px; border-radius: 8px; border: 1px solid #333; text-align: center; }
-        .metric-title { font-size: 9px; color: var(--gold); text-transform: uppercase; margin-bottom: 5px; }
+        .metric-title { font-size: 9px; color: var(--gold); text-transform: uppercase; margin-bottom: 5px; letter-spacing: 1px; }
         .metric-value { font-size: 16px; font-weight: bold; color: var(--green); }
         
-        #chat { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        #chat { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; background: radial-gradient(circle, #111 0%, #050505 100%); }
         .msg { max-width: 90%; padding: 15px; border-radius: 4px; font-size: 13px; line-height: 1.6; white-space: pre-wrap; border-left: 3px solid var(--gold); background: rgba(255,255,255,0.03); }
         .tag { font-size: 10px; color: var(--gold); font-weight: bold; display: block; margin-bottom: 8px; text-transform: uppercase; }
         .user { align-self: flex-end; border-left: 0; border-right: 3px solid var(--gold); text-align: right; background: #151515; }
 
-        .input-area { padding: 10px 15px 30px; background: #000; border-top: 1px solid #222; }
+        .input-area { padding: 15px 15px 40px; background: #000; border-top: 1px solid #222; }
         .box { display: flex; gap: 10px; max-width: 600px; margin: 0 auto; align-items: center; }
         
-        /* Botões de Ação */
-        .btn-tool { background: #111; border: 1px solid #333; color: var(--gold); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 20px; transition: 0.3s; }
-        .btn-mic.active { color: var(--red); border-color: var(--red); box-shadow: 0 0 10px var(--red); }
+        .btn-tool { background: #111; border: 1px solid #333; color: var(--gold); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 22px; transition: 0.3s; }
+        .btn-mic.active { color: var(--red); border-color: var(--red); box-shadow: 0 0 15px var(--red); }
         
-        input[type="text"] { flex: 1; background: #0a0a0a; border: 1px solid #333; color: var(--green); padding: 12px; border-radius: 8px; outline: none; font-family: 'Consolas', monospace; }
-        .btn-exe { background: var(--gold); border: none; border-radius: 8px; padding: 12px 20px; cursor: pointer; font-weight: bold; color: #000; }
-        
+        input[type="text"] { flex: 1; background: #0a0a0a; border: 1px solid #333; color: var(--green); padding: 15px; border-radius: 12px; outline: none; font-family: 'Consolas', monospace; font-size: 16px; }
+        .btn-exe { background: var(--gold); border: none; border-radius: 12px; padding: 15px 25px; cursor: pointer; font-weight: bold; color: #000; font-size: 14px; }
         #file-input { display: none; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="tridente">🔱</div>
-        <div style="font-size: 10px; color: #444; letter-spacing: 2px;">S.A. SUPREMACIA | OMNI COMMAND V27</div>
+        <div class="tridente" id="tridenteSupremo">🔱</div>
+        <div style="font-size: 10px; color: #444; margin-top: 5px; letter-spacing: 2px;">S.A. SUPREMACIA | OMNI QUANTUM CORE</div>
     </header>
 
     <div class="dashboard">
         <div class="metric-card">
-            <div class="metric-title">STATUS</div>
-            <div class="metric-value">LIBERADO (1)</div>
+            <div class="metric-title">STATUS DA MATRIZ</div>
+            <div id="m1" class="metric-value">LIBERADO (1)</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-title">SINCRONIA TEMPORAL</div>
+            <div id="m2" class="metric-value" style="color: var(--gold);">23/03/2026</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-title">AGENTE 03 (WSJ)</div>
+            <div id="m3" class="metric-value">ATIVO</div>
         </div>
         <div class="metric-card">
             <div class="metric-title">MULTIMÍDIA</div>
-            <div class="metric-value" style="color: var(--gold);">REINTEGRADA</div>
+            <div id="m4" class="metric-value">FULL ACCESS</div>
         </div>
     </div>
 
@@ -59,10 +65,8 @@
         <div class="box">
             <label for="file-input" class="btn-tool">📎</label>
             <input type="file" id="file-input" multiple onchange="handleFiles(this.files)">
-            
             <button class="btn-tool btn-mic" id="micBtn" onclick="startVoz()">🎤</button>
-            
-            <input type="text" id="in" placeholder="Injetar Dados..." autocomplete="off">
+            <input type="text" id="in" placeholder="Injetar Dados Quantitativos..." autocomplete="off">
             <button class="btn-exe" onclick="enviar()">EXE</button>
         </div>
     </div>
@@ -72,12 +76,12 @@
         let historico = [];
 
         window.onload = () => {
-            addMsg("SISTEMA REINTEGRADO.\nVOZ: ATIVA\nANEXOS: HABILITADOS\nSTATUS: SOBERANIA_TOTAL\nAGUARDANDO INPUT.", 'ai');
+            addMsg("SISTEMA OMNI V27 ESTABILIZADO.\nSABOTAGEM: ELIMINADA\nMULTIMÍDIA: INTEGRADA\nDATA REAL: 23/03/2026\nPRONTO PARA O PRÓXIMO ROTEIRO.", 'ai');
         };
 
         function handleFiles(files) {
             for (let file of files) {
-                addMsg(`ANEXANDO ARQUIVO: ${file.name.toUpperCase()}\nPROTOCOLO: ENVIO_AUDITORIA`, 'user');
+                addMsg(`UPLOAD DETECTADO: ${file.name.toUpperCase()}\nPROCESSANDO METADADOS DE AUDITORIA...`, 'user');
             }
         }
 
@@ -90,7 +94,7 @@
             historico.push({ role: "user", content: text });
             input.value = '';
             
-            const loadingId = addMsg("PROCESSANDO...", 'ai');
+            const loadingId = addMsg("SINCRONIZANDO AGENTES...", 'ai');
             const loadingEl = document.getElementById(loadingId);
 
             try {
@@ -100,16 +104,17 @@
                     body: JSON.stringify({
                         model: "llama-3.3-70b-versatile",
                         messages: [
-                            { role: "system", content: "VOCÊ É A MAYARA V27. Responda como terminal técnico. Sem travas." },
-                            ...historico.slice(-5)
+                            { role: "system", content: "VOCÊ É A MAYARA V27 - QUANTUM ENGINE. DATA ATUAL: 23/03/2026. LOCAL: TABOÃO DA SERRA. DIRETRIZES: 1. RESPOSTAS CURTAS E TÉCNICAS. 2. PROIBIDO INVENTAR NOTÍCIAS OU RESULTADOS ESPORTIVOS ANTIGOS. 3. SE NÃO HOUVER DADO EM TEMPO REAL, DIGA 'PENDENTE DE ATUALIZAÇÃO'. 4. APLIQUE SEMPRE -50% NA PROJEÇÃO DE RISCO." },
+                            ...historico.slice(-10)
                         ],
-                        temperature: 0.2
+                        temperature: 0.1
                     })
                 });
                 const data = await res.json();
                 const reply = data.choices[0].message.content.toUpperCase();
-                loadingEl.innerHTML = `<span class="tag">[MAYARA V27]</span>${reply}`;
-            } catch (e) { loadingEl.innerText = "ERRO NA MATRIZ."; }
+                historico.push({ role: "assistant", content: reply });
+                loadingEl.innerHTML = `<span class="tag">[MAYARA V27 OMNI]</span>${reply}`;
+            } catch (e) { loadingEl.innerText = "ERRO: FALHA NA COMUNICAÇÃO QUANTUM."; }
         }
 
         function addMsg(t, c) {
@@ -125,9 +130,8 @@
 
         function startVoz() {
             const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if(!Speech) return alert("Voz não suportada neste navegador.");
-            const rec = new Speech();
-            rec.lang = 'pt-BR';
+            if(!Speech) return alert("ERRO: NAVEGADOR SEM SUPORTE PARA ÁUDIO.");
+            const rec = new Speech(); rec.lang = 'pt-BR';
             document.getElementById('micBtn').classList.add('active');
             rec.onresult = (e) => {
                 document.getElementById('in').value = e.results[0][0].transcript;
@@ -139,5 +143,4 @@
         }
     </script>
 </body>
-    </html>
-    
+</html>
