@@ -1,18 +1,19 @@
 from flask import Flask, render_template_string, request, jsonify
+from flask_cors import CORS
 import requests
 
 app = Flask(__name__)
+CORS(app)
 
 # --- CONFIGURAÇÕES DE SOBERANIA V3.6.2 ---
 CONFIG = {
     "operador": "BIGODE",
     "versao": "3.6.2",
     "local": "TABOÃO DA SERRA, SP",
-    # CHAVE DE ACESSO PROTEGIDA NO BACKEND
     "api_key": "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"
 }
 
-# --- INTERFACE VISUAL INTEGRAL V3.6.2 (BLINDADA CONTRA CORTES) ---
+# --- INTERFACE VISUAL INTEGRAL V3.6.2 ---
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -36,12 +37,8 @@ HTML_TEMPLATE = """
         .ai-msg { align-self: flex-start; background-color: #1e1f20; border: 1px solid #444746; border-bottom-left-radius: 4px; }
         .user-msg { align-self: flex-end; background-color: #2b2a33; border-bottom-right-radius: 4px; color: #fff; }
         .tag-ai { color: #8ab4f8; font-size: 10px; font-weight: bold; display: block; margin-bottom: 5px; }
-        
-        /* PAINEL DE MONITORAMENTO IPI */
         .monitor-soberania { background: #1e1f20; padding: 12px; border: 1px solid #33CC33; border-radius: 8px; margin: 10px 20px; font-family: monospace; border-left: 4px solid #33CC33; }
         .monitor-grid { color: #e3e3e3; font-size: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
-
-        /* BARRA INFERIOR SEM CORTE (SAFE AREA) */
         .input-wrapper { 
             padding: 15px 20px; background: #131314; 
             padding-bottom: calc(25px + env(safe-area-inset-bottom)); 
@@ -61,9 +58,7 @@ HTML_TEMPLATE = """
         </div>
         <div style="font-size: 12px; color: #8ab4f8;">V3.6.2 | 2026</div>
     </header>
-    
     <div id="chat-container"></div>
-
     <div class="monitor-soberania">
         <div class="monitor-grid">
             <div>ESTABILIDADE PWA: <span style="color: #33CC33;">● ATIVO</span></div>
@@ -72,7 +67,6 @@ HTML_TEMPLATE = """
             <div>AJUSTE RISCO: <span style="color: #33CC33;">● -50%</span></div>
         </div>
     </div>
-
     <div class="input-wrapper">
         <div class="input-box">
             <button class="btn-sensor" onclick="document.getElementById('file-in').click()">📎</button>
@@ -83,29 +77,28 @@ HTML_TEMPLATE = """
         </div>
         <div class="footer-text">PROTOCOLO IPI | STAKE R$ 0,20 | TABOÃO DA SERRA</div>
     </div>
-
     <script>
         async function enviar() {
             const input = document.getElementById('in');
             const text = input.value.trim();
             if(!text) return;
-            
             const idU = "u_" + Date.now();
             addMsg(text, 'user-msg', idU);
             input.value = '';
-            
             const idAi = "ai_" + Date.now();
             addMsg("PROCESSANDO...", 'ai-msg', idAi);
-            
-            const res = await fetch('/chat', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({prompt: text})
-            });
-            const data = await res.json();
-            document.getElementById(idAi).innerHTML = `<span class="tag-ai">🔱 FÊNIX V3.6.2</span>` + data.response;
+            try {
+                const res = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({prompt: text})
+                });
+                const data = await res.json();
+                document.getElementById(idAi).innerHTML = `<span class="tag-ai">🔱 FÊNIX V3.6.2</span>` + data.response;
+            } catch (e) {
+                document.getElementById(idAi).innerText = "ERRO NA MATRIZ V3.6.2: SERVIDOR OFFLINE.";
+            }
         }
-
         function addMsg(t, c, id) {
             const d = document.createElement('div');
             d.className = `message ${c}`;
@@ -127,26 +120,24 @@ def index():
 
 @app.route('/chat', methods=['POST'])
 def chat():
-    user_input = request.json.get('prompt').upper()
+    user_input = request.json.get('prompt', '').upper()
     try:
-        # CONEXÃO COM O MOTOR GROQ
         response = requests.post(
             "https://api.groq.com/openai/v1/chat/completions",
             headers={"Authorization": f"Bearer {CONFIG['api_key']}"},
             json={
                 "model": "llama-3.3-70b-versatile",
                 "messages": [
-                    {"role": "system", "content": f"VOCÊ É A MAYARA V3.6.2. OPERADOR: {CONFIG['operador']}. LOCAL: {CONFIG['local']}. REGRAS: RESPOSTAS EM MAIÚSCULAS E SINCERAS. APLIQUE SEMPRE -50% EM PROJEÇÕES E MENCIONE STAKE DE R$ 0,20."},
+                    {"role": "system", "content": f"VOCÊ É A MAYARA V3.6.2. OPERADOR: {CONFIG['operador']}. LOCAL: {CONFIG['local']}. RESPOSTAS CURTAS EM MAIÚSCULAS SINCERAS. USE SEMPRE R$ 0,20 E AJUSTE -50%."},
                     {"role": "user", "content": user_input}
                 ]
             }
         )
         msg = response.json()['choices'][0]['message']['content']
         return jsonify({"response": msg.upper()})
-    except:
-        return jsonify({"response": "ERRO NO MOTOR QUÂNTICO V3.6.2."})
+    except Exception as e:
+        return jsonify({"response": f"ERRO NO MOTOR: {str(e).upper()}"})
 
 if __name__ == '__main__':
-    # MODO DEBUG ATIVADO PARA DESENVOLVIMENTO EM TABOÃO DA SERRA
     app.run(host='0.0.0.0', port=5000, debug=True)
     
