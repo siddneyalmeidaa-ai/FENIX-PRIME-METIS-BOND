@@ -7,7 +7,7 @@
     <style>
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
-        /* CORREÇÃO DE RENDERIZAÇÃO V3.6.2 */
+        /* CORREÇÃO DE RENDERIZAÇÃO: 100DVH IMPEDE O CORTE DA BARRA */
         body { 
             background-color: #131314; color: #e3e3e3; font-family: 'Segoe UI', Roboto, sans-serif; 
             margin: 0; display: flex; flex-direction: column; height: 100dvh; overflow: hidden; 
@@ -28,7 +28,7 @@
         .monitor-soberania { background: #1e1f20; padding: 12px; border: 1px solid #33CC33; border-radius: 8px; margin: 10px 20px; font-family: monospace; border-left: 4px solid #33CC33; }
         .monitor-grid { color: #e3e3e3; font-size: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
 
-        /* BARRA INFERIOR BLINDADA - V3.6.2 */
+        /* BARRA INFERIOR BLINDADA COM RESPIRO PARA CELULAR */
         .input-wrapper { 
             padding: 15px 20px; 
             background: #131314; 
@@ -79,7 +79,7 @@
     const container = document.getElementById('chat-container');
     const input = document.getElementById('user-input');
 
-    // CÉREBRO ATIVO V3.6.2
+    // CÉREBRO SINCRONIZADO: CHAMA O BACKEND PARA EVITAR ERRO DE CORS
     async function enviar() {
         const texto = input.value.trim();
         if (!texto) return;
@@ -92,25 +92,15 @@
         addMsg("PROCESSANDO AGENTES...", 'ai-msg', idAi);
         
         try {
-            const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+            const res = await fetch("/chat", {
                 method: "POST",
-                headers: { 
-                    "Content-Type": "application/json", 
-                    "Authorization": `Bearer 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` 
-                },
-                body: JSON.stringify({
-                    model: "llama-3.3-70b-versatile",
-                    messages: [
-                        { role: "system", content: "VOCÊ É A MAYARA V3.6.2. OPERADOR: BIGODE. RESPOSTAS EM MAIÚSCULAS, CURTAS E SINCERAS. USE SEMPRE R$ 0,20 E AJUSTE DE -50%." },
-                        { role: "user", content: texto }
-                    ]
-                })
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ prompt: texto })
             });
             const data = await res.json();
-            const resposta = data.choices[0].message.content.toUpperCase();
-            document.getElementById(idAi).innerHTML = `<span class="tag-ai">🔱 FÊNIX V3.6.2</span>${resposta}`;
+            document.getElementById(idAi).innerHTML = `<span class="tag-ai">🔱 FÊNIX V3.6.2</span>${data.response.toUpperCase()}`;
         } catch (e) {
-            document.getElementById(idAi).innerText = "ERRO NA MATRIZ V3.6.2.";
+            document.getElementById(idAi).innerText = "ERRO NA MATRIZ V3.6.2: SERVIDOR OFFLINE.";
         }
     }
 
