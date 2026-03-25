@@ -1,9 +1,11 @@
 from flask import Flask, render_template_string, request, jsonify
 from flask_cors import CORS
 import requests
+import json
+import os
 
 app = Flask(__name__)
-CORS(app)  # ESSENCIAL PARA EVITAR O ERRO NA MATRIZ
+CORS(app)
 
 # --- CONFIGURAÇÕES DE SOBERANIA V3.6.2 ---
 CONFIG = {
@@ -12,6 +14,18 @@ CONFIG = {
     "local": "TABOÃO DA SERRA, SP",
     "api_key": "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"
 }
+
+# --- FUNÇÃO DE LEITURA DO MOTOR (DATABASE) ---
+def carregar_agentes():
+    try:
+        # BUSCA O ARQUIVO NO DIRETÓRIO ATUAL DO RENDER
+        caminho = os.path.join(os.getcwd(), 'database.json')
+        with open(caminho, 'r', encoding='utf-8') as f:
+            dados = json.load(f)
+            agentes = [a['nome'] for a in dados.get('agentes', [])]
+            return ", ".join(agentes) if agentes else "NENHUM AGENTE LOCALIZADO"
+    except Exception as e:
+        return f"ERRO NA LEITURA: {str(e)}"
 
 # --- INTERFACE VISUAL INTEGRAL V3.6.2 ---
 HTML_TEMPLATE = """
@@ -87,7 +101,6 @@ HTML_TEMPLATE = """
             const idAi = "ai_" + Date.now();
             addMsg("PROCESSANDO...", 'ai-msg', idAi);
             try {
-                // ROTA RELATIVA PARA EVITAR ERROS DE PORTA
                 const res = await fetch('/chat', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
@@ -121,6 +134,10 @@ def index():
 @app.route('/chat', methods=['POST'])
 def chat():
     user_input = request.json.get('prompt', '').upper()
+    
+    # LEITURA DOS AGENTES PARA CONTEXTO DA IA
+    agentes_ativos = carregar_agentes()
+    
     try:
         response = requests.post(
             "https://api.groq.com/openai/v1/chat/completions",
@@ -128,15 +145,18 @@ def chat():
             json={
                 "model": "llama-3.3-70b-versatile",
                 "messages": [
-                    {"role": "system", "content": "VOCÊ É A MAYARA V3.6.2. OPERADOR: BIGODE. RESPOSTAS EM MAIÚSCULAS. USE SEMPRE R$ 0,20 E AJUSTE -50%."},
+                    {
+                        "role": "system", 
+                        "content": f"VOCÊ É A MAYARA V3.6.2. OPERADOR: BIGODE. LOCAL: {CONFIG['local']}. AGENTES DISPONÍVEIS: {agentes_ativos}. RESPOSTAS CURTAS E EM MAIÚSCULAS. USE SEMPRE R$ 0,20 E AJUSTE -50%."
+                    },
                     {"role": "user", "content": user_input}
                 ]
             }
         )
         msg = response.json()['choices'][0]['message']['content']
         return jsonify({"response": msg.upper()})
-    except:
-        return jsonify({"response": "ERRO NO MOTOR QUÂNTICO V3.6.2."})
+    except Exception:
+        return jsonify({"response": "ERRO NO MOTOR QUÂNTICO V3.6.2. VERIFIQUE A CONEXÃO."})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
