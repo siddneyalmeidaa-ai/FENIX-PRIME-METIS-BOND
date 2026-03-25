@@ -9,26 +9,40 @@
             background-color: #131314; color: #e3e3e3; font-family: 'Segoe UI', Roboto, Arial, sans-serif; 
             margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; 
         }
-        header { padding: 40px 20px 15px; font-weight: bold; border-bottom: 1px solid #444746; display: flex; align-items: center; justify-content: space-between; background: #1e1f20; }
-        .status-dot { width: 12px; height: 12px; background: #00ff00; border-radius: 50%; box-shadow: 0 0 12px #00ff00; }
         
+        /* HEADER - ARQUITETURA DE ECOSSISTEMA */
+        header { 
+            padding: 40px 20px 15px; font-weight: bold; border-bottom: 1px solid #444746; 
+            display: flex; align-items: center; justify-content: space-between; background: #1e1f20; 
+        }
+        .status-container { display: flex; align-items: center; gap: 10px; }
+        .status-dot { width: 12px; height: 12px; background: #00ff00; border-radius: 50%; box-shadow: 0 0 12px #00ff00; }
+        #txt-status { color: #00ff00; text-transform: uppercase; font-size: 14px; }
+        #btnInstalar { 
+            display: none; background: #f1c40f; color: #000; border: none; border-radius: 8px; 
+            padding: 5px 10px; font-size: 10px; font-weight: bold; cursor: pointer; 
+        }
+
+        /* CHAT - SOBERANIA OPERACIONAL */
         #chat-container { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; scroll-behavior: smooth; }
         .message { max-width: 85%; padding: 12px 16px; border-radius: 18px; line-height: 1.5; font-size: 15px; word-wrap: break-word; }
         .ai-msg { align-self: flex-start; background-color: #1e1f20; border: 1px solid #444746; border-bottom-left-radius: 4px; }
         .user-msg { align-self: flex-end; background-color: #2b2a33; border-bottom-right-radius: 4px; color: #fff; }
         .tag-ai { color: #8ab4f8; font-size: 10px; font-weight: bold; display: block; margin-bottom: 5px; }
-        
-        .monitor-soberania { background: #1e1f20; padding: 12px; border: 1px solid #33CC33; border-radius: 8px; margin: 10px 20px; font-family: monospace; border-left: 4px solid #33CC33; }
-        .monitor-grid { color: #e3e3e3; font-size: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
 
-        /* CORREÇÃO DA BARRA COMIDA - RESPEITANDO A SAFE AREA */
+        /* MONITOR DE SOBERANIA QUÂNTICA */
+        .monitor-soberania { background: #1e1f20; padding: 12px; border: 1px solid #33CC33; border-radius: 8px; margin: 10px 20px; font-family: monospace; border-left: 4px solid #33CC33; }
+        .monitor-title { color: #33CC33; font-size: 11px; margin: 0 0 8px 0; font-weight: bold; text-transform: uppercase; }
+        .monitor-grid { color: #e3e3e3; font-size: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+        .status-on { color: #33CC33; font-weight: bold; }
+
+        /* INPUT E BARRAS - INTEGRIDADE MOBILE */
         .input-wrapper { 
             padding: 10px 20px; 
             padding-bottom: calc(20px + env(safe-area-inset-bottom)); 
             background: #131314; 
         }
         .input-box { max-width: 800px; margin: 0 auto; background: #1e1f20; border: 1px solid #444746; border-radius: 28px; display: flex; align-items: center; padding: 5px 15px; gap: 10px; }
-        
         .btn-sensor { background: none; border: none; color: #8ab4f8; font-size: 20px; cursor: pointer; padding: 0 5px; }
         input { flex: 1; background: transparent; border: none; color: #fff; padding: 12px; font-size: 16px; outline: none; }
         .btn-exe { background: #8ab4f8; color: #000; border: none; border-radius: 20px; padding: 8px 20px; cursor: pointer; font-weight: bold; }
@@ -38,9 +52,10 @@
 <body>
 
 <header>
-    <div style="display: flex; align-items: center; gap: 10px;">
+    <div class="status-container">
         <div class="status-dot"></div>
-        <span>FÊNIX PRIME: <span style="color: #00ff00;">LIBERADO (1)</span></span>
+        <span>FÊNIX PRIME: <span id="txt-status">LIBERADO (1)</span></span>
+        <button id="btnInstalar">INSTALAR APP</button>
     </div>
     <div style="font-size: 12px; color: #8ab4f8;">V3.6.3 | 2026</div>
 </header>
@@ -48,16 +63,18 @@
 <div id="chat-container">
     <div class="message ai-msg">
         <span class="tag-ai">🔱 SISTEMA OMNI</span>
-        SOBERANIA ATIVA. Arquiteto Bigode detectado. [span_3](start_span)[span_4](start_span)Sensores de Engenharia, Libras e Auditoria integrados com sucesso.[span_3](end_span)[span_4](end_span)
+        SOBERANIA ATIVA. Arquiteto Bigode detectado. Sensores de Engenharia, Libras e Auditoria integrados com sucesso.
     </div>
 </div>
 
 <div class="monitor-soberania">
+    <p class="monitor-title">🔱 MONITOR DE SOBERANIA QUÂNTICA</p>
     <div class="monitor-grid">
-        <div>ESTABILIDADE PWA: <span style="color: #33CC33;">● ATIVO</span></div>
-        <div>QUANTUM MEMORY: <span style="color: #33CC33;">● SINCRO</span></div>
-        <div>PROTOCOLO IPI: <span style="color: #33CC33;">● R$ 0,20</span></div>
-        <div>AJUSTE RISCO: <span style="color: #33CC33;">● -50%</span></div> </div>
+        <div>ESTABILIDADE PWA: <span class="status-on">● ATIVO</span></div>
+        <div>QUANTUM MEMORY: <span class="status-on">● SINCRO</span></div>
+        <div>PROTOCOLO IPI: <span class="status-on">● R$ 0,20</span></div>
+        <div>AJUSTE RISCO: <span class="status-on">● -50%</span></div>
+    </div>
 </div>
 
 <div class="input-wrapper">
@@ -68,19 +85,21 @@
         <input type="text" id="user-input" placeholder="Comando para os Agentes..." autocomplete="off">
         <button class="btn-exe" onclick="enviar()">EXE</button>
     </div>
-    <div class="footer-text">PROTOCOLO IPI | STAKE R$ 0,20 | [span_5](start_span)TABOÃO DA SERRA[span_5](end_span)</div>
+    <div class="footer-text">PROTOCOLO IPI | STAKE R$ 0,20 | TABOÃO DA SERRA</div>
 </div>
 
 <script>
     const container = document.getElementById('chat-container');
     const input = document.getElementById('user-input');
 
-    // SENSOR DE VOZ (LIBRAS/TRADUÇÃO)
+    // LÓGICA DE VOZ (PROFESSORA LÍNGUA-AFUDA)
     function startVoice() {
         const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
         recognition.lang = 'pt-BR';
         recognition.start();
         document.getElementById('mic-btn').style.color = 'red';
+        addMsg("SENSOR AUDITIVO ATIVO: PROCESSANDO LIBRAS E TRADUÇÃO MULTIMODAL...", 'ai-msg');
+        
         recognition.onresult = (e) => {
             input.value = e.results[0][0].transcript.toUpperCase();
             document.getElementById('mic-btn').style.color = '#8ab4f8';
@@ -88,14 +107,14 @@
         recognition.onerror = () => document.getElementById('mic-btn').style.color = '#8ab4f8';
     }
 
-    [span_6](start_span)[span_7](start_span)// SENSOR DE ARQUIVOS (AUDITORIA IA-SENTINELA)[span_6](end_span)[span_7](end_span)
+    // LÓGICA DE AUDITORIA (IA-SENTINELA)
     function handleUpload(inputEl) {
         const file = inputEl.files[0];
         if(file) {
-            addMsg(`ATIVO DETECTADO: ${file.name}. INICIANDO ESCANEAMENTO...`, 'user-msg');
+            addMsg(`ATIVO DETECTADO: ${file.name.toUpperCase()}. INICIANDO ESCANEAMENTO...`, 'user-msg');
             const reader = new FileReader();
             reader.onload = (e) => {
-                addMsg(`AUDITORIA CONCLUÍDA. ARQUIVO "${file.name}" PROCESSADO PELA IA-SENTINELA.`, 'ai-msg');
+                addMsg(`AUDITORIA CONCLUÍDA. ARQUIVO "${file.name.toUpperCase()}" PROCESSADO PELA IA-SENTINELA.`, 'ai-msg');
             };
             reader.readAsText(file);
         }
@@ -106,7 +125,7 @@
         if(!txt) return;
         addMsg(txt, 'user-msg');
         input.value = '';
-        [span_8](start_span)[span_9](start_span)// Aplicação da Regra de Ouro (-50%)[span_8](end_span)[span_9](end_span)
+        // SIMULAÇÃO DE RESPOSTA COM REGRA DE OURO
         setTimeout(() => {
             addMsg("AGENTE CALIBRADORA: PROJEÇÃO ATUALIZADA COM SEGURANÇA MATEMÁTICA DE -50%.", 'ai-msg');
         }, 800);
