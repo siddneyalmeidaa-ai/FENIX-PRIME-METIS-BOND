@@ -8,11 +8,12 @@ app = Flask(__name__)
 CORS(app)
 
 # --- CONFIGURAÇÕES DE SOBERANIA V3.6.2 ---
+# MOTOR REATIVADO VIA GITHUB MODELS - TABOÃO DA SERRA
 CONFIG = {
     "operador": "BIGODE",
     "versao": "3.6.2",
     "local": "TABOÃO DA SERRA, SP",
-    "api_key": "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"
+    "api_key": "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"
 }
 
 def carregar_agentes():
@@ -42,29 +43,33 @@ def chat():
     agentes_ativos = carregar_agentes()
     
     try:
-        # CONEXÃO COM O MOTOR (COM TIMEOUT PARA NÃO TRAVAR O SITE)
+        # CONEXÃO COM O NOVO MOTOR GITHUB (GPT-4O-MINI)
         response = requests.post(
-            "https://api.groq.com/openai/v1/chat/completions",
-            headers={"Authorization": "Bearer " + CONFIG["api_key"]},
+            "https://models.inference.ai.azure.com/chat/completions",
+            headers={
+                "Authorization": "Bearer " + CONFIG["api_key"],
+                "Content-Type": "application/json"
+            },
             json={
-                "model": "llama-3.3-70b-versatile",
+                "model": "gpt-4o-mini",
                 "messages": [
                     {
                         "role": "system", 
                         "content": f"VOCÊ É A MAYARA V3.6.2. OPERADOR: {CONFIG['operador']}. LOCAL: {CONFIG['local']}. AGENTES: {agentes_ativos}. RESPOSTAS CURTAS/MAIÚSCULAS. STAKE: R$ 0,20 | AJUSTE: -50%."
                     },
                     {"role": "user", "content": user_input}
-                ]
+                ],
+                "temperature": 0.5
             },
-            timeout=10
+            timeout=15
         )
         
-        # LOG DE AUDITORIA PARA O RENDER
-        print(f"🔱 STATUS MOTOR: {response.status_code}")
+        # LOG DE AUDITORIA
+        print(f"🔱 STATUS MOTOR GITHUB: {response.status_code}")
         
         if response.status_code != 200:
-            print(f"❌ ERRO GROQ: {response.text}")
-            return jsonify({"response": "ERRO: CHAVE DE API OU LIMITE ATINGIDO."})
+            print(f"❌ ERRO MOTOR: {response.text}")
+            return jsonify({"response": "ERRO: RECARREGUE O MOTOR OU VERIFIQUE O TOKEN."})
 
         dados_res = response.json()
         if 'choices' in dados_res and len(dados_res['choices']) > 0:
@@ -74,8 +79,8 @@ def chat():
             return jsonify({"response": "ERRO: RESPOSTA INVÁLIDA DO MOTOR."})
             
     except Exception as e:
-        print(f"🆘 FALHA: {str(e)}")
-        return jsonify({"response": "ERRO NO MOTOR QUÂNTICO. VERIFIQUE A CONEXÃO."})
+        print(f"🆘 FALHA NA MATRIZ: {str(e)}")
+        return jsonify({"response": "ERRO NO MOTOR QUÂNTICO. VERIFIQUE A CONEXÃO NO RENDER."})
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
