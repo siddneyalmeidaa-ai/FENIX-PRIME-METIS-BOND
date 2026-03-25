@@ -1,5 +1,11 @@
 {
-  "agentes": [],
+  "agentes": [
+    {
+      "nome": "RAINHA MESTRA",
+      "status": "online",
+      "função": "Coordenação Global"
+    }
+  ],
   "historico": [],
   "configuracoes": {
     "versao": "3.6.2",
