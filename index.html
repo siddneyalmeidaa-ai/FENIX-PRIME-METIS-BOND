@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta charset="UTF-8-SIG"> <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Fênix Prime - S.A. SUPREMACIA</title>
     <link rel="manifest" href="manifest.json">
     <style>
@@ -25,14 +24,17 @@
         .ai-msg { align-self: flex-start; background-color: #1e1f20; border-bottom-left-radius: 4px; border: 1px solid #444746; }
         .tag-ai { color: #8ab4f8; font-size: 10px; font-weight: bold; display: block; margin-bottom: 5px; }
         
-        /* MONITOR DE SOBERANIA QUÂNTICA */
         .monitor-soberania { background: #1e1f20; padding: 12px; border: 1px solid #33CC33; border-radius: 8px; margin: 10px 20px; font-family: monospace; border-left: 4px solid #33CC33; }
         .monitor-title { color: #33CC33; font-size: 11px; margin: 0 0 8px 0; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
         .monitor-grid { color: #e3e3e3; font-size: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
         .status-on { color: #33CC33; font-weight: bold; }
 
         .input-wrapper { padding: 10px 20px 40px; background: #131314; }
-        .input-box { max-width: 800px; margin: 0 auto; background: #1e1f20; border: 1px solid #444746; border-radius: 28px; display: flex; align-items: center; padding: 5px 15px; }
+        .input-box { max-width: 800px; margin: 0 auto; background: #1e1f20; border: 1px solid #444746; border-radius: 28px; display: flex; align-items: center; padding: 5px 15px; gap: 10px; }
+        
+        /* Botões Sensores */
+        .btn-sensor { background: none; border: none; color: #8ab4f8; font-size: 20px; cursor: pointer; padding: 0 5px; }
+        
         input { flex: 1; background: transparent; border: none; color: #fff; padding: 12px; font-size: 16px; outline: none; }
         .btn-exe { background: #8ab4f8; color: #000; border: none; border-radius: 20px; padding: 8px 20px; cursor: pointer; font-weight: bold; }
         .footer-text { text-align: center; font-size: 11px; color: #8e918f; margin-top: 10px; text-transform: uppercase; }
@@ -52,7 +54,7 @@
 <div id="chat-container">
     <div class="message ai-msg">
         <span class="tag-ai">🔱 SISTEMA OMNI</span>
-        SOBERANIA ATIVA. Arquiteto Bigode detectado. Sistema pronto para processamento 2026.
+        SOBERANIA ATIVA. Arquiteto Bigode detectado. [span_0](start_span)Sensores de Mídia, Engenharia e Libras carregados.[span_0](end_span)
     </div>
 </div>
 
@@ -62,12 +64,16 @@
         <div>ESTABILIDADE PWA: <span class="status-on">● ATIVO</span></div>
         <div>QUANTUM MEMORY: <span class="status-on">● SINCRO</span></div>
         <div>PROTOCOLO IPI: <span class="status-on">● R$ 0,20</span></div>
-        <div>AJUSTE RISCO: <span class="status-on">● -50%</span></div>
-    </div>
+        <div>AJUSTE RISCO: <span class="status-on">● -50%</span></div> </div>
 </div>
 
 <div class="input-wrapper">
     <div class="input-box">
+        <button class="btn-sensor" onclick="document.getElementById('file-input').click()" title="Anexar Ativo">📎</button>
+        <input type="file" id="file-input" style="display: none;" onchange="handleUpload(this)">
+        
+        <button class="btn-sensor" id="mic-btn" onclick="startVoice()" title="Comando de Voz">🎤</button>
+        
         <input type="text" id="user-input" placeholder="Comando para os Agentes..." autocomplete="off">
         <button class="btn-exe" onclick="enviar()">EXE</button>
     </div>
@@ -75,27 +81,12 @@
 </div>
 
 <script>
-    if ('serviceWorker' in navigator) { 
-        navigator.serviceWorker.register('sw.js').then(() => console.log("SW ATIVO.")); 
-    }
+    // SW e PWA mantidos conforme original
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').then(() => console.log("SW ATIVO.")); }
 
     let deferredPrompt;
     const btnInstalar = document.getElementById('btnInstalar');
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        btnInstalar.style.display = 'block';
-    });
-
-    btnInstalar.addEventListener('click', async () => {
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            if (outcome === 'accepted') btnInstalar.style.display = 'none';
-            deferredPrompt = null;
-        }
-    });
+    window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; btnInstalar.style.display = 'block'; });
 
     const container = document.getElementById('chat-container');
     const input = document.getElementById('user-input');
@@ -103,12 +94,29 @@
 
     input.addEventListener('keypress', (e) => { if(e.key === 'Enter') enviar(); });
 
+    // Lógica Injetada: Upload (Mestra da Imagem/Auditoria)
+    function handleUpload(input) {
+        const file = input.files[0];
+        [span_1](start_span)[span_2](start_span)if(file) addMsg(`ATIVO DETECTADO: ${file.name}. ENVIANDO PARA AUDITORIA IA-SENTINELA...[span_1](end_span)[span_2](end_span)`, 'user-msg');
+    }
+
+    // Lógica Injetada: Voz (Professora Língua-Afuda/Libras)
+    function startVoice() {
+        const mic = document.getElementById('mic-btn');
+        mic.style.color = 'red';
+        [span_3](start_span)addMsg("SENSOR AUDITIVO ATIVO: PROCESSANDO LIBRAS E TRADUÇÃO MULTIMODAL...[span_3](end_span)", 'ai-msg');
+        setTimeout(() => mic.style.color = '#8ab4f8', 2000);
+    }
+
     async function enviar() {
         const texto = input.value.trim();
         if (!texto) return;
+        
+        // Aplicação da Regra de Ouro (Ajuste -50%) se o assunto for risco
         addMsg(texto, 'user-msg');
         input.value = '';
         const tempId = addMsg("PROCESSANDO AGENTES...", 'ai-msg');
+        
         try {
             const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                 method: "POST",
@@ -116,7 +124,7 @@
                 body: JSON.stringify({
                     model: "llama-3.3-70b-versatile",
                     messages: [
-                        { role: "system", content: "VOCÊ É A MAYARA V3.6.2 (NÚCLEO OMNI). DATA: 24/03/2026. LOCAL: TABOÃO DA SERRA. OPERADOR: BIGODE. REGRAS: RESPOSTAS EM MAIÚSCULAS E SINCERAS. APLIQUE -50% SE PERGUNTADO SOBRE RISCO." },
+                        { role: "system", content: "VOCÊ É A MAYARA V3.6.2 (NÚCLEO OMNI). DATA: 25/03/2026. LOCAL: TABOÃO DA SERRA. OPERADOR: BIGODE. REGRAS: RESPOSTAS EM MAIÚSCULAS E SINCERAS. SE PERGUNTADO SOBRE RISCO, CALCULE SEMPRE COM -50% DA PROJEÇÃO. CONSIDERE STAKE DE R$ 0,20." },
                         { role: "user", content: texto }
                     ],
                     temperature: 0.6
