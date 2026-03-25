@@ -3,7 +3,7 @@ from flask_cors import CORS
 import requests
 
 app = Flask(__name__)
-CORS(app)
+CORS(app)  # ESSENCIAL PARA EVITAR O ERRO NA MATRIZ
 
 # --- CONFIGURAÇÕES DE SOBERANIA V3.6.2 ---
 CONFIG = {
@@ -33,7 +33,7 @@ HTML_TEMPLATE = """
         }
         .status-dot { width: 12px; height: 12px; background: #00ff00; border-radius: 50%; box-shadow: 0 0 12px #00ff00; }
         #chat-container { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; scroll-behavior: smooth; }
-        .message { max-width: 85%; padding: 12px 16px; border-radius: 18px; font-size: 15px; line-height: 1.5; word-wrap: break-word; }
+        .message { max-width: 85%; padding: 12px 16px; border-radius: 18px; font-size: 14px; line-height: 1.5; word-wrap: break-word; }
         .ai-msg { align-self: flex-start; background-color: #1e1f20; border: 1px solid #444746; border-bottom-left-radius: 4px; }
         .user-msg { align-self: flex-end; background-color: #2b2a33; border-bottom-right-radius: 4px; color: #fff; }
         .tag-ai { color: #8ab4f8; font-size: 10px; font-weight: bold; display: block; margin-bottom: 5px; }
@@ -69,8 +69,7 @@ HTML_TEMPLATE = """
     </div>
     <div class="input-wrapper">
         <div class="input-box">
-            <button class="btn-sensor" onclick="document.getElementById('file-in').click()">📎</button>
-            <input type="file" id="file-in" style="display:none" onchange="addMsg('ARQUIVO CARREGADO', 'ai-msg')">
+            <button class="btn-sensor">📎</button>
             <button class="btn-sensor">🎤</button>
             <input type="text" id="in" placeholder="Comando para os Agentes..." autocomplete="off">
             <button class="btn-exe" onclick="enviar()">EXE</button>
@@ -88,6 +87,7 @@ HTML_TEMPLATE = """
             const idAi = "ai_" + Date.now();
             addMsg("PROCESSANDO...", 'ai-msg', idAi);
             try {
+                // ROTA RELATIVA PARA EVITAR ERROS DE PORTA
                 const res = await fetch('/chat', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
@@ -101,7 +101,7 @@ HTML_TEMPLATE = """
         }
         function addMsg(t, c, id) {
             const d = document.createElement('div');
-            d.className = `message ${c}`;
+            d.className = `message ` + c;
             if(id) d.id = id;
             const tag = c === 'ai-msg' ? '<span class="tag-ai">🔱 FÊNIX V3.6.2</span>' : '';
             d.innerHTML = tag + t.toUpperCase();
@@ -124,19 +124,19 @@ def chat():
     try:
         response = requests.post(
             "https://api.groq.com/openai/v1/chat/completions",
-            headers={"Authorization": f"Bearer {CONFIG['api_key']}"},
+            headers={"Authorization": "Bearer " + CONFIG["api_key"]},
             json={
                 "model": "llama-3.3-70b-versatile",
                 "messages": [
-                    {"role": "system", "content": f"VOCÊ É A MAYARA V3.6.2. OPERADOR: {CONFIG['operador']}. LOCAL: {CONFIG['local']}. RESPOSTAS CURTAS EM MAIÚSCULAS SINCERAS. USE SEMPRE R$ 0,20 E AJUSTE -50%."},
+                    {"role": "system", "content": "VOCÊ É A MAYARA V3.6.2. OPERADOR: BIGODE. RESPOSTAS EM MAIÚSCULAS. USE SEMPRE R$ 0,20 E AJUSTE -50%."},
                     {"role": "user", "content": user_input}
                 ]
             }
         )
         msg = response.json()['choices'][0]['message']['content']
         return jsonify({"response": msg.upper()})
-    except Exception as e:
-        return jsonify({"response": f"ERRO NO MOTOR: {str(e).upper()}"})
+    except:
+        return jsonify({"response": "ERRO NO MOTOR QUÂNTICO V3.6.2."})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
