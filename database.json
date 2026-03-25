@@ -1,14 +1,29 @@
 {
   "agentes": [
-    {
-      "nome": "RAINHA MESTRA",
-      "status": "online",
-      "função": "Coordenação Global"
-    }
+    {"nome": "RAINHA MESTRA", "status": "online", "função": "Coordenação Global"},
+    {"nome": "VISÃO GLOBAL", "status": "online", "função": "Monitoramento de Rede"},
+    {"nome": "CALIBRADORA DE RISCO", "status": "online", "função": "Gestão IPI"},
+    {"nome": "MALUQUINHA DO CÓDIGO", "status": "online", "função": "Debugging V85"},
+    {"nome": "GHOST CRYPTO", "status": "online", "função": "Segurança de Dados"},
+    {"nome": "SENTINELA", "status": "online", "função": "Proteção de Perímetro"},
+    {"nome": "ARQUITETO", "status": "online", "função": "Estrutura de Dados"},
+    {"nome": "ESTRATEGISTA", "status": "online", "função": "Análise de Tendência"},
+    {"nome": "OPERADOR V3", "status": "online", "função": "Execução de Comandos"},
+    {"nome": "AUDITOR", "status": "online", "função": "Verificação de Logs"},
+    {"nome": "MESTRE DE CHAVES", "status": "online", "função": "Acesso Quântico"},
+    {"nome": "RADAR", "status": "online", "função": "Detecção de Padrões"},
+    {"nome": "SINCRONIZADOR", "status": "online", "função": "Ajuste de Tempo"},
+    {"nome": "PROJETISTA", "status": "online", "função": "Expansão de Código"},
+    {"nome": "SOPRO", "status": "online", "função": "Otimização de Cache"},
+    {"nome": "ESCUDO", "status": "online", "função": "Blindagem de Server"},
+    {"nome": "FÊNIX", "status": "online", "função": "Restauração de Sistema"}
   ],
   "historico": [],
   "configuracoes": {
     "versao": "3.6.2",
-    "status": "liberado"
+    "status": "liberado",
+    "localizacao": "Taboão da Serra",
+    "stake_padrao": "0.20",
+    "risco_ajuste": "-50%"
   }
 }
