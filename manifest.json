@@ -1,12 +1,11 @@
 {
-  "name": "FÊNIX PRIME V3.6.2",
+  "name": "Fênix Prime - S.A. SUPREMACIA",
   "short_name": "Fênix Prime",
-  "description": "SISTEMA OMNI DE INTELIGÊNCIA E GESTÃO IPI",
-  "start_url": "index.html",
+  "start_url": "./index.html",
   "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#050505",
-  "theme_color": "#f1c40f",
+  "background_color": "#131314",
+  "theme_color": "#1e1f20",
+  "description": "Sistema de Gestão Soberana V3.6.2",
   "icons": [
     {
       "src": "logo.png",
