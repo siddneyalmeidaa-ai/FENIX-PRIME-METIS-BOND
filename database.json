@@ -1,1 +1,8 @@
-{}
+{
+  "agentes": [],
+  "historico": [],
+  "configuracoes": {
+    "versao": "3.6.2",
+    "status": "liberado"
+  }
+}
