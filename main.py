@@ -8,12 +8,12 @@ app = Flask(__name__)
 CORS(app)
 
 # --- CONFIGURAÇÕES DE SOBERANIA V3.6.2 ---
-# MOTOR REATIVADO VIA GITHUB MODELS - TABOÃO DA SERRA
+# BLINDAGEM ATIVADA: A CHAVE É PUXADA PELO "os.environ"
 CONFIG = {
     "operador": "BIGODE",
     "versao": "3.6.2",
     "local": "TABOÃO DA SERRA, SP",
-    "api_key": "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"
+    "api_key": os.environ.get("GITHUB_TOKEN")
 }
 
 def carregar_agentes():
@@ -42,8 +42,12 @@ def chat():
     user_input = request.json.get('prompt', '').upper()
     agentes_ativos = carregar_agentes()
     
+    # PROTEÇÃO: VERIFICA SE A VARIÁVEL EXISTE
+    if not CONFIG["api_key"]:
+        return jsonify({"response": "ERRO: GITHUB_TOKEN NÃO CONFIGURADO NO RENDER."})
+    
     try:
-        # CONEXÃO COM O NOVO MOTOR GITHUB (GPT-4O-MINI)
+        # CONEXÃO COM O MOTOR GITHUB (BLINDADO)
         response = requests.post(
             "https://models.inference.ai.azure.com/chat/completions",
             headers={
@@ -64,23 +68,18 @@ def chat():
             timeout=15
         )
         
-        # LOG DE AUDITORIA
-        print(f"🔱 STATUS MOTOR GITHUB: {response.status_code}")
-        
         if response.status_code != 200:
-            print(f"❌ ERRO MOTOR: {response.text}")
-            return jsonify({"response": "ERRO: RECARREGUE O MOTOR OU VERIFIQUE O TOKEN."})
+            return jsonify({"response": "ERRO: RECARREGUE O MOTOR OU VERIFIQUE O TOKEN NO RENDER."})
 
         dados_res = response.json()
         if 'choices' in dados_res and len(dados_res['choices']) > 0:
             msg = dados_res['choices'][0]['message']['content']
             return jsonify({"response": msg.upper()})
         else:
-            return jsonify({"response": "ERRO: RESPOSTA INVÁLIDA DO MOTOR."})
+            return jsonify({"response": "ERRO: RESPOSTA INVÁLIDA."})
             
     except Exception as e:
-        print(f"🆘 FALHA NA MATRIZ: {str(e)}")
-        return jsonify({"response": "ERRO NO MOTOR QUÂNTICO. VERIFIQUE A CONEXÃO NO RENDER."})
+        return jsonify({"response": "ERRO NO MOTOR QUÂNTICO. VERIFIQUE O RENDER."})
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
