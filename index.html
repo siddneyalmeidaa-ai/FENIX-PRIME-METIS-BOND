@@ -1,48 +1,42 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8-SIG"> <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta charset="UTF-8-SIG">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Fênix Prime - S.A. SUPREMACIA</title>
     <style>
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        /* CORREÇÃO DE RENDERIZAÇÃO: ACABOU O PROBLEMA DE "COMER" A BARRA */
         body { 
-            background-color: #131314; color: #e3e3e3; font-family: 'Segoe UI', Roboto, Arial, sans-serif; 
-            margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; 
+            background-color: #131314; color: #e3e3e3; font-family: 'Segoe UI', Roboto, sans-serif; 
+            margin: 0; display: flex; flex-direction: column; height: 100dvh; overflow: hidden; 
         }
         
-        /* HEADER - ARQUITETURA DE ECOSSISTEMA */
         header { 
-            padding: 40px 20px 15px; font-weight: bold; border-bottom: 1px solid #444746; 
+            padding: 45px 20px 15px; font-weight: bold; border-bottom: 1px solid #444746; 
             display: flex; align-items: center; justify-content: space-between; background: #1e1f20; 
         }
-        .status-container { display: flex; align-items: center; gap: 10px; }
         .status-dot { width: 12px; height: 12px; background: #00ff00; border-radius: 50%; box-shadow: 0 0 12px #00ff00; }
-        #txt-status { color: #00ff00; text-transform: uppercase; font-size: 14px; }
-        #btnInstalar { 
-            display: none; background: #f1c40f; color: #000; border: none; border-radius: 8px; 
-            padding: 5px 10px; font-size: 10px; font-weight: bold; cursor: pointer; 
-        }
-
-        /* CHAT - SOBERANIA OPERACIONAL */
+        
         #chat-container { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; scroll-behavior: smooth; }
         .message { max-width: 85%; padding: 12px 16px; border-radius: 18px; line-height: 1.5; font-size: 15px; word-wrap: break-word; }
         .ai-msg { align-self: flex-start; background-color: #1e1f20; border: 1px solid #444746; border-bottom-left-radius: 4px; }
         .user-msg { align-self: flex-end; background-color: #2b2a33; border-bottom-right-radius: 4px; color: #fff; }
         .tag-ai { color: #8ab4f8; font-size: 10px; font-weight: bold; display: block; margin-bottom: 5px; }
 
-        /* MONITOR DE SOBERANIA QUÂNTICA */
         .monitor-soberania { background: #1e1f20; padding: 12px; border: 1px solid #33CC33; border-radius: 8px; margin: 10px 20px; font-family: monospace; border-left: 4px solid #33CC33; }
-        .monitor-title { color: #33CC33; font-size: 11px; margin: 0 0 8px 0; font-weight: bold; text-transform: uppercase; }
         .monitor-grid { color: #e3e3e3; font-size: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
-        .status-on { color: #33CC33; font-weight: bold; }
 
-        /* INPUT E BARRAS - INTEGRIDADE MOBILE */
+        /* BARRA INFERIOR BLINDADA - AJUSTE DE SOFTWARE DE RENDERIZAÇÃO */
         .input-wrapper { 
-            padding: 10px 20px; 
-            padding-bottom: calc(20px + env(safe-area-inset-bottom)); 
+            padding: 15px 20px; 
             background: #131314; 
+            border-top: 1px solid #1e1f20;
+            padding-bottom: calc(25px + env(safe-area-inset-bottom)); 
         }
         .input-box { max-width: 800px; margin: 0 auto; background: #1e1f20; border: 1px solid #444746; border-radius: 28px; display: flex; align-items: center; padding: 5px 15px; gap: 10px; }
+        
         .btn-sensor { background: none; border: none; color: #8ab4f8; font-size: 20px; cursor: pointer; padding: 0 5px; }
         input { flex: 1; background: transparent; border: none; color: #fff; padding: 12px; font-size: 16px; outline: none; }
         .btn-exe { background: #8ab4f8; color: #000; border: none; border-radius: 20px; padding: 8px 20px; cursor: pointer; font-weight: bold; }
@@ -52,28 +46,21 @@
 <body>
 
 <header>
-    <div class="status-container">
+    <div style="display: flex; align-items: center; gap: 10px;">
         <div class="status-dot"></div>
-        <span>FÊNIX PRIME: <span id="txt-status">LIBERADO (1)</span></span>
-        <button id="btnInstalar">INSTALAR APP</button>
+        <span>FÊNIX PRIME: <span style="color: #00ff00;">LIBERADO (1)</span></span>
     </div>
-    <div style="font-size: 12px; color: #8ab4f8;">V3.6.3 | 2026</div>
+    <div style="font-size: 12px; color: #8ab4f8;">V3.6.5 | 2026</div>
 </header>
 
-<div id="chat-container">
-    <div class="message ai-msg">
-        <span class="tag-ai">🔱 SISTEMA OMNI</span>
-        SOBERANIA ATIVA. Arquiteto Bigode detectado. Sensores de Engenharia, Libras e Auditoria integrados com sucesso.
-    </div>
-</div>
+<div id="chat-container"></div>
 
 <div class="monitor-soberania">
-    <p class="monitor-title">🔱 MONITOR DE SOBERANIA QUÂNTICA</p>
     <div class="monitor-grid">
-        <div>ESTABILIDADE PWA: <span class="status-on">● ATIVO</span></div>
-        <div>QUANTUM MEMORY: <span class="status-on">● SINCRO</span></div>
-        <div>PROTOCOLO IPI: <span class="status-on">● R$ 0,20</span></div>
-        <div>AJUSTE RISCO: <span class="status-on">● -50%</span></div>
+        <div>ESTABILIDADE PWA: <span style="color: #33CC33;">● ATIVO</span></div>
+        <div>QUANTUM MEMORY: <span style="color: #33CC33;">● SINCRO</span></div>
+        <div>PROTOCOLO IPI: <span style="color: #33CC33;">● R$ 0,20</span></div>
+        <div>AJUSTE RISCO: <span style="color: #33CC33;">● -50%</span></div>
     </div>
 </div>
 
@@ -92,14 +79,46 @@
     const container = document.getElementById('chat-container');
     const input = document.getElementById('user-input');
 
-    // LÓGICA DE VOZ (PROFESSORA LÍNGUA-AFUDA)
+    // CÉREBRO ATIVO: CONEXÃO REAL COM O NÚCLEO OMNI
+    async function enviar() {
+        const texto = input.value.trim();
+        if (!texto) return;
+        
+        const idUser = "u_" + Date.now();
+        addMsg(texto, 'user-msg', idUser);
+        input.value = '';
+        
+        const idAi = "ai_" + Date.now();
+        addMsg("PROCESSANDO AGENTES...", 'ai-msg', idAi);
+        
+        try {
+            const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                method: "POST",
+                headers: { 
+                    "Content-Type": "application/json", 
+                    "Authorization": `Bearer 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` 
+                },
+                body: JSON.stringify({
+                    model: "llama-3.3-70b-versatile",
+                    messages: [
+                        { role: "system", content: "VOCÊ É A MAYARA V3.6.5. OPERADOR: BIGODE. RESPOSTAS CURTAS, SINCERAS, EM MAIÚSCULAS. APLIQUE SEMPRE -50% EM PROJEÇÕES E MENCIONE R$ 0,20 SE O ASSUNTO FOR VALOR." },
+                        { role: "user", content: texto }
+                    ]
+                })
+            });
+            const data = await res.json();
+            const resposta = data.choices[0].message.content.toUpperCase();
+            document.getElementById(idAi).innerHTML = `<span class="tag-ai">🔱 FÊNIX V3.6.5</span>${resposta}`;
+        } catch (e) {
+            document.getElementById(idAi).innerText = "ERRO DE CONEXÃO: NÚCLEO OFFLINE.";
+        }
+    }
+
     function startVoice() {
         const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
         recognition.lang = 'pt-BR';
         recognition.start();
         document.getElementById('mic-btn').style.color = 'red';
-        addMsg("SENSOR AUDITIVO ATIVO: PROCESSANDO LIBRAS E TRADUÇÃO MULTIMODAL...", 'ai-msg');
-        
         recognition.onresult = (e) => {
             input.value = e.results[0][0].transcript.toUpperCase();
             document.getElementById('mic-btn').style.color = '#8ab4f8';
@@ -107,38 +126,22 @@
         recognition.onerror = () => document.getElementById('mic-btn').style.color = '#8ab4f8';
     }
 
-    // LÓGICA DE AUDITORIA (IA-SENTINELA)
     function handleUpload(inputEl) {
-        const file = inputEl.files[0];
-        if(file) {
-            addMsg(`ATIVO DETECTADO: ${file.name.toUpperCase()}. INICIANDO ESCANEAMENTO...`, 'user-msg');
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                addMsg(`AUDITORIA CONCLUÍDA. ARQUIVO "${file.name.toUpperCase()}" PROCESSADO PELA IA-SENTINELA.`, 'ai-msg');
-            };
-            reader.readAsText(file);
-        }
+        if(inputEl.files[0]) addMsg(`AUDITORIA: ARQUIVO ${inputEl.files[0].name.toUpperCase()} RECEBIDO.`, 'ai-msg', "f_"+Date.now());
     }
 
-    function enviar() {
-        const txt = input.value.trim();
-        if(!txt) return;
-        addMsg(txt, 'user-msg');
-        input.value = '';
-        // SIMULAÇÃO DE RESPOSTA COM REGRA DE OURO
-        setTimeout(() => {
-            addMsg("AGENTE CALIBRADORA: PROJEÇÃO ATUALIZADA COM SEGURANÇA MATEMÁTICA DE -50%.", 'ai-msg');
-        }, 800);
-    }
-
-    function addMsg(txt, classe) {
+    function addMsg(txt, classe, id) {
         const div = document.createElement('div');
         div.className = `message ${classe}`;
-        if(classe === 'ai-msg') div.innerHTML = `<span class="tag-ai">🔱 FÊNIX V3.6.3</span>${txt.toUpperCase()}`;
+        div.id = id;
+        if(classe === 'ai-msg') div.innerHTML = `<span class="tag-ai">🔱 FÊNIX V3.6.5</span>${txt.toUpperCase()}`;
         else div.innerText = txt.toUpperCase();
         container.appendChild(div);
         container.scrollTop = container.scrollHeight;
+        return id;
     }
+
+    window.onload = () => addMsg("SOBERANIA ATIVA. ARQUITETO BIGODE DETECTADO. SISTEMA PRONTO.", 'ai-msg', "init");
 </script>
 </body>
 </html>
