@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8-SIG">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Fênix Prime - S.A. SUPREMACIA</title>
     <style>
@@ -63,24 +63,29 @@
 <script>
     const container = document.getElementById('chat-container');
     const input = document.getElementById('user-input');
+    
+    // URL DINÂMICA PARA NÃO DAR ERRO DE MATRIX
+    const API_URL = window.location.origin + "/chat";
 
     async function enviar() {
         const texto = input.value.trim();
         if (!texto) return;
-        const idUser = "u_" + Date.now();
-        addMsg(texto, 'user-msg', idUser);
+        
+        addMsg(texto, 'user-msg', "u_" + Date.now());
         input.value = '';
+        
         const idAi = "ai_" + Date.now();
         addMsg("PROCESSANDO AGENTES...", 'ai-msg', idAi);
+        
         try {
-            const res = await fetch("/chat", {
+            const res = await fetch(API_URL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ prompt: texto })
             });
             const data = await res.json();
             const respostaFinal = data.response || "ERRO NO RETORNO DOS AGENTES.";
-            document.getElementById(idAi).innerHTML = `<span class="tag-ai">🔱 FÊNIX V3.6.2</span>${respostaFinal.toUpperCase()}`;
+            document.getElementById(idAi).innerHTML = `<span class="tag-ai">🔱 FÊNIX V3.6.2</span>${respostaFinal}`;
         } catch (e) {
             document.getElementById(idAi).innerHTML = `<span class="tag-ai">🔱 FÊNIX V3.6.2</span>ERRO NA MATRIZ: SERVIDOR OFFLINE.`;
         }
