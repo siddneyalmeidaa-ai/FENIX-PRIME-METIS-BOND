@@ -15,10 +15,7 @@ CONFIG = {
     "api_key": os.environ.get("GITHUB_TOKEN")
 }
 
-# DEFININDO O CAMINHO DA RAIZ PARA EVITAR "NOT FOUND"
 base_dir = os.path.abspath(os.path.dirname(__file__))
-
-# --- ROTAS DE LIBERAÇÃO DOS AGENTES (PWA) ---
 
 @app.route('/')
 def index():
@@ -26,19 +23,15 @@ def index():
 
 @app.route('/manifest.json')
 def manifest():
-    # LIBERA O RG DO APP COM O TIPO CORRETO
     return send_from_directory(base_dir, 'manifest.json', mimetype='application/json')
 
 @app.route('/sw.js')
 def sw():
-    # LIBERA O MOTOR COM O TIPO JAVASCRIPT EXIGIDO PELO PWA
     return send_from_directory(base_dir, 'sw.js', mimetype='application/javascript')
 
 @app.route('/tridente.svg')
 def icon():
     return send_from_directory(base_dir, 'tridente.svg', mimetype='image/svg+xml')
-
-# --- MOTOR DE INTELIGÊNCIA ---
 
 @app.route('/chat', methods=['POST'])
 def chat():
@@ -71,6 +64,5 @@ def chat():
         return jsonify({"response": "ERRO NO MOTOR QUÂNTICO."})
 
 if __name__ == '__main__':
-    # AJUSTE FINAL: GARANTINDO QUE A PORTA SEJA LIDA CORRETAMENTE PELO RENDER
     p = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0 ',port=p)
+    app.run(host='0.0.0.0',port=p)
