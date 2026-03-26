@@ -71,6 +71,7 @@ def chat():
         return jsonify({"response": "ERRO NO MOTOR QUÂNTICO."})
 
 if __name__ == '__main__':
+    # AJUSTE FINAL: GARANTINDO QUE A PORTA SEJA LIDA CORRETAMENTE PELO RENDER
     p = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0
     ', port=p)
