@@ -1,17 +1,15 @@
 {
-  "name": "Fênix Prime - S.A. SUPREMACIA",
-  "short_name": "Fênix Prime",
-  "start_url": "index.html",
+  "name": "Fênix Prime",
+  "short_name": "Fênix",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#131314",
   "theme_color": "#1e1f20",
-  "description": "Sistema de Gestão Soberana V3.6.2",
   "icons": [
     {
-      "src": "tridente.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "src": "https://cdn-icons-png.flaticon.com/512/5968/5968260.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ]
 }
