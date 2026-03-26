@@ -15,26 +15,28 @@ CONFIG = {
     "api_key": os.environ.get("GITHUB_TOKEN")
 }
 
+# DEFININDO O CAMINHO DA RAIZ PARA EVITAR "NOT FOUND"
+base_dir = os.path.abspath(os.path.dirname(__file__))
+
 # --- ROTAS DE LIBERAÇÃO DOS AGENTES (PWA) ---
 
 @app.route('/')
 def index():
-    return send_from_directory('.', 'index.html')
+    return send_from_directory(base_dir, 'index.html')
 
 @app.route('/manifest.json')
 def manifest():
-    # LIBERA O ACESSO AO MANIFESTO PARA O BOTÃO INSTALAR APARECER
-    return send_from_directory('.', 'manifest.json')
+    # LIBERA O RG DO APP COM O TIPO CORRETO
+    return send_from_directory(base_dir, 'manifest.json', mimetype='application/json')
 
 @app.route('/sw.js')
 def sw():
-    # LIBERA O MOTOR DO SERVICE WORKER
-    return send_from_directory('.', 'sw.js')
+    # LIBERA O MOTOR COM O TIPO JAVASCRIPT EXIGIDO PELO PWA
+    return send_from_directory(base_dir, 'sw.js', mimetype='application/javascript')
 
 @app.route('/tridente.svg')
 def icon():
-    # LIBERA O ÍCONE PARA A TELA INICIAL
-    return send_from_directory('.', 'tridente.svg')
+    return send_from_directory(base_dir, 'tridente.svg', mimetype='image/svg+xml')
 
 # --- MOTOR DE INTELIGÊNCIA ---
 
@@ -42,7 +44,7 @@ def icon():
 def chat():
     user_input = request.json.get('prompt', '').upper()
     if not CONFIG["api_key"]:
-        return jsonify({"response": "ERRO: GITHUB_TOKEN NÃO CONFIGURADO NO RENDER."})
+        return jsonify({"response": "ERRO: GITHUB_TOKEN NÃO CONFIGURADO."})
     try:
         response = requests.post(
             "https://models.inference.ai.azure.com/chat/completions",
@@ -70,5 +72,5 @@ def chat():
 
 if __name__ == '__main__':
     p = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0'
-            , port=p)
+    app.run(host='0.0.0.0
+    ', port=p)
