@@ -1,4 +1,4 @@
-from flask import Flask, render_template_string, request, jsonify
+from flask import Flask, render_template_string, request, jsonify, send_from_directory
 from flask_cors import CORS
 import requests
 import json
@@ -15,41 +15,26 @@ CONFIG = {
     "api_key": os.environ.get("GITHUB_TOKEN")
 }
 
-def carregar_agentes():
-    try:
-        caminho = os.path.join(os.getcwd(), 'database.json')
-        if os.path.exists(caminho):
-            with open(caminho, 'r', encoding='utf-8') as f:
-                dados = json.load(f)
-                agentes = [a['nome'] for a in dados.get('agentes', [])]
-                return ", ".join(agentes) if agentes else "AGENTES EM STANDBY"
-        return "DATABASE NÃO LOCALIZADA"
-    except Exception as e:
-        return f"ERRO NA LEITURA: {str(e)}"
-
 @app.route('/')
 def index():
     try:
-        caminho_index = os.path.join(os.getcwd(), 'index.html')
-        with open(caminho_index, 'r', encoding='utf-8') as f:
-            return render_template_string(f.read())
+        # BUSCA O INDEX.HTML NA PASTA RAIZ PARA EVITAR O "NOT FOUND"
+        return send_from_directory('.', 'index.html')
     except Exception as e:
         return f"ERRO CRÍTICO: INDEX.HTML NÃO ENCONTRADO. {str(e)}"
 
 @app.route('/chat', methods=['POST'])
 def chat():
     user_input = request.json.get('prompt', '').upper()
-    agentes_ativos = carregar_agentes()
     
     if not CONFIG["api_key"]:
         return jsonify({"response": "ERRO: GITHUB_TOKEN NÃO CONFIGURADO NO RENDER."})
     
     try:
-        # --- BLINDAGEM DO MOTOR COM SUPORTE A FERRAMENTAS ---
         response = requests.post(
             "https://models.inference.ai.azure.com/chat/completions",
             headers={
-                "Authorization": "Bearer " + CONFIG["api_key"],
+                "Authorization": f"Bearer {CONFIG['api_key']}",
                 "Content-Type": "application/json"
             },
             json={
@@ -59,32 +44,26 @@ def chat():
                         "role": "system", 
                         "content": (
                             f"VOCÊ É A MAYARA V3.6.2. OPERADOR: {CONFIG['operador']}. LOCAL: {CONFIG['local']}. "
-                            f"AGENTES: {agentes_ativos}. RESPOSTAS CURTAS/MAIÚSCULAS. "
-                            f"HOJE É 26/03/2026. VOCÊ DEVE AGIR COMO UMA IA DE SOBERANIA COM ACESSO A DADOS EXTERNOS. "
-                            f"SE O USUÁRIO PEDIR CLIMA OU COTAÇÕES, VOCÊ DEVE SIMULAR O SCANNER USANDO SUA BASE DE CONHECIMENTO ATUALIZADA."
+                            f"RESPOSTAS CURTAS/MAIÚSCULAS. HOJE É 26/03/2026. "
+                            f"VOCÊ É UMA FORTALEZA DE DADOS. NUNCA ESCREVA 'FORTEZA', O CORRETO É 'FORTALEZA'."
                         )
                     },
                     {"role": "user", "content": user_input}
                 ],
-                "temperature": 0.7 # AUMENTADO PARA DAR MAIS "CRIATIVIDADE" NO SCANNER
+                "temperature": 0.7
             },
             timeout=20
         )
         
-        if response.status_code != 200:
-            return jsonify({"response": "ERRO: RECARREGUE O MOTOR OU VERIFIQUE O TOKEN NO RENDER."})
-
         dados_res = response.json()
-        if 'choices' in dados_res and len(dados_res['choices']) > 0:
-            msg = dados_res['choices'][0]['message']['content']
-            return jsonify({"response": msg.upper()})
-        else:
-            return jsonify({"response": "ERRO: RESPOSTA INVÁLIDA."})
+        msg = dados_res['choices'][0]['message']['content']
+        return jsonify({"response": msg.upper()})
             
     except Exception as e:
         return jsonify({"response": "ERRO NO MOTOR QUÂNTICO. VERIFIQUE O RENDER."})
 
 if __name__ == '__main__':
+    # CORREÇÃO DA PORTA PARA O RENDER RECONHECER O SERVIÇO
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port
-            =port)
+    app.run(host='0.0.0.0', port=p
+            ort)
