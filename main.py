@@ -62,7 +62,7 @@ def chat():
         return jsonify({"response": "ERRO NO MOTOR QUÂNTICO. VERIFIQUE O RENDER."})
 
 if __name__ == '__main__':
-    # Porta configurada corretamente em uma única linha para o Render
+    # PORTA CONFIGURADA EM LINHA ÚNICA - SEM ERRO DE SINTAXE
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=p
-    ort)
+            ort)
