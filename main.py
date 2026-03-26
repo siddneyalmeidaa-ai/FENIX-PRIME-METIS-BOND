@@ -1,7 +1,6 @@
-from flask import Flask, render_template_string, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import requests
-import json
 import os
 
 app = Flask(__name__)
@@ -18,7 +17,7 @@ CONFIG = {
 @app.route('/')
 def index():
     try:
-        # BUSCA O INDEX.HTML NA PASTA RAIZ PARA EVITAR O "NOT FOUND"
+        # Entrega o index.html da raiz para evitar o erro Not Found
         return send_from_directory('.', 'index.html')
     except Exception as e:
         return f"ERRO CRÍTICO: INDEX.HTML NÃO ENCONTRADO. {str(e)}"
@@ -63,7 +62,7 @@ def chat():
         return jsonify({"response": "ERRO NO MOTOR QUÂNTICO. VERIFIQUE O RENDER."})
 
 if __name__ == '__main__':
-    # CORREÇÃO DA PORTA PARA O RENDER RECONHECER O SERVIÇO
+    # Porta configurada corretamente em uma única linha para o Render
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=p
-            ort)
+    ort)
