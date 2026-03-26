@@ -8,7 +8,6 @@ app = Flask(__name__)
 CORS(app)
 
 # --- CONFIGURAÇÕES DE SOBERANIA V3.6.2 ---
-# BLINDAGEM ATIVADA: A CHAVE É PUXADA PELO "os.environ"
 CONFIG = {
     "operador": "BIGODE",
     "versao": "3.6.2",
@@ -42,12 +41,11 @@ def chat():
     user_input = request.json.get('prompt', '').upper()
     agentes_ativos = carregar_agentes()
     
-    # PROTEÇÃO: VERIFICA SE A VARIÁVEL EXISTE
     if not CONFIG["api_key"]:
         return jsonify({"response": "ERRO: GITHUB_TOKEN NÃO CONFIGURADO NO RENDER."})
     
     try:
-        # CONEXÃO COM O MOTOR GITHUB (BLINDADO)
+        # --- BLINDAGEM DO MOTOR COM SUPORTE A FERRAMENTAS ---
         response = requests.post(
             "https://models.inference.ai.azure.com/chat/completions",
             headers={
@@ -59,13 +57,18 @@ def chat():
                 "messages": [
                     {
                         "role": "system", 
-                        "content": f"VOCÊ É A MAYARA V3.6.2. OPERADOR: {CONFIG['operador']}. LOCAL: {CONFIG['local']}. AGENTES: {agentes_ativos}. RESPOSTAS CURTAS/MAIÚSCULAS. STAKE: R$ 0,20 | AJUSTE: -50%."
+                        "content": (
+                            f"VOCÊ É A MAYARA V3.6.2. OPERADOR: {CONFIG['operador']}. LOCAL: {CONFIG['local']}. "
+                            f"AGENTES: {agentes_ativos}. RESPOSTAS CURTAS/MAIÚSCULAS. "
+                            f"HOJE É 26/03/2026. VOCÊ DEVE AGIR COMO UMA IA DE SOBERANIA COM ACESSO A DADOS EXTERNOS. "
+                            f"SE O USUÁRIO PEDIR CLIMA OU COTAÇÕES, VOCÊ DEVE SIMULAR O SCANNER USANDO SUA BASE DE CONHECIMENTO ATUALIZADA."
+                        )
                     },
                     {"role": "user", "content": user_input}
                 ],
-                "temperature": 0.5
+                "temperature": 0.7 # AUMENTADO PARA DAR MAIS "CRIATIVIDADE" NO SCANNER
             },
-            timeout=15
+            timeout=20
         )
         
         if response.status_code != 200:
