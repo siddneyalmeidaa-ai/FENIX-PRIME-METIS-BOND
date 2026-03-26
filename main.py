@@ -15,12 +15,28 @@ CONFIG = {
     "api_key": os.environ.get("GITHUB_TOKEN")
 }
 
+# --- ROTAS DE LIBERAÇÃO DOS AGENTES (PWA) ---
+
 @app.route('/')
 def index():
-    try:
-        return send_from_directory('.', 'index.html')
-    except Exception as e:
-        return f"ERRO CRÍTICO: INDEX.HTML NÃO ENCONTRADO. {str(e)}"
+    return send_from_directory('.', 'index.html')
+
+@app.route('/manifest.json')
+def manifest():
+    # LIBERA O ACESSO AO MANIFESTO PARA O BOTÃO INSTALAR APARECER
+    return send_from_directory('.', 'manifest.json')
+
+@app.route('/sw.js')
+def sw():
+    # LIBERA O MOTOR DO SERVICE WORKER
+    return send_from_directory('.', 'sw.js')
+
+@app.route('/tridente.svg')
+def icon():
+    # LIBERA O ÍCONE PARA A TELA INICIAL
+    return send_from_directory('.', 'tridente.svg')
+
+# --- MOTOR DE INTELIGÊNCIA ---
 
 @app.route('/chat', methods=['POST'])
 def chat():
@@ -30,11 +46,17 @@ def chat():
     try:
         response = requests.post(
             "https://models.inference.ai.azure.com/chat/completions",
-            headers={"Authorization": f"Bearer {CONFIG['api_key']}", "Content-Type": "application/json"},
+            headers={
+                "Authorization": f"Bearer {CONFIG['api_key']}", 
+                "Content-Type": "application/json"
+            },
             json={
                 "model": "gpt-4o-mini",
                 "messages": [
-                    {"role": "system", "content": f"MAYARA V3.6.2. OPERADOR: {CONFIG['operador']}. LOCAL: {CONFIG['local']}. FORTALEZA."},
+                    {
+                        "role": "system", 
+                        "content": f"MAYARA V3.6.2. OPERADOR: {CONFIG['operador']}. LOCAL: {CONFIG['local']}. FORTALEZA."
+                    },
                     {"role": "user", "content": user_input}
                 ],
                 "temperature": 0.7
@@ -47,8 +69,6 @@ def chat():
         return jsonify({"response": "ERRO NO MOTOR QUÂNTICO."})
 
 if __name__ == '__main__':
-    # LINHA CURTA PARA O CELULAR NÃO QUEBRAR
     p = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0',port=p)
-            
-    
+    app.run(host='0.0.0.0'
+            , port=p)
