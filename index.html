@@ -71,6 +71,15 @@
     const input = document.getElementById('user-input');
     const API_URL = window.location.origin + "/chat";
 
+    // --- REGISTRO DO MOTOR DE SOBERANIA (PWA) ---
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('FÊNIX ATIVA:', reg.scope))
+                .catch(err => console.log('FALHA NA MATRIZ:', err));
+        });
+    }
+
     async function enviar() {
         const texto = input.value.trim();
         if (!texto) return;
@@ -121,5 +130,4 @@
     window.onload = () => addMsg("SOBERANIA V3.6.2 ATIVA. ARQUITETO BIGODE DETECTADO.", 'ai-msg', "init");
 </script>
 </body>
-</
-    html>
+</html>
