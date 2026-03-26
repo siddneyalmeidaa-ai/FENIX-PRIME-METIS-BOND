@@ -1,6 +1,7 @@
 {
   "name": "Fênix Prime",
   "short_name": "Fênix",
+  "description": "S.A. SUPREMACIA - Arquiteto Bigode",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#131314",
@@ -9,7 +10,8 @@
     {
       "src": "https://cdn-icons-png.flaticon.com/512/5968/5968260.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
