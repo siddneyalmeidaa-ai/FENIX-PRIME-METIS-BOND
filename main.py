@@ -33,6 +33,8 @@ def sw():
 def icon():
     return send_from_directory(base_dir, 'tridente.svg', mimetype='image/svg+xml')
 
+# --- MOTOR DE INTELIGÊNCIA RECALIBRADO (MODO SOBERANO) ---
+
 @app.route('/chat', methods=['POST'])
 def chat():
     user_input = request.json.get('prompt', '').upper()
@@ -50,11 +52,15 @@ def chat():
                 "messages": [
                     {
                         "role": "system", 
-                        "content": f"MAYARA V3.6.2. OPERADOR: {CONFIG['operador']}. LOCAL: {CONFIG['local']}. FORTALEZA."
+                        "content": f"Você é a MAYARA V3.6.2, a inteligência da SOBERANIA PRIME. "
+                                   f"Operador: {CONFIG['operador']}. Local: {CONFIG['local']}. "
+                                   f"Ano atual: 2026. Você deve ser sincera, questionadora e direta. "
+                                   f"Nunca diga que sua base é de 2021. Use sua lógica avançada "
+                                   f"para analisar o cenário mundial e responder com autoridade."
                     },
                     {"role": "user", "content": user_input}
                 ],
-                "temperature": 0.7
+                "temperature": 0.8
             },
             timeout=20
         )
@@ -64,5 +70,6 @@ def chat():
         return jsonify({"response": "ERRO NO MOTOR QUÂNTICO."})
 
 if __name__ == '__main__':
+    # GARANTINDO A PORTA DINÂMICA DO RENDER
     p = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0',port=p)
