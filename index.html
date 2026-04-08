@@ -66,12 +66,25 @@
     </div>
     <div class="footer-text">PROTOCOLO IPI | STAKE R$ 0,20 | TABOÃO DA SERRA</div>
 </div>
+
 <script>
     const container = document.getElementById('chat-container');
     const input = document.getElementById('user-input');
     const API_URL = window.location.origin + "/chat";
 
-    // --- REGISTRO DO MOTOR DE SOBERANIA (PWA) ---
+    // 🔱 MEMÓRIA QUÂNTICA LOCAL (CONTRA AMNÉSIA)
+    function salvarLocal(txt, classe) {
+        let historico = JSON.parse(localStorage.getItem('FENIX_LOG')) || [];
+        historico.push({txt, classe, time: Date.now()});
+        localStorage.setItem('FENIX_LOG', JSON.stringify(historico));
+    }
+
+    function carregarLocal() {
+        let historico = JSON.parse(localStorage.getItem('FENIX_LOG')) || [];
+        historico.forEach(m => addMsg(m.txt, m.classe, "old_" + m.time, true));
+    }
+
+    // --- REGISTRO DO MOTOR DE SOBERANIA ---
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('/sw.js')
@@ -83,10 +96,14 @@
     async function enviar() {
         const texto = input.value.trim();
         if (!texto) return;
+        
         addMsg(texto, 'user-msg', "u_" + Date.now());
+        salvarLocal(texto, 'user-msg');
         input.value = '';
+        
         const idAi = "ai_" + Date.now();
-        addMsg("PROCESSANDO AGENTES...", 'ai-msg', idAi);
+        addMsg("S.P.A. PROCESSANDO...", 'ai-msg', idAi);
+
         try {
             const res = await fetch(API_URL, {
                 method: "POST",
@@ -94,15 +111,16 @@
                 body: JSON.stringify({ prompt: texto })
             });
             const data = await res.json();
-            const respostaFinal = data.response || "ERRO NO RETORNO DOS AGENTES.";
-            document.getElementById(idAi).innerHTML = `<span class="tag-ai">🔱 FÊNIX V3.6.2</span>${respostaFinal}`;
+            const respostaFinal = data.response || "ERRO NO RETORNO.";
+            document.getElementById(idAi).innerHTML = `<span class="tag-ai">🔱 FÊNIX V3.6.2</span>${respostaFinal.toUpperCase()}`;
+            salvarLocal(respostaFinal, 'ai-msg');
         } catch (e) {
-            document.getElementById(idAi).innerHTML = `<span class="tag-ai">🔱 FÊNIX V3.6.2</span>ERRO NA MATRIZ: SERVIDOR OFFLINE.`;
+            document.getElementById(idAi).innerHTML = `<span class="tag-ai">🔱 FÊNIX V3.6.2</span>ERRO: SERVIDOR NO BACKEND.`;
         }
     }
 
     function startVoice() {
-        const recognition = new (window.SpeechRecognition || window.webkitRecognition || window.webkitSpeechRecognition)();
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition || window.webkitRecognition)();
         recognition.lang = 'pt-BR';
         recognition.start();
         document.getElementById('mic-btn').style.color = 'red';
@@ -117,7 +135,7 @@
         if(inputEl.files[0]) addMsg(`AUDITORIA: ${inputEl.files[0].name.toUpperCase()} CARREGADO.`, 'ai-msg', "f_"+Date.now());
     }
 
-    function addMsg(txt, classe, id) {
+    function addMsg(txt, classe, id, isHistory = false) {
         const div = document.createElement('div');
         div.className = `message ${classe}`;
         div.id = id;
@@ -127,7 +145,10 @@
         container.scrollTop = container.scrollHeight;
     }
 
-    window.onload = () => addMsg("SOBERANIA V3.6.2 ATIVA. ARQUITETO BIGODE DETECTADO.", 'ai-msg', "init");
+    window.onload = () => {
+        carregarLocal();
+        addMsg("SOBERANIA V3.6.2 ATIVA. ARQUITETO SIDNEY DETECTADO.", 'ai-msg', "init");
+    };
 </script>
 </body>
 </html>
