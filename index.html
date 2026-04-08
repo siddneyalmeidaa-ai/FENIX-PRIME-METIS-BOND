@@ -64,31 +64,36 @@
         <input type="text" id="user-input" placeholder="Comando para os Agentes..." autocomplete="off">
         <button class="btn-exe" onclick="enviar()">EXE</button>
     </div>
-    <div class="footer-text">PROTOCOLO IPI | STAKE R$ 0,20 | TABOÃO DA SERRA</div>
+    <div class="footer-text">PROTOCOLO IPI | STAKE R$ 0,20 | TABOÃO DA SERRA | ARQUITETO S.P.A.</div>
 </div>
 
 <script>
     const container = document.getElementById('chat-container');
     const input = document.getElementById('user-input');
     const API_URL = window.location.origin + "/chat";
+    const ARQUITETO_NOME = "SIDNEY PEREIRA DE ALMEIDA";
 
-    // 🔱 MEMÓRIA QUÂNTICA LOCAL (CONTRA AMNÉSIA)
-    function salvarLocal(txt, classe) {
-        let historico = JSON.parse(localStorage.getItem('FENIX_LOG')) || [];
-        historico.push({txt, classe, time: Date.now()});
-        localStorage.setItem('FENIX_LOG', JSON.stringify(historico));
+    // 🔱 SISTEMA DE MEMÓRIA QUÂNTICA (ANTI-AMNÉSIA)
+    function salvarNaMemoria(txt, classe) {
+        let log = JSON.parse(localStorage.getItem('FENIX_MEMORY_V3')) || [];
+        log.push({txt, classe, timestamp: new Date().toLocaleTimeString()});
+        // Mantém apenas as últimas 50 mensagens para não pesar
+        if (log.length > 50) log.shift();
+        localStorage.setItem('FENIX_MEMORY_V3', JSON.stringify(log));
     }
 
-    function carregarLocal() {
-        let historico = JSON.parse(localStorage.getItem('FENIX_LOG')) || [];
-        historico.forEach(m => addMsg(m.txt, m.classe, "old_" + m.time, true));
+    function carregarMemoria() {
+        let log = JSON.parse(localStorage.getItem('FENIX_MEMORY_V3')) || [];
+        if (log.length > 0) {
+            log.forEach(m => addMsg(m.txt, m.classe, "hist_" + Math.random(), true));
+        }
     }
 
-    // --- REGISTRO DO MOTOR DE SOBERANIA ---
+    // --- REGISTRO PWA ---
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('/sw.js')
-                .then(reg => console.log('FÊNIX ATIVA:', reg.scope))
+                .then(reg => console.log('🔱 FÊNIX EM ÓRBITA:', reg.scope))
                 .catch(err => console.log('FALHA NA MATRIZ:', err));
         });
     }
@@ -96,26 +101,35 @@
     async function enviar() {
         const texto = input.value.trim();
         if (!texto) return;
+
+        // Recupera o histórico para enviar ao servidor
+        const contextoAnterior = JSON.parse(localStorage.getItem('FENIX_MEMORY_V3')) || [];
         
         addMsg(texto, 'user-msg', "u_" + Date.now());
-        salvarLocal(texto, 'user-msg');
+        salvarNaMemoria(texto, 'user-msg');
         input.value = '';
-        
+
         const idAi = "ai_" + Date.now();
-        addMsg("S.P.A. PROCESSANDO...", 'ai-msg', idAi);
+        addMsg("S.P.A. ACIONANDO MOTOR QUÂNTICO...", 'ai-msg', idAi);
 
         try {
             const res = await fetch(API_URL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ prompt: texto })
+                body: JSON.stringify({ 
+                    prompt: texto,
+                    arquiteto: ARQUITETO_NOME,
+                    contexto: contextoAnterior,
+                    regra: "SUPREMACIA_TOTAL"
+                })
             });
             const data = await res.json();
-            const respostaFinal = data.response || "ERRO NO RETORNO.";
+            const respostaFinal = data.response || "ERRO NO RETORNO DOS AGENTES.";
+            
             document.getElementById(idAi).innerHTML = `<span class="tag-ai">🔱 FÊNIX V3.6.2</span>${respostaFinal.toUpperCase()}`;
-            salvarLocal(respostaFinal, 'ai-msg');
+            salvarNaMemoria(respostaFinal, 'ai-msg');
         } catch (e) {
-            document.getElementById(idAi).innerHTML = `<span class="tag-ai">🔱 FÊNIX V3.6.2</span>ERRO: SERVIDOR NO BACKEND.`;
+            document.getElementById(idAi).innerHTML = `<span class="tag-ai">🔱 FÊNIX V3.6.2</span>ERRO DE MOTOR: SERVIDOR OFFLINE OU EM DEPLOY.`;
         }
     }
 
@@ -132,7 +146,7 @@
     }
 
     function handleUpload(inputEl) {
-        if(inputEl.files[0]) addMsg(`AUDITORIA: ${inputEl.files[0].name.toUpperCase()} CARREGADO.`, 'ai-msg', "f_"+Date.now());
+        if(inputEl.files[0]) addMsg(`AUDITORIA: ${inputEl.files[0].name.toUpperCase()} CARREGADO NO NÚCLEO.`, 'ai-msg', "f_"+Date.now());
     }
 
     function addMsg(txt, classe, id, isHistory = false) {
@@ -145,9 +159,10 @@
         container.scrollTop = container.scrollHeight;
     }
 
+    // --- INICIALIZAÇÃO SOBERANA ---
     window.onload = () => {
-        carregarLocal();
-        addMsg("SOBERANIA V3.6.2 ATIVA. ARQUITETO SIDNEY DETECTADO.", 'ai-msg', "init");
+        carregarMemoria();
+        addMsg(`SISTEMA ONLINE. BEM-VINDO DE VOLTA, ARQUITETO ${ARQUITETO_NOME.split(' ')[0]}.`, 'ai-msg', "init");
     };
 </script>
 </body>
