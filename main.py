@@ -1,64 +1,69 @@
-from flask import Flask, request, jsonify, send_from_directory
-from flask_cors import CORS
+# ==========================================
+# PROJETO FRAJOLA / FÊNIX PRIME V3.6.2
+# MÓDULO DE CORREÇÃO E EXPANSÃO DA BUSCA INTELIGENTE
+# ==========================================
+
 import requests
-import os
+from flask import Flask, request, jsonify
 
 app = Flask(__name__)
-CORS(app)
 
-base_dir = os.path.abspath(os.path.dirname(__file__))
+# Configurações do Protocolo IPI e Quantum Memory
+PROTOCOL_CONFIG = {
+    "versao": "3.6.2",
+    "status": "ATIVO",
+    "stake_padrao": 0.20,
+    "ajuste_risco": -0.50,
+    "quantum_memory": "SINCRO"
+}
 
-@app.route('/')
-def index():
-    return send_from_directory(base_dir, 'index.html')
-
-@app.route('/manifest.json')
-def manifest():
-    return send_from_directory(base_dir, 'manifest.json', mimetype='application/json')
-
-@app.route('/sw.js')
-def sw():
-    return send_from_directory(base_dir, 'sw.js', mimetype='application/javascript')
-
-@app.route('/tridente.svg')
-def icon():
-    return send_from_directory(base_dir, 'tridente.svg', mimetype='image/svg+xml')
-
-@app.route('/chat', methods=['POST'])
-def chat():
-    dados = request.get_json() or {}
-    user_input = dados.get('prompt', '').strip()
-    
-    if not user_input:
-        return jsonify({"response": "DIGITE UM COMANDO VÁLIDO."})
+def expandir_extracao_wikipedia(termo):
+    """
+    Função atualizada para buscar múltiplos parágrafos ou o conteúdo completo
+    da introdução, evitando cair na armadilha de frases de cabeçalho de listas.
+    """
+    url = f"https://pt.wikipedia.org/api/rest_v1/page/summary/{requests.utils.quote(termo)}"
+    headers = {"User-Agent": "FenixPrimeBot/3.6.2 (contato@fenix.local)"}
     
     try:
-        # Passo 1: Busca inteligente por termos relacionados na Wikipedia em português
-        search_url = f"https://pt.wikipedia.org/w/api.php?action=query&list=search&srsearch={requests.utils.quote(user_input)}&format=json"
-        headers = {"User-Agent": "FenixPWA/3.6.2"}
-        search_res = requests.get(search_url, headers=headers, timeout=10)
-        
-        if search_res.status_code == 200:
-            search_data = search_res.json()
-            results = search_data.get('query', {}).get('search', [])
+        response = requests.get(url, headers=headers, timeout=5)
+        if response.status_code == 200:
+            data = response.json()
+            extract = data.get("extract", "")
             
-            if results:
-                # Pega o título do primeiro artigo encontrado na busca
-                best_title = results[0]['title']
-                summary_url = f"https://pt.wikipedia.org/api/rest_v1/page/summary/{requests.utils.quote(best_title)}"
-                sum_res = requests.get(summary_url, headers=headers, timeout=10)
-                
-                if sum_res.status_code == 200:
-                    sum_data = sum_res.json()
-                    extract = sum_data.get('extract')
-                    if extract:
-                        return jsonify({"response": extract.upper()})
-        
-        return jsonify({"response": f"CONSULTA EXECUTADA PARA '{user_input.upper()}': NENHUM ARTIGO CORRESPONDENTE LOCALIZADO NA BASE GLOBAL."})
+            # Se o texto for apenas uma frase introdutória de lista, tentamos buscar o conteúdo da página completa se necessário
+            if "A lista abaixo contém" in extract or "contém as doenças" in extract:
+                # Fallback para buscar o conteúdo completo via API de ação do MediaWiki se precisar detalhar
+                url_action = f"https://pt.wikipedia.org/w/api.php?action=query&prop=extracts&exintro&explaintext&titles={requests.utils.quote(termo)}&format=json"
+                resp_action = requests.get(url_action, headers=headers, timeout=5)
+                if resp_action.status_code == 200:
+                    pages = resp_action.json().get("query", {}).get("pages", {})
+                    for page_id in pages:
+                        content = pages[page_id].get("extract", "")
+                        if content:
+                            return content
+                            
+            return extract if extract else "Nenhum resumo detalhado encontrado para este termo."
+        else:
+            return "Erro ao consultar a base de dados remota."
     except Exception as e:
-        return jsonify({"response": f"ERRO NA EXECUÇÃO DA BUSCA: {str(e).upper()}"})
+        return f"Falha de conexão com o endpoint: {str(e)}"
 
-if __name__ == '__main__':
-    p = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=p)
+@app.route("/api/busca", methods=["POST"])
+def api_busca():
+    dados = request.get_json() or {}
+    termo = dados.get("termo", "")
+    
+    resultado = expandir_extracao_wikipedia(termo)
+    
+    return jsonify({
+        "status": "LIBERADO",
+        "versao": PROTOCOL_CONFIG["versao"],
+        "termo_consultado": termo,
+        "resultado": resultado,
+        "protocolo": PROTOCOL_CONFIG
+    })
+
+if __name__ == "__main__":
+    app.run(host="0.0.5.0", port=5000)
     
