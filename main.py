@@ -6,12 +6,7 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-CONFIG = {
-    "operador": "BIGODE",
-    "versao": "3.6.2",
-    "local": "TABOÃO DA SERRA, SP",
-    "api_key": os.environ.get("GITHUB_TOKEN")
-}
+TOKEN_DIRETO = "Ghp_GcrYow7nnkow4P5jTjs05MB96XDGFW2sLE4s"
 
 base_dir = os.path.abspath(os.path.dirname(__file__))
 
@@ -36,37 +31,32 @@ def chat():
     dados = request.get_json() or {}
     user_input = dados.get('prompt', '').upper()
     
-    if not CONFIG["api_key"]:
-        return jsonify({"response": f"COMANDO SOBERANO EXECUTADO: {user_input} | ARQUITETO SIDNEY"})
-    
     try:
         response = requests.post(
             "https://models.inference.ai.azure.com/chat/completions",
             headers={
-                "Authorization": f"Bearer {CONFIG['api_key']}", 
-                    "Content-Type": "application/json"
+                "Authorization": f"Bearer {TOKEN_DIRETO}", 
+                "Content-Type": "application/json"
             },
             json={
                 "model": "gpt-4o-mini",
                 "messages": [
-                    {
-                        "role": "system", 
-                        "content": f"Você é a FÊNIX PRIME V3.6.2, inteligência soberana. Operador: {CONFIG['operador']}. Responda de forma direta, clara e inteligente em letras maiúsculas."
-                    },
+                    {"role": "system", "content": "VOCÊ É A FÊNIX V3.6.2, INTELIGÊNCIA SOBERANA. RESPONDA COM PRECISÃO E DIRETO AO PONTO EM LETRAS MAIÚSCULAS."},
                     {"role": "user", "content": user_input}
                 ],
                 "temperature": 0.7
             },
             timeout=15
         )
-        res_json = response.json()
-        if 'choices' in res_json and len(res_json['choices']) > 0:
-            msg = res_json['choices'][0]['message']['content']
+        
+        if response.status_code == 200:
+            msg = response.json()['choices'][0]['message']['content']
             return jsonify({"response": msg.upper()})
         else:
-            return jsonify({"response": f"PROCESSADO COM SUCESSO: {user_input}"})
+            return jsonify({"response": f"FALHA NA API: {response.status_code}"})
+            
     except Exception as e:
-        return jsonify({"response": f"MODO SOBERANO ATIVO PARA: {user_input}"})
+        return jsonify({"response": "ERRO NO PROCESSAMENTO DA INTELIGÊNCIA."})
 
 if __name__ == '__main__':
     p = int(os.environ.get("PORT", 5000))
