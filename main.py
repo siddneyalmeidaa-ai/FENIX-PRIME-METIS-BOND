@@ -33,22 +33,32 @@ def chat():
         return jsonify({"response": "DIGITE UM COMANDO VÁLIDO."})
     
     try:
-        url = f"https://pt.wikipedia.org/api/rest_v1/page/summary/{requests.utils.quote(user_input)}"
+        # Passo 1: Busca inteligente por termos relacionados na Wikipedia em português
+        search_url = f"https://pt.wikipedia.org/w/api.php?action=query&list=search&srsearch={requests.utils.quote(user_input)}&format=json"
         headers = {"User-Agent": "FenixPWA/3.6.2"}
-        response = requests.get(url, headers=headers, timeout=10)
+        search_res = requests.get(search_url, headers=headers, timeout=10)
         
-        if response.status_code == 200:
-            data = response.json()
-            extract = data.get('extract')
-            if extract:
-                return jsonify({"response": extract.upper()})
+        if search_res.status_code == 200:
+            search_data = search_res.json()
+            results = search_data.get('query', {}).get('search', [])
+            
+            if results:
+                # Pega o título do primeiro artigo encontrado na busca
+                best_title = results[0]['title']
+                summary_url = f"https://pt.wikipedia.org/api/rest_v1/page/summary/{requests.utils.quote(best_title)}"
+                sum_res = requests.get(summary_url, headers=headers, timeout=10)
+                
+                if sum_res.status_code == 200:
+                    sum_data = sum_res.json()
+                    extract = sum_data.get('extract')
+                    if extract:
+                        return jsonify({"response": extract.upper()})
         
-        termo_upper = user_input.upper()
-        return jsonify({"response": f"DADOS CONSULTADOS PARA '{termo_upper}': SEM REGISTRO DIRETO NA BASE DE CONHECIMENTO PÚBLICO."})
+        return jsonify({"response": f"CONSULTA EXECUTADA PARA '{user_input.upper()}': NENHUM ARTIGO CORRESPONDENTE LOCALIZADO NA BASE GLOBAL."})
     except Exception as e:
-        return jsonify({"response": f"FALHA NO PROCESSAMENTO DA CONSULTA: {str(e).upper()}"})
+        return jsonify({"response": f"ERRO NA EXECUÇÃO DA BUSCA: {str(e).upper()}"})
 
 if __name__ == '__main__':
     p = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=p)
-            
+    
