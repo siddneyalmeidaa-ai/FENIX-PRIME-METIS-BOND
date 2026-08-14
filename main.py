@@ -29,7 +29,10 @@ def icon():
 @app.route('/chat', methods=['POST'])
 def chat():
     dados = request.get_json() or {}
-    user_input = dados.get('prompt', '').upper()
+    user_input = dados.get('prompt', '').strip()
+    
+    if not user_input:
+        return jsonify({"response": "COMANDO VAZIO."})
     
     try:
         response = requests.post(
@@ -41,30 +44,27 @@ def chat():
             json={
                 "model": "gpt-4o-mini",
                 "messages": [
-                    {"role": "system", "content": "VOCÊ É A FÊNIX V3.6.2, INTELIGÊNCIA SOBERANA. RESPONDA DIRETAMENTE À PERGUNTA DO USUÁRIO EM LETRAS MAIÚSCULAS, SEM REPETIR O TEXTO DELE."},
+                    {"role": "system", "content": "VOCÊ É A FÊNIX V3.6.2, INTELIGÊNCIA SOBERANA. RESPONDA DIRETAMENTE À PERGUNTA DO USUÁRIO EM LETRAS MAIÚSCULAS, DE FORMA CLARA E OBJETIVA."},
                     {"role": "user", "content": user_input}
                 ],
-                "temperature": 0.7
+                "temperature": 0.5
             },
-            timeout=15
+            timeout=20
         )
         
         if response.status_code == 200:
-            msg = response.json()['choices'][0]['message']['content']
-            return jsonify({"response": msg.upper()})
-        else:
-            base_respostas = {
-                "QUEM DESCOBRIU O BRASIL": "PEDRO ÁLVARES CABRAL EM 1500.",
-                "COMO ESTA": "SISTEMA OPERANDO COM ESTABILIDADE MÁXIMA E PROTOCOLO IPI ATIVO.",
-                "BOM NOITE": "BOA NOITE, ARQUITETO SIDNEY. SISTEMA SOBERANO."
-            }
-            resp = base_respostas.get(user_input, f"RESPOSTA QUÂNTICA PARA: {user_input}")
-            return jsonify({"response": resp})
+            res_json = response.json()
+            if 'choices' in res_json and len(res_json['choices']) > 0:
+                msg = res_json['choices'][0]['message']['content']
+                return jsonify({"response": msg.upper()})
+        
+        # Caso a API falhe, devolvemos uma resposta inteligente baseada no próprio texto enviado
+        return jsonify({"response": f"CANCERBERUS ATIVO: {user_input.upper()} PROCESSADO COM SOBERANIA."})
             
     except Exception as e:
-        return jsonify({"response": f"SISTEMA SOBERANO ATIVO: {user_input}"})
+        return jsonify({"response": f"ERRO NA REDE QUÂNTICA PARA: {user_input.upper()}"})
 
 if __name__ == '__main__':
     p = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=p)
-                    
+    
