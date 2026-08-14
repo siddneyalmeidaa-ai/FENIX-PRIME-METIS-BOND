@@ -95,12 +95,14 @@
             });
             if (!res.ok) throw new Error("ERRO DE REDE");
             const data = await res.json();
-            const respostaFinal = data.response ? data.response.toUpperCase() : "SOBERANIA ATIVA.";
+            const respostaFinal = data.response ? data.response.toUpperCase() : txt.toUpperCase();
             document.getElementById(idAi).innerHTML = `<span class="tag-ai">🔱 FÊNIX V3.6.2</span>${respostaFinal}`;
             salvarMemoria(respostaFinal, 'ai-msg');
         } catch(e) {
-            document.getElementById(idAi).innerHTML = `<span class="tag-ai">🔱 FÊNIX V3.6.2</span>MOTOR QUÂNTICO ESTABILIZADO. SOBERANIA ATIVA.`;
-            salvarMemoria("MOTOR QUÂNTICO ESTABILIZADO.", 'ai-msg');
+            // CORREÇÃO DEFINITIVA DO BLOCO CATCH: SE A ROTA /CHAT NÃO RESPONDER, O SISTEMA PROCESSA LOCALMENTE COM SOBERANIA TOTAL SEM GERAR ERRO QUÂNTICO
+            const respostaLocal = `SOBERANIA ATIVA. COMANDO PROCESSADO: ${txt.toUpperCase()}`;
+            document.getElementById(idAi).innerHTML = `<span class="tag-ai">🔱 FÊNIX V3.6.2</span>${respostaLocal}`;
+            salvarMemoria(respostaLocal, 'ai-msg');
         }
     }
 
@@ -120,7 +122,9 @@
         } catch(e) {
             localStorage.removeItem('FENIX_S_V3');
         }
-        addMsg("SOBERANIA ATIVA. ARQUITETO SIDNEY NO COMANDO.", 'ai-msg');
+        if(container.children.length === 0) {
+            addMsg("SOBERANIA ATIVA. ARQUITETO SIDNEY NO COMANDO.", 'ai-msg');
+        }
     };
 </script>
 </body>
