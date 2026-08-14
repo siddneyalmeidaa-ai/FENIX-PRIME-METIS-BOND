@@ -1,62 +1,64 @@
-# ==========================================
-# PROJETO FRAJOLA / FÊNIX PRIME V3.6.2
-# CORREÇÃO DA ROTA DE BUSCA E RETORNO DE DADOS
-# ==========================================
-
+from flask import Flask, request, jsonify, send_from_directory
+from flask_cors import CORS
 import requests
-from flask import Flask, request, jsonify
+import os
 
 app = Flask(__name__)
+CORS(app)
 
-PROTOCOL_CONFIG = {
-    "versao": "3.6.2",
-    "status": "ATIVO",
-    "stake_padrao": 0.20,
-    "ajuste_risco": -0.50,
-    "quantum_memory": "SINCRO"
-}
+base_dir = os.path.abspath(os.path.dirname(__file__))
 
-def consultar_base_conhecimento(termo):
-    """
-    Realiza a consulta direta na API da Wikipedia focando no verbete exato
-    para evitar o retorno de cabeçalhos de listas genéricas.
-    """
-    termo_tratado = termo.strip()
-    url = f"https://pt.wikipedia.org/api/rest_v1/page/summary/{requests.utils.quote(termo_tratado)}"
-    headers = {"User-Agent": "FenixPrimeBot/3.6.2 (contato@fenix.local)"}
+@app.route('/')
+def index():
+    return send_from_directory(base_dir, 'index.html')
+
+@app.route('/manifest.json')
+def manifest():
+    return send_from_directory(base_dir, 'manifest.json', mimetype='application/json')
+
+@app.route('/sw.js')
+def sw():
+    return send_from_directory(base_dir, 'sw.js', mimetype='application/javascript')
+
+@app.route('/tridente.svg')
+def icon():
+    return send_from_directory(base_dir, 'tridente.svg', mimetype='image/svg+xml')
+
+@app.route('/chat', methods=['POST'])
+def chat():
+    dados = request.get_json() or {}
+    user_input = dados.get('prompt', '').strip()
+    
+    if not user_input:
+        return jsonify({"response": "DIGITE UM COMANDO VÁLIDO."})
     
     try:
-        response = requests.get(url, headers=headers, timeout=5)
-        if response.status_code == 200:
-            data = response.json()
-            extract = data.get("extract", "")
+        # Passo 1: Busca inteligente por termos relacionados na Wikipedia em português
+        search_url = f"https://pt.wikipedia.org/w/api.php?action=query&list=search&srsearch={requests.utils.quote(user_input)}&format=json"
+        headers = {"User-Agent": "FenixPWA/3.6.2"}
+        search_res = requests.get(search_url, headers=headers, timeout=10)
+        
+        if search_res.status_code == 200:
+            search_data = search_res.json()
+            results = search_data.get('query', {}).get('search', [])
             
-            # Se o extrato vier vazio ou focado em listas, tentamos o título principal
-            if not extract or "A lista abaixo" in extract:
-                return f"Consulta realizada para: {termo_tratado}. Definição técnica indisponível no resumo imediato."
+            if results:
+                # Pega o título do primeiro artigo encontrado na busca
+                best_title = results[0]['title']
+                summary_url = f"https://pt.wikipedia.org/api/rest_v1/page/summary/{requests.utils.quote(best_title)}"
+                sum_res = requests.get(summary_url, headers=headers, timeout=10)
                 
-            return extract
-        else:
-            return f"Erro de conexão com o repositório externo para o termo: {termo_tratado}"
+                if sum_res.status_code == 200:
+                    sum_data = sum_res.json()
+                    extract = sum_data.get('extract')
+                    if extract:
+                        return jsonify({"response": extract.upper()})
+        
+        return jsonify({"response": f"CONSULTA EXECUTADA PARA '{user_input.upper()}': NENHUM ARTIGO CORRESPONDENTE LOCALIZADO NA BASE GLOBAL."})
     except Exception as e:
-        return f"Falha crítica no canal de busca: {str(e)}"
+        return jsonify({"response": f"ERRO NA EXECUÇÃO DA BUSCA: {str(e).upper()}"})
 
-@app.route("/api/busca", methods=["POST"])
-def api_busca():
-    dados = request.get_json() or {}
-    termo = dados.get("termo", "")
-    
-    # Processa a busca real e obtém o conteúdo técnico
-    resultado_conteudo = consultar_base_conhecimento(termo)
-    
-    return jsonify({
-        "status": "LIBERADO",
-        "versao": PROTOCOL_CONFIG["versao"],
-        "termo_consultado": termo,
-        "resultado": resultado_conteudo,
-        "protocolo": PROTOCOL_CONFIG
-    })
-
-if __name__ == "__main__":
-    app.run(host="0.0.5.0", port=5000)
+if __name__ == '__main__':
+    p = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=p)
     
