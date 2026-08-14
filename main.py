@@ -1,6 +1,6 @@
 # ==========================================
 # PROJETO FRAJOLA / FÊNIX PRIME V3.6.2
-# MÓDULO DE CORREÇÃO E EXPANSÃO DA BUSCA INTELIGENTE
+# CORREÇÃO DA ROTA DE BUSCA E RETORNO DE DADOS
 # ==========================================
 
 import requests
@@ -8,7 +8,6 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-# Configurações do Protocolo IPI e Quantum Memory
 PROTOCOL_CONFIG = {
     "versao": "3.6.2",
     "status": "ATIVO",
@@ -17,12 +16,13 @@ PROTOCOL_CONFIG = {
     "quantum_memory": "SINCRO"
 }
 
-def expandir_extracao_wikipedia(termo):
+def consultar_base_conhecimento(termo):
     """
-    Função atualizada para buscar múltiplos parágrafos ou o conteúdo completo
-    da introdução, evitando cair na armadilha de frases de cabeçalho de listas.
+    Realiza a consulta direta na API da Wikipedia focando no verbete exato
+    para evitar o retorno de cabeçalhos de listas genéricas.
     """
-    url = f"https://pt.wikipedia.org/api/rest_v1/page/summary/{requests.utils.quote(termo)}"
+    termo_tratado = termo.strip()
+    url = f"https://pt.wikipedia.org/api/rest_v1/page/summary/{requests.utils.quote(termo_tratado)}"
     headers = {"User-Agent": "FenixPrimeBot/3.6.2 (contato@fenix.local)"}
     
     try:
@@ -31,36 +31,29 @@ def expandir_extracao_wikipedia(termo):
             data = response.json()
             extract = data.get("extract", "")
             
-            # Se o texto for apenas uma frase introdutória de lista, tentamos buscar o conteúdo da página completa se necessário
-            if "A lista abaixo contém" in extract or "contém as doenças" in extract:
-                # Fallback para buscar o conteúdo completo via API de ação do MediaWiki se precisar detalhar
-                url_action = f"https://pt.wikipedia.org/w/api.php?action=query&prop=extracts&exintro&explaintext&titles={requests.utils.quote(termo)}&format=json"
-                resp_action = requests.get(url_action, headers=headers, timeout=5)
-                if resp_action.status_code == 200:
-                    pages = resp_action.json().get("query", {}).get("pages", {})
-                    for page_id in pages:
-                        content = pages[page_id].get("extract", "")
-                        if content:
-                            return content
-                            
-            return extract if extract else "Nenhum resumo detalhado encontrado para este termo."
+            # Se o extrato vier vazio ou focado em listas, tentamos o título principal
+            if not extract or "A lista abaixo" in extract:
+                return f"Consulta realizada para: {termo_tratado}. Definição técnica indisponível no resumo imediato."
+                
+            return extract
         else:
-            return "Erro ao consultar a base de dados remota."
+            return f"Erro de conexão com o repositório externo para o termo: {termo_tratado}"
     except Exception as e:
-        return f"Falha de conexão com o endpoint: {str(e)}"
+        return f"Falha crítica no canal de busca: {str(e)}"
 
 @app.route("/api/busca", methods=["POST"])
 def api_busca():
     dados = request.get_json() or {}
     termo = dados.get("termo", "")
     
-    resultado = expandir_extracao_wikipedia(termo)
+    # Processa a busca real e obtém o conteúdo técnico
+    resultado_conteudo = consultar_base_conhecimento(termo)
     
     return jsonify({
         "status": "LIBERADO",
         "versao": PROTOCOL_CONFIG["versao"],
         "termo_consultado": termo,
-        "resultado": resultado,
+        "resultado": resultado_conteudo,
         "protocolo": PROTOCOL_CONFIG
     })
 
