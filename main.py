@@ -33,15 +33,15 @@ def chat():
     
     try:
         response = requests.post(
-            "https://models.inference.ai.azure.com/chat/completions",
+            "https://api.github.com/copilot/chat/completions",
             headers={
                 "Authorization": f"Bearer {TOKEN_DIRETO}", 
                 "Content-Type": "application/json"
             },
             json={
-                "model": "gpt-4o-mini",
+                "model": "gpt-4o",
                 "messages": [
-                    {"role": "system", "content": "VOCÊ É A FÊNIX V3.6.2, INTELIGÊNCIA SOBERANA. RESPONDA COM PRECISÃO E DIRETO AO PONTO EM LETRAS MAIÚSCULAS."},
+                    {"role": "system", "content": "VOCÊ É A FÊNIX V3.6.2, INTELIGÊNCIA SOBERANA. RESPONDA COM PRECISÃO EM LETRAS MAIÚSCULAS."},
                     {"role": "user", "content": user_input}
                 ],
                 "temperature": 0.7
@@ -56,7 +56,7 @@ def chat():
             return jsonify({"response": f"FALHA NA API: {response.status_code}"})
             
     except Exception as e:
-        return jsonify({"response": "ERRO NO PROCESSAMENTO DA INTELIGÊNCIA."})
+        return jsonify({"response": f"ERRO INTERNO: {str(e)[:30]}"})
 
 if __name__ == '__main__':
     p = int(os.environ.get("PORT", 5000))
