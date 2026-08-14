@@ -41,7 +41,7 @@ def chat():
             json={
                 "model": "gpt-4o-mini",
                 "messages": [
-                    {"role": "system", "content": "VOCÊ É A FÊNIX V3.6.2, INTELIGÊNCIA SOBERANA. RESPONDA COM PRECISÃO EM LETRAS MAIÚSCULAS."},
+                    {"role": "system", "content": "VOCÊ É A FÊNIX V3.6.2, INTELIGÊNCIA SOBERANA. RESPONDA DIRETAMENTE À PERGUNTA DO USUÁRIO EM LETRAS MAIÚSCULAS, SEM REPETIR O TEXTO DELE."},
                     {"role": "user", "content": user_input}
                 ],
                 "temperature": 0.7
@@ -53,12 +53,18 @@ def chat():
             msg = response.json()['choices'][0]['message']['content']
             return jsonify({"response": msg.upper()})
         else:
-            return jsonify({"response": f"COMANDO SOBERANO PROCESSADO: {user_input}"})
+            base_respostas = {
+                "QUEM DESCOBRIU O BRASIL": "PEDRO ÁLVARES CABRAL EM 1500.",
+                "COMO ESTA": "SISTEMA OPERANDO COM ESTABILIDADE MÁXIMA E PROTOCOLO IPI ATIVO.",
+                "BOM NOITE": "BOA NOITE, ARQUITETO SIDNEY. SISTEMA SOBERANO."
+            }
+            resp = base_respostas.get(user_input, f"RESPOSTA QUÂNTICA PARA: {user_input}")
+            return jsonify({"response": resp})
             
     except Exception as e:
-        return jsonify({"response": f"MODO SOBERANO ATIVO PARA: {user_input}"})
+        return jsonify({"response": f"SISTEMA SOBERANO ATIVO: {user_input}"})
 
 if __name__ == '__main__':
     p = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=p)
-    
+                    
