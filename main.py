@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
+import requests
 import os
 
 app = Flask(__name__)
@@ -8,7 +9,8 @@ CORS(app)
 CONFIG = {
     "operador": "BIGODE",
     "versao": "3.6.2",
-    "local": "TABOÃO DA SERRA, SP"
+    "local": "TABOÃO DA SERRA, SP",
+    "api_key": os.environ.get("GITHUB_TOKEN")
 }
 
 base_dir = os.path.abspath(os.path.dirname(__file__))
@@ -31,23 +33,40 @@ def icon():
 
 @app.route('/chat', methods=['POST'])
 def chat():
+    dados = request.get_json() or {}
+    user_input = dados.get('prompt', '').upper()
+    
+    if not CONFIG["api_key"]:
+        return jsonify({"response": f"COMANDO SOBERANO EXECUTADO: {user_input} | ARQUITETO SIDNEY"})
+    
     try:
-        dados = request.get_json() or {}
-        user_input = dados.get('prompt', '').upper()
-        
-        # RESPOSTAS DINÂMICAS BASEADAS NO COMANDO DO ARQUITETO SIDNEY
-        if "BOM" in user_input or "NOITE" in user_input or "DIA" in user_input:
-            resposta_final = "BOA NOITE, ARQUITETO SIDNEY. SISTEMA SOBERANO TOTALMENTE OPERACIONAL."
-        elif "COMO" in user_input and "ESTA" in user_input:
-            resposta_final = "ESTABILIDADE MÁXIMA. PROTOCOLO IPI ATIVO E MOTORES QUÂNTICOS SINCRONIZADOS."
-        elif "NOVIDADE" in user_input:
-            resposta_final = "TODAS AS BLINDAGENS DO SERVIDOR ESTÃO ATIVAS E O PWA OPERA COM SOBERANIA."
+        response = requests.post(
+            "https://models.inference.ai.azure.com/chat/completions",
+            headers={
+                "Authorization": f"Bearer {CONFIG['api_key']}", 
+                    "Content-Type": "application/json"
+            },
+            json={
+                "model": "gpt-4o-mini",
+                "messages": [
+                    {
+                        "role": "system", 
+                        "content": f"Você é a FÊNIX PRIME V3.6.2, inteligência soberana. Operador: {CONFIG['operador']}. Responda de forma direta, clara e inteligente em letras maiúsculas."
+                    },
+                    {"role": "user", "content": user_input}
+                ],
+                "temperature": 0.7
+            },
+            timeout=15
+        )
+        res_json = response.json()
+        if 'choices' in res_json and len(res_json['choices']) > 0:
+            msg = res_json['choices'][0]['message']['content']
+            return jsonify({"response": msg.upper()})
         else:
-            resposta_final = f"COMANDO RECEBIDO COM SUCESSO: {user_input} | SOBERANIA ATIVA."
-        
-        return jsonify({"response": resposta_final})
+            return jsonify({"response": f"PROCESSADO COM SUCESSO: {user_input}"})
     except Exception as e:
-        return jsonify({"response": "MOTOR QUÂNTICO ESTABILIZADO. SOBERANIA ATIVA."})
+        return jsonify({"response": f"MODO SOBERANO ATIVO PARA: {user_input}"})
 
 if __name__ == '__main__':
     p = int(os.environ.get("PORT", 5000))
