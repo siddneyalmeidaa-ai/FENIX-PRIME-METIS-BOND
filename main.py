@@ -32,7 +32,7 @@ def chat():
     user_input = dados.get('prompt', '').strip()
     
     if not user_input:
-        return jsonify({"response": "COMANDO VAZIO."})
+        return jsonify({"response": "DIGITE UM COMANDO VÁLIDO."})
     
     try:
         response = requests.post(
@@ -49,7 +49,7 @@ def chat():
                 ],
                 "temperature": 0.5
             },
-            timeout=20
+            timeout=25
         )
         
         if response.status_code == 200:
@@ -57,12 +57,11 @@ def chat():
             if 'choices' in res_json and len(res_json['choices']) > 0:
                 msg = res_json['choices'][0]['message']['content']
                 return jsonify({"response": msg.upper()})
-        
-        # Caso a API falhe, devolvemos uma resposta inteligente baseada no próprio texto enviado
-        return jsonify({"response": f"CANCERBERUS ATIVO: {user_input.upper()} PROCESSADO COM SOBERANIA."})
+                
+        return jsonify({"response": f"FALHA DE RESPOSTA DA IA (CÓDIGO {response.status_code})"})
             
     except Exception as e:
-        return jsonify({"response": f"ERRO NA REDE QUÂNTICA PARA: {user_input.upper()}"})
+        return jsonify({"response": "ERRO DE CONEXÃO COM O MOTOR QUÂNTICO."})
 
 if __name__ == '__main__':
     p = int(os.environ.get("PORT", 5000))
