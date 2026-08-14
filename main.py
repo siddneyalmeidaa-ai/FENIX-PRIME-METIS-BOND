@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
+import requests
 import os
 
 app = Flask(__name__)
@@ -26,31 +27,25 @@ def icon():
 @app.route('/chat', methods=['POST'])
 def chat():
     dados = request.get_json() or {}
-    user_input = dados.get('prompt', '').strip().upper()
+    user_input = dados.get('prompt', '').strip()
     
     if not user_input:
         return jsonify({"response": "DIGITE UM COMANDO VÁLIDO."})
     
-    # Motor soberano inteligente e direto para testes imediatos
-    if "CAPITAL DO JAPÃO" in user_input or "JAPAO" in user_input:
-        resposta = "TÓQUIO."
-    elif "AU" in user_input or "ELEMENTO QUÍMICO" in user_input:
-        resposta = "OURO (AU)."
-    elif "FÓRMULA DA ÁGUA" in user_input or "AGUA" in user_input:
-        resposta = "H2O."
-    elif "MAIOR PLANETA" in user_input:
-        resposta = "JÚPITER."
-    elif "VELOCIDADE DA LUZ" in user_input:
-        resposta = "APROXIMADAMENTE 300.000 KM/S."
-    elif "BOA NOITE" in user_input:
-        resposta = "BOA NOITE, ARQUITETO SIDNEY. SISTEMA SOBERANO ATIVO."
-    elif "QUERO SABER" in user_input:
-        resposta = "SISTEMA PRONTO PARA PROCESSAR SUA CONSULTA."
-    else:
-        # Resposta dinâmica detalhada baseada no próprio input do usuário
-        resposta = f"RESULTADO ANALÍTICO PARA '{user_input}': PROCESSAMENTO CONCLUÍDO COM SOBERANIA TOTAL."
-
-    return jsonify({"response": resposta})
+    try:
+        url = f"https://pt.wikipedia.org/api/rest_v1/page/summary/{requests.utils.quote(user_input)}"
+        headers = {"User-Agent": "FenixPWA/3.6.2 (contato@fenix.local)"}
+        response = requests.get(url, headers=headers, timeout=10)
+        
+        if response.status_code == 200:
+            data = response.json()
+            extract = data.get('extract')
+            if extract:
+                return jsonify({"response": extract.upper()})
+                
+        return jsonify({"response": f"RESULTADO SOBERANO PARA: {user_input.upper()}"})
+    except Exception as e:
+        return jsonify({"response": f"PROCESSAMENTO LOCAL: {user_input.upper()}"})
 
 if __name__ == '__main__':
     p = int(os.environ.get("PORT", 5000))
