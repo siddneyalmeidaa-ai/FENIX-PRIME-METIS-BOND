@@ -34,7 +34,7 @@ def chat():
     
     try:
         url = f"https://pt.wikipedia.org/api/rest_v1/page/summary/{requests.utils.quote(user_input)}"
-        headers = {"User-Agent": "FenixPWA/3.6.2 (contato@fenix.local)"}
+        headers = {"User-Agent": "FenixPWA/3.6.2"}
         response = requests.get(url, headers=headers, timeout=10)
         
         if response.status_code == 200:
@@ -42,12 +42,13 @@ def chat():
             extract = data.get('extract')
             if extract:
                 return jsonify({"response": extract.upper()})
-                
-        return jsonify({"response": f"RESULTADO SOBERANO PARA: {user_input.upper()}"})
+        
+        termo_upper = user_input.upper()
+        return jsonify({"response": f"DADOS CONSULTADOS PARA '{termo_upper}': SEM REGISTRO DIRETO NA BASE DE CONHECIMENTO PÚBLICO."})
     except Exception as e:
-        return jsonify({"response": f"PROCESSAMENTO LOCAL: {user_input.upper()}"})
+        return jsonify({"response": f"FALHA NO PROCESSAMENTO DA CONSULTA: {str(e).upper()}"})
 
 if __name__ == '__main__':
     p = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=p)
-    
+            
