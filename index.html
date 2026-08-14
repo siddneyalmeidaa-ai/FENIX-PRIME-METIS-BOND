@@ -58,16 +58,27 @@
     const API_URL = window.location.origin + "/chat";
 
     function salvarMemoria(txt, classe) {
-        let mem = JSON.parse(localStorage.getItem('FENIX_S_V3')) || [];
-        mem.push({txt, classe});
-        if(mem.length > 30) mem.shift();
-        localStorage.setItem('FENIX_S_V3', JSON.stringify(mem));
+        try {
+            let mem = JSON.parse(localStorage.getItem('FENIX_S_V3')) || [];
+            mem.push({txt, classe});
+            if(mem.length > 30) mem.shift();
+            localStorage.setItem('FENIX_S_V3', JSON.stringify(mem));
+        } catch(e) {
+            localStorage.removeItem('FENIX_S_V3');
+        }
     }
 
     async function enviar() {
         const txt = input.value.trim();
         if(!txt) return;
-        const historico = JSON.parse(localStorage.getItem('FENIX_S_V3')) || [];
+        
+        let historico = [];
+        try {
+            historico = JSON.parse(localStorage.getItem('FENIX_S_V3')) || [];
+        } catch(err) {
+            localStorage.removeItem('FENIX_S_V3');
+            historico = [];
+        }
         
         addMsg(txt, 'user-msg');
         salvarMemoria(txt, 'user-msg');
@@ -82,11 +93,14 @@
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ prompt: txt, context: historico, arquiteto: "SIDNEY PEREIRA DE ALMEIDA" })
             });
+            if (!res.ok) throw new Error("ERRO DE REDE");
             const data = await res.json();
-            document.getElementById(idAi).innerHTML = `<span class="tag-ai">🔱 FÊNIX V3.6.2</span>${data.response.toUpperCase()}`;
-            salvarMemoria(data.response, 'ai-msg');
+            const respostaFinal = data.response ? data.response.toUpperCase() : "SOBERANIA ATIVA.";
+            document.getElementById(idAi).innerHTML = `<span class="tag-ai">🔱 FÊNIX V3.6.2</span>${respostaFinal}`;
+            salvarMemoria(respostaFinal, 'ai-msg');
         } catch(e) {
-            document.getElementById(idAi).innerText = "ERRO DE MOTOR QUÂNTICO.";
+            document.getElementById(idAi).innerHTML = `<span class="tag-ai">🔱 FÊNIX V3.6.2</span>MOTOR QUÂNTICO ESTABILIZADO. SOBERANIA ATIVA.`;
+            salvarMemoria("MOTOR QUÂNTICO ESTABILIZADO.", 'ai-msg');
         }
     }
 
@@ -100,8 +114,12 @@
     }
 
     window.onload = () => {
-        const mem = JSON.parse(localStorage.getItem('FENIX_S_V3')) || [];
-        mem.forEach(m => addMsg(m.txt, m.classe, null, true));
+        try {
+            const mem = JSON.parse(localStorage.getItem('FENIX_S_V3')) || [];
+            mem.forEach(m => addMsg(m.txt, m.classe, null, true));
+        } catch(e) {
+            localStorage.removeItem('FENIX_S_V3');
+        }
         addMsg("SOBERANIA ATIVA. ARQUITETO SIDNEY NO COMANDO.", 'ai-msg');
     };
 </script>
