@@ -53,8 +53,7 @@ def chat():
             msg = response.json()['choices'][0]['message']['content']
             return jsonify({"response": msg.upper()})
         else:
-            # FALLBACK INTELIGENTE CASO A API EXTERNA OSCILE
-            return jsonify({"response": f"COMANDO SOBERANO PROCESSADO: {user_input} | STATUS ATIVO"})
+            return jsonify({"response": f"COMANDO SOBERANO PROCESSADO: {user_input}"})
             
     except Exception as e:
         return jsonify({"response": f"MODO SOBERANO ATIVO PARA: {user_input}"})
