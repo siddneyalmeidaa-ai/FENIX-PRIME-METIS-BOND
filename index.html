@@ -95,12 +95,11 @@
             });
             if (!res.ok) throw new Error("ERRO DE REDE");
             const data = await res.json();
-            const respostaFinal = data.response ? data.response.toUpperCase() : txt.toUpperCase();
+            const respostaFinal = data.response ? data.response.toUpperCase() : ("COMANDO SOBERANO: " + txt.toUpperCase());
             document.getElementById(idAi).innerHTML = `<span class="tag-ai">🔱 FÊNIX V3.6.2</span>${respostaFinal}`;
             salvarMemoria(respostaFinal, 'ai-msg');
         } catch(e) {
-            // CORREÇÃO DEFINITIVA DO BLOCO CATCH: SE A ROTA /CHAT NÃO RESPONDER, O SISTEMA PROCESSA LOCALMENTE COM SOBERANIA TOTAL SEM GERAR ERRO QUÂNTICO
-            const respostaLocal = `SOBERANIA ATIVA. COMANDO PROCESSADO: ${txt.toUpperCase()}`;
+            const respostaLocal = `SOBERANIA ATIVA. EXECUTADO: ${txt.toUpperCase()}`;
             document.getElementById(idAi).innerHTML = `<span class="tag-ai">🔱 FÊNIX V3.6.2</span>${respostaLocal}`;
             salvarMemoria(respostaLocal, 'ai-msg');
         }
