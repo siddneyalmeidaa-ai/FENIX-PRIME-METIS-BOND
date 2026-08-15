@@ -40,11 +40,11 @@ def save_quantum_memory(history):
 chat_history = load_quantum_memory()
 
 PROTOCOL_CONFIG = {
-    "versao": "4.4.0-GOOGLE_CLOUD_SYNC",
-    "status": "NUCLEO_INTEGRADO_CLOUD",
+    "versao": "4.5.0-CORRIGIDO_ERRO_VAR",
+    "status": "NUCLEO_ESTAVEL_BLINDADO",
     "stake_padrao": 0.20,
     "ajuste_risco": -0.50,
-    "quantum_memory": "GOOGLE_CLOUD_API_READY"
+    "quantum_memory": "CORRECAO_DEFINITIVA_APLICADA"
 }
 
 @app.route('/')
@@ -68,7 +68,7 @@ def health_check():
     cloud_active = bool(os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"))
     api_status = "GOOGLE_CLOUD_ONLINE" if cloud_active else "MODO_AUTONOMO_LOCAL"
     return jsonify({
-        "nucleo": "FÊNIX PRIME CLOUD",
+        "nucleo": "FÊNIX PRIME CORRIGIDO",
         "status": PROTOCOL_CONFIG["status"],
         "versao": PROTOCOL_CONFIG["versao"],
         "api_status": api_status,
@@ -171,8 +171,9 @@ def chat():
                     
         if not resposta_final:
             input_lower = user_input.lower()
-            if any(saudacao in input_lower for keyword in ["oi", "olá", "boa noite", "bom dia", "boa tarde", "tudo bem", "e ai", "fala"]):
-                resposta_final = f"SALVE, BIGODE! NÚCLEO 4.4 CONECTADO À GOOGLE CLOUD OPERANDO EM PLENA SUPREMACIA."
+            saudacao = ["oi", "olá", "boa noite", "bom dia", "boa tarde", "tudo bem", "e ai", "fala"]
+            if any(s in input_lower for s in saudacao):
+                resposta_final = f"SALVE, BIGODE! NÚCLEO 4.5 CONECTADO À GOOGLE CLOUD OPERANDO EM PLENA SUPREMACIA."
             else:
                 resposta_final = f"PROCESSAMENTO CLOUD PARA '{user_input.upper()}': SISTEMA ESTÁVEL E SINCRONIZADO."
             
@@ -198,4 +199,4 @@ def chat():
 if __name__ == '__main__':
     p = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=p)
-        
+                               
