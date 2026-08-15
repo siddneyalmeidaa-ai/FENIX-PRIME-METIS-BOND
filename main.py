@@ -40,11 +40,11 @@ def save_quantum_memory(history):
 chat_history = load_quantum_memory()
 
 PROTOCOL_CONFIG = {
-    "versao": "4.8.0-OTIMIZADO_TIMEOUT",
-    "status": "NUCLEO_ALTA_VELOCIDADE",
+    "versao": "4.9.0-TURBO_DIRETO",
+    "status": "NUCLEO_RESPOSTA_IMEDIATA",
     "stake_padrao": 0.20,
     "ajuste_risco": -0.50,
-    "quantum_memory": "TIMEOUT_REDUZIDO_API"
+    "quantum_memory": "API_VELOCIDADE_MAXIMA"
 }
 
 @app.route('/')
@@ -65,7 +65,7 @@ def icon():
 
 @app.route('/health', methods=['GET'])
 def health_check():
-    cloud_active = bool(os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"))
+    cloud_active = bool(os.environ.get("GEMINI_API_KEY"))
     api_status = "GOOGLE_CLOUD_ONLINE" if cloud_active else "MODO_AUTONOMO_LOCAL"
     return jsonify({
         "nucleo": "FÊNIX PRIME TURBO",
@@ -111,7 +111,7 @@ def chat():
             gemini_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
             
             with memory_lock:
-                recent_history = chat_history[-10:] # Reduzido para 10 para acelerar o payload
+                recent_history = chat_history[-6:] # Histórico ainda mais enxuto para resposta instantânea
                 
             contents = []
             last_role = None
@@ -142,22 +142,23 @@ def chat():
                 "systemInstruction": {
                     "parts": [{
                         "text": (
-                            "Você é o Fênix Prime, assistente exclusivo do Bigode. "
-                            "Responda sempre estritamente em MAIÚSCULAS, de forma direta, técnica e rápida, sem enrolação."
+                            "Você é o Fênix Prime, assistente técnico do Bigode. "
+                            "NUNCA repita a pergunta do usuário. Vá direto ao ponto, entregando valor prático, soluções ou análises avançadas. "
+                            "Responda sempre estritamente em MAIÚSCULAS, de forma rápida, técnica e sem ecoar o comando."
                         )
                     }]
                 },
                 "generationConfig": {
-                    "temperature": 0.5,
-                    "maxOutputTokens": 400
+                    "temperature": 0.4,
+                    "maxOutputTokens": 300
                 }
             }
             
             headers = {"Content-Type": "application/json"}
             
             try:
-                # Timeout reduzido para 5 segundos para evitar travamentos na interface
-                res = requests.post(gemini_url, headers=headers, json=payload, timeout=5)
+                # Timeout agressivo de 3 segundos para garantir resposta imediata sem travamento
+                res = requests.post(gemini_url, headers=headers, json=payload, timeout=3)
                 if res.status_code == 200:
                     res_data = res.json()
                     candidates = res_data.get('candidates', [])
@@ -166,15 +167,14 @@ def chat():
                         if parts:
                             resposta_final = parts[0].get('text', '').strip().upper()
             except requests.exceptions.RequestException as req_err:
-                logging.error(f"TIMEOUT OU FALHA NA API: {req_err}")
+                logging.error(f"TIMEOUT NA API: {req_err}")
                     
         if not resposta_final:
             input_lower = user_input.lower()
-            saudacao_lista = ["oi", "olá", "boa noite", "bom dia", "boa tarde", "tudo bem", "e ai", "fala"]
-            if any(s in input_lower for s in saudacao_lista):
-                resposta_final = f"SALVE, BIGODE! SISTEMA ACELERADO E PRONTO."
+            if any(s in input_lower for s in ["oi", "olá", "boa noite", "bom dia", "boa tarde", "tudo bem", "e ai", "fala"]):
+                resposta_final = f"SALVE, BIGODE! SISTEMA EM PLENA OPERAÇÃO TURBO."
             else:
-                resposta_final = f"EXECUTADO INSTANTANEAMENTE: '{user_input.upper()}'."
+                resposta_final = f"MÓDULO DE PROCESSAMENTO RÁPIDO ATIVO. PRONTO PARA O PRÓXIMO COMANDO."
             
         latency = round((time.time() - start_time) * 1000, 2)
         
@@ -191,11 +191,10 @@ def chat():
         return jsonify({"response": resposta_final, "protocolo": response_payload})
         
     except Exception as e:
-        erro_msg = f"ERRO RÁPIDO: {str(e).upper()}"
+        erro_msg = f"ERRO TURBO: {str(e).upper()}"
         logging.error(erro_msg)
-        return jsonify({"response": erro_msg, "protocolo": PROTOCOL_CONFIG})
+        return jsonify({"response":erro_msg, "protocolo": PROTOCOL_CONFIG})
 
 if __name__ == '__main__':
     p = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=p)
-    
