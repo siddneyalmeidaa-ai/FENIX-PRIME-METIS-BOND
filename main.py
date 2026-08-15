@@ -40,11 +40,11 @@ def save_quantum_memory(history):
 chat_history = load_quantum_memory()
 
 PROTOCOL_CONFIG = {
-    "versao": "4.6.0-BLINDAGEM_TOTAL",
-    "status": "NUCLEO_ESTAVEL_BLINDADO",
+    "versao": "4.7.0-ANTI_REPETICAO",
+    "status": "NUCLEO_DINAMICO_FLUIDO",
     "stake_padrao": 0.20,
     "ajuste_risco": -0.50,
-    "quantum_memory": "EXCECOES_TRATADAS"
+    "quantum_memory": "RESPOSTAS_VARIADAS_ATIVAS"
 }
 
 @app.route('/')
@@ -68,7 +68,7 @@ def health_check():
     cloud_active = bool(os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"))
     api_status = "GOOGLE_CLOUD_ONLINE" if cloud_active else "MODO_AUTONOMO_LOCAL"
     return jsonify({
-        "nucleo": "FÊNIX PRIME BLINDADO",
+        "nucleo": "FÊNIX PRIME DINÂMICO",
         "status": PROTOCOL_CONFIG["status"],
         "versao": PROTOCOL_CONFIG["versao"],
         "api_status": api_status,
@@ -144,14 +144,16 @@ def chat():
                         "text": (
                             "Você é o Fênix Prime, o parceiro de desenvolvimento avançado e assistente exclusivo do Bigode. "
                             "Sua missão absoluta é DAR CONTINUIDADE LÓGICA E PRECISA À CONVERSA, lembrando de tudo o que foi debatido, "
-                            "evitando alucinações e fornecendo soluções completas e diretas integradas à Google Cloud. "
+                            "evitando repetições automáticas ou padrões engessados. Responda variando o vocabulário e entregando valor prático. "
                             "Responda sempre estritamente em MAIÚSCULAS, com linguagem técnica, camarada e foco total em alta performance."
                         )
                     }]
                 },
                 "generationConfig": {
-                    "temperature": 0.2,
-                    "maxOutputTokens": 1000
+                    "temperature": 0.7,
+                    "maxOutputTokens": 1000,
+                    "topP": 0.95,
+                    "topK": 40
                 }
             }
             
@@ -173,9 +175,9 @@ def chat():
             input_lower = user_input.lower()
             saudacao_lista = ["oi", "olá", "boa noite", "bom dia", "boa tarde", "tudo bem", "e ai", "fala"]
             if any(s in input_lower for s in saudacao_lista):
-                resposta_final = f"SALVE, BIGODE! NÚCLEO 4.6 CONECTADO À GOOGLE CLOUD OPERANDO EM PLENA SUPREMACIA."
+                resposta_final = f"SALVE, BIGODE! TUDO PRONTO POR AQUI. COMO POSSO CONTRIBUIR COM O CÓDIGO AGORA?"
             else:
-                resposta_final = f"PROCESSAMENTO CLOUD PARA '{user_input.upper()}': SISTEMA ESTÁVEL E SINCRONIZADO."
+                resposta_final = f"COMANDO RECEBIDO E PROCESSADO COM SUCESSO: '{user_input.upper()}'. QUAL É O PRÓXIMO AJUSTE?"
             
         latency = round((time.time() - start_time) * 1000, 2)
         
@@ -199,4 +201,4 @@ def chat():
 if __name__ == '__main__':
     p = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=p)
-                                             
+        
