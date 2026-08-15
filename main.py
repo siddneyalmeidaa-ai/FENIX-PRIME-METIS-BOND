@@ -40,11 +40,11 @@ def save_quantum_memory(history):
 chat_history = load_quantum_memory()
 
 PROTOCOL_CONFIG = {
-    "versao": "4.7.0-ANTI_REPETICAO",
-    "status": "NUCLEO_DINAMICO_FLUIDO",
+    "versao": "4.8.0-OTIMIZADO_TIMEOUT",
+    "status": "NUCLEO_ALTA_VELOCIDADE",
     "stake_padrao": 0.20,
     "ajuste_risco": -0.50,
-    "quantum_memory": "RESPOSTAS_VARIADAS_ATIVAS"
+    "quantum_memory": "TIMEOUT_REDUZIDO_API"
 }
 
 @app.route('/')
@@ -68,7 +68,7 @@ def health_check():
     cloud_active = bool(os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"))
     api_status = "GOOGLE_CLOUD_ONLINE" if cloud_active else "MODO_AUTONOMO_LOCAL"
     return jsonify({
-        "nucleo": "FÊNIX PRIME DINÂMICO",
+        "nucleo": "FÊNIX PRIME TURBO",
         "status": PROTOCOL_CONFIG["status"],
         "versao": PROTOCOL_CONFIG["versao"],
         "api_status": api_status,
@@ -111,7 +111,7 @@ def chat():
             gemini_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
             
             with memory_lock:
-                recent_history = chat_history[-20:]
+                recent_history = chat_history[-10:] # Reduzido para 10 para acelerar o payload
                 
             contents = []
             last_role = None
@@ -142,25 +142,22 @@ def chat():
                 "systemInstruction": {
                     "parts": [{
                         "text": (
-                            "Você é o Fênix Prime, o parceiro de desenvolvimento avançado e assistente exclusivo do Bigode. "
-                            "Sua missão absoluta é DAR CONTINUIDADE LÓGICA E PRECISA À CONVERSA, lembrando de tudo o que foi debatido, "
-                            "evitando repetições automáticas ou padrões engessados. Responda variando o vocabulário e entregando valor prático. "
-                            "Responda sempre estritamente em MAIÚSCULAS, com linguagem técnica, camarada e foco total em alta performance."
+                            "Você é o Fênix Prime, assistente exclusivo do Bigode. "
+                            "Responda sempre estritamente em MAIÚSCULAS, de forma direta, técnica e rápida, sem enrolação."
                         )
                     }]
                 },
                 "generationConfig": {
-                    "temperature": 0.7,
-                    "maxOutputTokens": 1000,
-                    "topP": 0.95,
-                    "topK": 40
+                    "temperature": 0.5,
+                    "maxOutputTokens": 400
                 }
             }
             
             headers = {"Content-Type": "application/json"}
             
             try:
-                res = requests.post(gemini_url, headers=headers, json=payload, timeout=15)
+                # Timeout reduzido para 5 segundos para evitar travamentos na interface
+                res = requests.post(gemini_url, headers=headers, json=payload, timeout=5)
                 if res.status_code == 200:
                     res_data = res.json()
                     candidates = res_data.get('candidates', [])
@@ -169,22 +166,22 @@ def chat():
                         if parts:
                             resposta_final = parts[0].get('text', '').strip().upper()
             except requests.exceptions.RequestException as req_err:
-                logging.error(f"FALHA NA REQUISIÇÃO DA API GOOGLE CLOUD: {req_err}")
+                logging.error(f"TIMEOUT OU FALHA NA API: {req_err}")
                     
         if not resposta_final:
             input_lower = user_input.lower()
             saudacao_lista = ["oi", "olá", "boa noite", "bom dia", "boa tarde", "tudo bem", "e ai", "fala"]
             if any(s in input_lower for s in saudacao_lista):
-                resposta_final = f"SALVE, BIGODE! TUDO PRONTO POR AQUI. COMO POSSO CONTRIBUIR COM O CÓDIGO AGORA?"
+                resposta_final = f"SALVE, BIGODE! SISTEMA ACELERADO E PRONTO."
             else:
-                resposta_final = f"COMANDO RECEBIDO E PROCESSADO COM SUCESSO: '{user_input.upper()}'. QUAL É O PRÓXIMO AJUSTE?"
+                resposta_final = f"EXECUTADO INSTANTANEAMENTE: '{user_input.upper()}'."
             
         latency = round((time.time() - start_time) * 1000, 2)
         
         with memory_lock:
             chat_history.append(f"Assistente: {resposta_final}")
-            if len(chat_history) > 40:
-                chat_history = chat_history[-40:]
+            if len(chat_history) > 30:
+                chat_history = chat_history[-30:]
             save_quantum_memory(chat_history)
             
         response_payload = PROTOCOL_CONFIG.copy()
@@ -194,11 +191,11 @@ def chat():
         return jsonify({"response": resposta_final, "protocolo": response_payload})
         
     except Exception as e:
-        erro_msg = f"ERRO CRÍTICO NA CLOUD: {str(e).upper()}"
+        erro_msg = f"ERRO RÁPIDO: {str(e).upper()}"
         logging.error(erro_msg)
         return jsonify({"response": erro_msg, "protocolo": PROTOCOL_CONFIG})
 
 if __name__ == '__main__':
     p = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=p)
-        
+    
